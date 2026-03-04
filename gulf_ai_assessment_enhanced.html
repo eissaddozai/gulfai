@@ -2770,6 +2770,13 @@ html { scrollbar-gutter: stable; }
 .nb-num { display: none !important; }
 .nb { justify-content: center !important; font-size: 10.5px !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; font-weight: 600 !important; }
 
+/* ─── TABLE VISIBILITY FIX ────────────────────────────────────────── */
+/* The scroll-reveal system adds .sr to .dt tables with clip-path:inset(0 100% 0 0)
+   which hides them. contentVisibility:hidden on inactive panels prevents
+   IntersectionObserver from ever adding .vis. Override to always show tables. */
+table.dt.sr,
+table.dt.sr.vis { clip-path: none !important; }
+
 /* ─── DIAGRAM PLACEHOLDER ─────────────────────────────────────────── */
 .dp {
   border-radius: var(--r-lg);
