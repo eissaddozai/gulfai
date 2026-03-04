@@ -2778,6 +2778,242 @@ html { scrollbar-gutter: stable; }
   font-weight: 600 !important;
 }
 
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 TABLE-TO-DIAGRAM TRANSFORMATION SYSTEM
+   Investigative Intelligence Interface Design Framework
+   ═══════════════════════════════════════════════════════════════ */
+
+/* --- Toggle Bar --- */
+.i3-toggle-bar {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 10px; margin-top: 4px;
+  font-family: var(--font-s); font-size: 11px;
+}
+.i3-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 4px;
+  border: 1px solid var(--border-hi);
+  background: transparent; color: var(--text-sec);
+  cursor: pointer; transition: all var(--transition-fast);
+  font-family: var(--font-s); font-size: 11px; letter-spacing: .04em;
+}
+.i3-btn:hover { border-color: var(--panel-accent); color: #fff; background: rgba(255,255,255,.04); }
+.i3-btn--active { background: var(--panel-accent); border-color: var(--panel-accent); color: #fff; }
+.i3-viz-label {
+  margin-left: 6px; font-size: 10px; color: var(--text-sec);
+  letter-spacing: .1em; text-transform: uppercase;
+  opacity: .7;
+}
+
+/* --- Viz Frame Container --- */
+.i3-viz-frame {
+  width: 100%; overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  position: relative;
+}
+.i3-viz-frame svg { display: block; width: 100%; overflow: visible; }
+.i3-viz-frame .i3-loading {
+  text-align: center; color: var(--text-sec);
+  font-size: 12px; padding: 32px;
+  font-family: var(--font-s); letter-spacing: .05em;
+}
+
+/* --- Node & Edge Styles (shared) --- */
+.i3-node { cursor: pointer; transition: opacity .15s; }
+.i3-node:hover { opacity: .85; }
+.i3-node-label {
+  font-family: var(--font-s); font-size: 11px; fill: #ccc;
+  pointer-events: none; user-select: none;
+}
+.i3-edge { fill: none; stroke-opacity: .55; }
+.i3-edge-label {
+  font-family: var(--font-s); font-size: 9px; fill: var(--text-sec);
+  pointer-events: none;
+}
+
+/* --- Chip Gap Waffle --- */
+.i3-waffle-country { display: inline-block; text-align: center; vertical-align: top; }
+.i3-waffle-title {
+  font-family: var(--font-s); font-size: 11px; font-weight: 700;
+  color: #fff; margin-bottom: 6px; letter-spacing: .05em;
+}
+.i3-waffle-grid { display: grid; gap: 2px; }
+.i3-waffle-cell {
+  border-radius: 1px;
+  transition: opacity .1s;
+}
+.i3-waffle-cell:hover { opacity: .75; cursor: default; }
+.i3-gap-label {
+  font-family: var(--font-s); font-size: 10px; color: #C0392B;
+  font-weight: 700; margin-top: 6px; letter-spacing: .03em;
+}
+.i3-compliance-bar {
+  height: 6px; border-radius: 3px; margin-top: 4px;
+  background: rgba(255,255,255,.08);
+  overflow: hidden;
+}
+.i3-compliance-fill { height: 100%; border-radius: 3px; }
+
+/* --- Radar Chart --- */
+.i3-radar-axis { stroke: rgba(255,255,255,.12); stroke-width: 1; fill: none; }
+.i3-radar-grid { stroke: rgba(255,255,255,.06); stroke-width: 1; fill: none; }
+.i3-radar-area { fill-opacity: .18; stroke-width: 2; }
+.i3-radar-label {
+  font-family: var(--font-s); font-size: 10px; fill: var(--text-sec);
+  text-anchor: middle;
+}
+.i3-radar-legend {
+  font-family: var(--font-s); font-size: 11px; fill: #ccc;
+  cursor: pointer;
+}
+
+/* --- Heat Map (Integration Tier) --- */
+.i3-heatmap-cell {
+  rx: 3; cursor: pointer;
+  transition: opacity .12s;
+}
+.i3-heatmap-cell:hover { opacity: .75; }
+.i3-heatmap-col-label {
+  font-family: var(--font-s); font-size: 9.5px; fill: var(--text-sec);
+  cursor: pointer;
+}
+.i3-heatmap-col-label:hover { fill: #fff; }
+.i3-heatmap-row-label {
+  font-family: var(--font-s); font-size: 10px; fill: #ccc;
+}
+.i3-sort-arrow { fill: var(--panel-accent); }
+
+/* --- Competitive Constellation --- */
+.i3-const-node { cursor: pointer; }
+.i3-const-node:hover circle { opacity: .8; }
+.i3-filter-bar {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 10px; align-items: center;
+}
+.i3-filter-btn {
+  padding: 3px 10px; border-radius: 12px;
+  border: 1px solid var(--border-hi);
+  background: transparent; color: var(--text-sec);
+  font-family: var(--font-s); font-size: 10px;
+  cursor: pointer; transition: all var(--transition-fast);
+  letter-spacing: .04em;
+}
+.i3-filter-btn:hover, .i3-filter-btn.active {
+  background: var(--panel-accent); border-color: var(--panel-accent); color: #fff;
+}
+.i3-filter-input {
+  padding: 4px 10px; border-radius: 4px;
+  border: 1px solid var(--border-hi);
+  background: var(--surface-1); color: #fff;
+  font-family: var(--font-s); font-size: 11px;
+  outline: none; width: 180px;
+}
+.i3-filter-input:focus { border-color: var(--panel-accent); }
+
+/* --- Allied Gauges --- */
+.i3-gauge-row { display: flex; align-items: center; margin-bottom: 10px; }
+.i3-gauge-country {
+  font-family: var(--font-s); font-size: 11px; font-weight: 700;
+  width: 90px; flex-shrink: 0; color: #ccc;
+}
+.i3-gauge-country.i3-gap { color: #C0392B; }
+.i3-gauge-bars { display: flex; gap: 8px; flex: 1; }
+.i3-gauge-wrap { flex: 1; }
+.i3-gauge-dim {
+  font-family: var(--font-s); font-size: 9px; color: var(--text-sec);
+  margin-bottom: 2px; letter-spacing: .05em; text-transform: uppercase;
+}
+.i3-gauge-track {
+  height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden;
+}
+.i3-gauge-fill {
+  height: 100%; border-radius: 4px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.i3-gap-annotation {
+  margin-top: 12px; padding: 10px 14px;
+  border-left: 3px solid #C0392B;
+  background: rgba(192,57,43,.08);
+  border-radius: 0 4px 4px 0;
+  font-family: var(--font-s); font-size: 11px; color: #C0A090; line-height: 1.6;
+}
+
+/* --- Arc / Bipartite Diagrams --- */
+.i3-arc-node { cursor: pointer; }
+.i3-arc-path { fill: none; transition: opacity .15s; }
+.i3-arc-path:hover { opacity: 1 !important; }
+
+/* --- Glossary Search --- */
+.i3-search-wrap {
+  display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center;
+}
+.i3-search-input {
+  padding: 6px 12px; border-radius: 4px;
+  border: 1px solid var(--border-hi);
+  background: var(--surface-1); color: #fff;
+  font-family: var(--font-s); font-size: 12px;
+  outline: none; flex: 1; min-width: 200px;
+}
+.i3-search-input:focus { border-color: var(--panel-accent); }
+.i3-tag-btn {
+  padding: 3px 10px; border-radius: 12px;
+  border: 1px solid var(--border-hi);
+  background: transparent; color: var(--text-sec);
+  font-family: var(--font-s); font-size: 10px; letter-spacing: .05em;
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.i3-tag-btn:hover, .i3-tag-btn.active {
+  background: var(--panel-accent); border-color: var(--panel-accent); color: #fff;
+}
+.i3-glossary-hidden { display: none !important; }
+.i3-search-highlight {
+  background: rgba(200,168,74,.3); border-radius: 2px; padding: 0 1px;
+}
+
+/* --- Profile Drawer --- */
+.i3-profile-drawer {
+  margin-top: 8px; padding: 14px 18px;
+  background: var(--surface-1);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-md);
+  font-family: var(--font-s); font-size: 12px; color: #ccc; line-height: 1.7;
+}
+.i3-profile-drawer h4 {
+  font-family: var(--font-d); font-size: 14px; color: #fff;
+  margin: 0 0 8px 0; font-weight: 600;
+}
+.i3-profile-drawer .i3-profile-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 10px;
+}
+.i3-profile-drawer .i3-meta-item {
+  font-size: 10.5px; color: var(--text-sec); letter-spacing: .04em;
+}
+.i3-profile-drawer .i3-meta-item strong { color: #fff; }
+
+/* --- Timeline --- */
+.i3-timeline-dot { cursor: pointer; transition: r .15s; }
+.i3-timeline-dot:hover { r: 8; }
+
+/* --- Bubble chart --- */
+.i3-bubble { cursor: pointer; transition: opacity .15s; }
+.i3-bubble:hover { opacity: .8; }
+.i3-bubble.suspended { stroke: #C0392B !important; stroke-width: 2 !important; }
+
+/* --- Force network --- */
+.i3-force-link { fill: none; stroke: rgba(255,255,255,.18); stroke-width: 1.5; }
+.i3-force-node { cursor: pointer; }
+.i3-force-node circle { transition: r .15s, fill-opacity .15s; }
+.i3-force-node:hover circle { fill-opacity: .9; }
+.i3-center-node circle { stroke: rgba(255,255,255,.3); stroke-width: 2; }
+
+/* --- Dependency matrix dots --- */
+.i3-dep-dot { cursor: pointer; transition: opacity .12s; }
+.i3-dep-dot:hover { opacity: .7; }
+
 </style>
 </head>
 <body>
@@ -2883,7 +3119,7 @@ html { scrollbar-gutter: stable; }
  <div style="margin-top:28px;max-width:920px;">
  <div class="th3">Table 1.1b — G42 Global Expansion Footprint (as of February 2026)</div>
  <div style="font-size:12px;color:#9AA0B0;line-height:1.7;margin-bottom:16px;">G42 operates through ten subsidiaries collectively branded as the "Intelligence Grid," with 25,000 employees across 75 nationalities. It was named to TIME's 2025 list of 100 Most Influential Companies — the first UAE company featured. The country-by-country expansion below shows the geographic reach of an entity whose governance concentration was mapped in the diagram above. Every deployment listed below runs through the same decision structure: a single chairman, a CEO with documented DarkMatter lineage, and roughly twelve people holding overlapping board seats.</div>
- <table class="dt">
+ <table class="dt" id="i3-uae-partnerships">
  <thead><tr><th>Country</th><th>Scale and nature of engagement</th><th>Current status and key considerations</th></tr></thead>
  <tbody>
  <tr><td class="e tu">India</td><td>8-exaflop national AI supercomputer with Cerebras, MBZUAI, and C-DAC — India's first exaflop-scale infrastructure</td><td>Represents 19 times India's existing combined peak compute capacity. G42 also released NANDA, an 87-billion-parameter Hindi-English open-source model targeting 600 million Hindi speakers. The partnership operates under Indian data sovereignty rules, making India the largest country to embed G42 infrastructure under its own governance framework.</td></tr>
@@ -2900,7 +3136,7 @@ html { scrollbar-gutter: stable; }
  </div>
 
  <div class="th3">Table 1.1a — Tahnoon's AI Entities</div>
- <table class="dt">
+ <table class="dt" id="i3-tahnoon-entities">
  <thead><tr><th>Entity</th><th>Tahnoon's Role</th><th>Scale</th><th>Why it matters</th></tr></thead>
  <tbody>
  <tr><td class="e tu">G42</td><td>Chairman</td><td>Roughly 75 per cent of all UAE data centre capacity</td><td>The UAE's national AI company, operating 57 data centre facilities totalling roughly 500 megawatts and serving as the designated builder of Stargate UAE. G42's CEO is Peng Xiao, a Chinese business executive who previously held roles at DarkMatter subsidiaries while also serving as director of a Beijing-based entity — the Associated Press and a US House committee found corporate records contradicting G42's claim of no DarkMatter connection.<br><br>A Canadian intelligence assessment concluded that G42's exit from Chinese technology was a restructuring rather than a genuine separation.</td></tr>
@@ -2912,7 +3148,7 @@ html { scrollbar-gutter: stable; }
  </table>
 
  <div class="th3">Table 1.1b — Foreign Partners and Their Connection to Tahnoon</div>
- <table class="dt">
+ <table class="dt" id="i3-tahnoon-partners">
  <thead><tr><th>Partner</th><th>How they connect</th><th>What is verified</th></tr></thead>
  <tbody>
  <tr><td class="e">Microsoft</td><td>$1.5B equity + $15.2B infrastructure, routed through G42</td><td>Provides the compliance pathway for 81,900 of the UAE's 116,900 approved chips. Microsoft's CEO described the compliance setup as a "vault within a vault." The specific terms of that arrangement remain undisclosed.</td></tr>
@@ -2982,7 +3218,7 @@ html { scrollbar-gutter: stable; }
  <div class="cap">Hover any box for the full record — the linear chain structure, compared with the UAE's distributed network, shows how all decisions route through a single point.</div>
 
  <div class="th3">Table 1.1c — Saudi AI Entities: What MBS Controls</div>
- <table class="dt">
+ <table class="dt" id="i3-mbs-entities">
  <thead><tr><th>Entity</th><th>MBS's role</th><th>What is verified</th></tr></thead>
  <tbody>
  <tr><td class="e ts">SDAIA</td><td>Chairman</td><td>The national AI authority handling regulation, strategy, and data governance — its president reports directly to MBS, who also chairs the investment fund and the national AI company, meaning regulatory and commercial authority have no institutional separation. SDAIA's flagship Arabic model, ALLaM, is built on Meta's Llama-2 rather than from scratch, and SDAIA's own research found that globally trained models still outperform ALLaM on most standard benchmarks.</td></tr>
@@ -2993,7 +3229,7 @@ html { scrollbar-gutter: stable; }
  </table>
 
  <div class="th3">Table 1.1d — Personnel Holding Multiple Roles Simultaneously</div>
- <table class="dt">
+ <table class="dt" id="i3-saudi-dual-roles">
  <thead><tr><th>Person</th><th>Role A</th><th>Role B</th><th>Why it matters</th></tr></thead>
  <tbody>
  <tr><td class="e">Alghamdi</td><td>Serves as president of SDAIA, the national AI regulatory authority</td><td>Reports directly to MBS without intermediate oversight layers</td><td>The person running AI regulation answers directly to the figure who chairs both the AI investment fund and the national AI company. There is no institutional separation between regulating AI and investing in it.</td></tr>
@@ -3055,7 +3291,7 @@ html { scrollbar-gutter: stable; }
  <div class="cap">Dashed boxes mark entities that should exist but whose structure could not be established from the sources reviewed — hover confirmed nodes for detail.</div>
 
  <div class="th3">Table 1.1e — Sheikh Faisal bin Thani: Five Simultaneous Roles</div>
- <table class="dt">
+ <table class="dt" id="i3-qatar-officials">
  <thead><tr><th>Role</th><th>Domain</th><th>Why it matters</th></tr></thead>
  <tbody>
  <tr><td class="e tq">Serves as Qatar's Minister of Commerce and Industry</td><td>Government</td><td>Sets the commercial policy framework governing all foreign technology investment in Qatar, including any future Qai partnership structures.</td></tr>
@@ -3067,7 +3303,7 @@ html { scrollbar-gutter: stable; }
  </table>
 
  <div class="th3">Table 1.1f — QIA Investments Relevant to AI or Canada</div>
- <table class="dt">
+ <table class="dt" id="i3-qatar-investments">
  <thead><tr><th>Investment</th><th>Terms</th><th>Status and relevance</th></tr></thead>
  <tbody>
  <tr><td class="e">Anthropic</td><td>Series F round in September 2025, with the investment amount not disclosed</td><td>Both QIA (Qatar) and MGX (UAE) now hold Anthropic equity. Neither has disclosed stake size or governance rights. The same frontier AI laboratory has Gulf sovereign investors from two countries in its cap table.</td></tr>
@@ -3106,7 +3342,7 @@ html { scrollbar-gutter: stable; }
  <div class="cap">Hover any marker for the full record — the annotation on the right side marks the gap between where Canada and France currently sit.</div>
 
  <div class="th3">Table 1.2b — Gulf AI Capital Deployment: Three-Country Comparison</div>
- <table class="dt">
+ <table class="dt" id="i3-maturity-matrix">
  <thead><tr><th>Dimension</th><th>UAE</th><th>Saudi Arabia</th><th>Qatar</th></tr></thead>
  <tbody>
  <tr><td class="e">Capital that has been verified as actually deployed and operational</td>
@@ -3164,7 +3400,7 @@ html { scrollbar-gutter: stable; }
  </table>
 
  <div class="th3">Table 1.3b — American Compute Layer / Chinese Telecom Layer</div>
- <table class="dt">
+ <table class="dt" id="i3-dep-stack">
  <thead><tr><th>Layer</th><th>UAE</th><th>Saudi Arabia</th><th>Qatar</th></tr></thead>
  <tbody>
  <tr><td class="e">AI computing (US-built)</td>
@@ -4068,7 +4304,7 @@ window.addEventListener('resize', () => {
  <div style="background:linear-gradient(135deg,rgba(107,138,154,0.1) 0%,rgba(107,138,154,0.03) 100%);border:1px solid rgba(107,138,154,0.3);border-left:3px solid #6B8A9A;border-radius:var(--radius-md);padding:24px 28px;margin-bottom:28px;max-width:920px;position:relative;overflow:hidden;">
  <div style="font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#6B8A9A;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:12px;height:1px;background:#6B8A9A;"></span>CANADIAN INSTITUTIONAL AND CORPORATE EXPOSURE — DETAILED INVENTORY</div>
  <div style="font-size:12px;color:#C0C4CC;line-height:1.72;margin-bottom:16px;">No Canadian pension fund has publicly confirmed direct investment in G42, MGX, HUMAIN, or other Gulf AI vehicles. Indirect exposure exists through several identified pathways, and the Maple 8 pension funds (managing over $2 trillion collectively) are expected to visit the UAE in 2026 to develop new investment opportunities. The inventory below documents what can be established from publicly available information.</div>
- <table class="dt" style="margin-bottom:14px;">
+ <table id="i3-comp-canadian" class="dt" style="margin-bottom:14px;">
  <thead><tr><th>Entity</th><th>Gulf AI Exposure Pathway</th><th>Scale and significance</th></tr></thead>
  <tbody>
  <tr><td class="e" style="color:#6B8A9A;">CDPQ ($473B CAD AUM)</td><td>$2.5B stake in Jebel Ali Port; 45% stake in a global DP World ports platform — total enterprise value exposure estimated at approximately $23 billion</td><td>The deepest UAE infrastructure position of any Canadian institution. CDPQ suspended future investments with DP World on February 11, 2026 following revelations about DP World CEO's links to Jeffrey Epstein — creating uncertainty about the future of Canada's largest identified UAE exposure pathway.</td></tr>
@@ -4122,7 +4358,7 @@ window.addEventListener('resize', () => {
  <div style="margin-bottom:28px;max-width:920px;">
  <div class="th3">Saudi Arabia — Chinese Technology Inventory</div>
  <div style="font-size:12px;color:#9AA0B0;line-height:1.7;margin-bottom:16px;">Saudi Arabia presents the most acute case of Chinese technology integration of the three states. The depth and breadth of this presence — across telecoms, cloud, surveillance, manufacturing, and data centre infrastructure — coexists with the US chip approvals and HUMAIN partnership structures. No independent technical assessment of the degree of separation between these layers has been published.</div>
- <table class="dt">
+ <table class="dt" id="i3-comp-chinese">
  <thead><tr>
  <th>Entity</th>
  <th>Scale</th>
@@ -4333,7 +4569,7 @@ window.addEventListener('resize', () => {
  <!-- Section A: Acronym Glossary -->
  <div style="margin-bottom:32px;max-width:920px;">
  <div class="th3">Section A — Acronym Glossary</div>
- <table class="dt">
+ <table class="dt" id="i3-glossary">
  <thead><tr><th style="width:160px;">Term</th><th>Definition</th></tr></thead>
  <tbody>
  <tr><td class="e">ADIA</td><td>Abu Dhabi Investment Authority — UAE sovereign wealth fund (~$1 trillion AUM); Sheikh Tahnoon has chaired it since 2023. Its early investment in Craft Ventures created a noted overlap with the White House AI advisory role held by the fund's managing partner.</td></tr>
@@ -9021,5 +9257,2344 @@ qsa('.sc').forEach(function(sc){
 
 
 })(); // end IIFE
+
+/* ═══ I3 SYSTEM START ═══ */
+/* ═══════════════════════════════════════════════════════════════
+   I3 TABLE-TO-DIAGRAM TRANSFORMATION SYSTEM — Phase 0: Infrastructure
+   Investigative Intelligence Interface Design Framework
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+// ── Shared color palette ──────────────────────────────────────
+var I3_COLORS = {
+  us:      '#0A7E8C',  // teal — US/allied/verified
+  gulf:    '#C8A84A',  // amber — Gulf sovereign
+  chinese: '#C0392B',  // red — Chinese/adversarial concern
+  unknown: '#4A5568',  // slate — unknown/unverified
+  gap:     '#9A5A30',  // rust — compliance gap
+  conflict:'#8B3050',  // burgundy — conflict of interest
+  policy:  '#4682B4',  // steel blue — framework/policy only
+  uae:     '#0A7E8C',
+  saudi:   '#C8A84A',
+  qatar:   '#8B3050',
+  green:   '#27AE60',
+  warn:    '#E67E22',
+  text:    '#ccc',
+  textSec: '#9AA0B0',
+  surface2:'#1A1F2B',
+  border:  'rgba(255,255,255,0.06)',
+};
+
+// ── I3 core object ────────────────────────────────────────────
+var I3 = window.I3 = {
+  renderers: {},
+  rendered:  {},
+  drawers:   {},  // profile drawer data per table
+
+  register: function(id, fn, label) {
+    I3.renderers[id] = fn;
+    I3.rendered[id]  = false;
+    // Update label on toggle bar if already injected
+    var bar = document.querySelector('.i3-toggle-bar[data-table="' + id + '"]');
+    if (bar) {
+      var lbl = bar.querySelector('.i3-viz-label');
+      if (lbl && label) lbl.textContent = label;
+    }
+  },
+
+  toggle: function(tableId, mode) {
+    var table = document.getElementById(tableId);
+    var frame = document.getElementById('viz-' + tableId);
+    var bar   = document.querySelector('.i3-toggle-bar[data-table="' + tableId + '"]');
+    if (!table || !frame || !bar) return;
+
+    if (mode === 'viz') {
+      table.style.display = 'none';
+      // Hide dt-wrap parent if present
+      if (table.parentElement && table.parentElement.classList.contains('dt-wrap')) {
+        table.parentElement.style.display = 'none';
+      }
+      frame.style.display = 'block';
+      frame.removeAttribute('aria-hidden');
+      bar.querySelectorAll('.i3-btn').forEach(function(b) {
+        b.classList.toggle('i3-btn--active', b.dataset.mode === 'viz');
+        b.setAttribute('aria-pressed', b.dataset.mode === 'viz' ? 'true' : 'false');
+      });
+      if (!I3.rendered[tableId]) {
+        I3.render(tableId);
+      }
+    } else {
+      table.style.display = '';
+      if (table.parentElement && table.parentElement.classList.contains('dt-wrap')) {
+        table.parentElement.style.display = '';
+      }
+      frame.style.display = 'none';
+      frame.setAttribute('aria-hidden', 'true');
+      bar.querySelectorAll('.i3-btn').forEach(function(b) {
+        b.classList.toggle('i3-btn--active', b.dataset.mode === 'table');
+        b.setAttribute('aria-pressed', b.dataset.mode === 'table' ? 'true' : 'false');
+      });
+    }
+  },
+
+  render: function(tableId) {
+    var frame = document.getElementById('viz-' + tableId);
+    if (!frame) return;
+    var W = frame.offsetWidth;
+    if (W < 40) {
+      // Panel not settled — retry
+      setTimeout(function() { I3.render(tableId); }, 150);
+      return;
+    }
+    var fn = I3.renderers[tableId];
+    if (fn) {
+      frame.innerHTML = '<div class="i3-loading">Loading diagram…</div>';
+      try {
+        fn(frame, W);
+        I3.rendered[tableId] = true;
+      } catch(e) {
+        frame.innerHTML = '<div class="i3-loading" style="color:#C0392B">Diagram error: ' + e.message + '</div>';
+        console.error('I3 render error for ' + tableId + ':', e);
+      }
+    }
+  },
+
+  forceRedraw: function(tableId) {
+    var frame = document.getElementById('viz-' + tableId);
+    if (frame && frame.style.display !== 'none') {
+      frame.innerHTML = '';
+      I3.rendered[tableId] = false;
+      I3.render(tableId);
+    } else {
+      I3.rendered[tableId] = false;
+    }
+  },
+
+  // ── Tooltip helpers ────────────────────────────────────────
+  tt: function(html, evt) {
+    if (typeof showTT === 'function') showTT(html, evt);
+  },
+  ttMove: function(evt) {
+    if (typeof mvTT === 'function') mvTT(evt);
+  },
+  ttHide: function() {
+    if (typeof hideTT === 'function') hideTT();
+  },
+  buildTT: function(name, detail, source) {
+    return '<strong>' + name + '</strong>' +
+           (detail ? '<br/>' + detail : '') +
+           (source ? '<br/><em style="color:#9AA0B0;font-size:10px">Source: ' + source + '</em>' : '');
+  },
+
+  // ── Extract table data ─────────────────────────────────────
+  tableData: function(id) {
+    var t = document.getElementById(id);
+    if (!t) return { headers: [], rows: [] };
+    var headers = [];
+    t.querySelectorAll('thead th').forEach(function(th) {
+      headers.push(th.textContent.trim());
+    });
+    var rows = [];
+    t.querySelectorAll('tbody tr').forEach(function(tr) {
+      var cells = [];
+      tr.querySelectorAll('td').forEach(function(td) {
+        cells.push(td.textContent.trim());
+      });
+      if (cells.length) rows.push(cells);
+    });
+    return { headers: headers, rows: rows };
+  },
+
+  // ── Confidence opacity ─────────────────────────────────────
+  confOpacity: function(level) {
+    return { verified: 1, assessed: 0.75, reported: 0.5, unknown: 0.25 }[level] || 0.7;
+  },
+
+  // ── D3 SVG factory ─────────────────────────────────────────
+  makeSVG: function(frame, W, H) {
+    return d3.select(frame)
+      .append('svg')
+      .attr('width', W)
+      .attr('height', H)
+      .attr('viewBox', '0 0 ' + W + ' ' + H);
+  },
+};
+
+// ── inject toggle bars for all registered tables ──────────────
+function injectToggles() {
+  var tableIds = [
+    'i3-uae-partnerships', 'i3-tahnoon-entities', 'i3-tahnoon-partners',
+    'i3-mbs-entities', 'i3-saudi-dual-roles', 'i3-qatar-officials',
+    'i3-qatar-investments', 'i3-maturity-matrix', 'chip-gap-table',
+    'i3-dep-stack', 'ai-models-table', 'i3-comp-canadian',
+    'i3-comp-chinese', 'integration-tier-table', 'competitive-matrix-table',
+    'allied-context-table', 'i3-glossary'
+  ];
+
+  var labels = {
+    'i3-uae-partnerships':   'Bubble Map',
+    'i3-tahnoon-entities':   'Authority Network',
+    'i3-tahnoon-partners':   'Flow Diagram',
+    'i3-mbs-entities':       'Authority Web',
+    'i3-saudi-dual-roles':   'Conflict Map',
+    'i3-qatar-officials':    'Domain Matrix',
+    'i3-qatar-investments':  'Status Timeline',
+    'i3-maturity-matrix':    'Radar Chart',
+    'chip-gap-table':        'Accountability Gap',
+    'i3-dep-stack':          'Dependency Stack',
+    'ai-models-table':       'Capability Radar',
+    'i3-comp-canadian':      'Exposure Chart',
+    'i3-comp-chinese':       'Domain Matrix',
+    'integration-tier-table':'Heat-Map',
+    'competitive-matrix-table':'Constellation',
+    'allied-context-table':  'Engagement Gauges',
+    'i3-glossary':           'Search Index',
+  };
+
+  tableIds.forEach(function(id) {
+    var table = document.getElementById(id);
+    if (!table) return;
+
+    // Don't inject twice
+    if (document.querySelector('.i3-toggle-bar[data-table="' + id + '"]')) return;
+
+    // Build toggle bar
+    var bar = document.createElement('div');
+    bar.className = 'i3-toggle-bar';
+    bar.dataset.table = id;
+    bar.innerHTML =
+      '<button class="i3-btn i3-btn--active" data-mode="table" aria-pressed="true">' +
+        '<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="opacity:.8">' +
+          '<rect x="0" y="0" width="5" height="2.5" rx="0.5"/>' +
+          '<rect x="6.5" y="0" width="5.5" height="2.5" rx="0.5"/>' +
+          '<rect x="0" y="3.5" width="5" height="2.5" rx="0.5"/>' +
+          '<rect x="6.5" y="3.5" width="5.5" height="2.5" rx="0.5"/>' +
+          '<rect x="0" y="7" width="5" height="2.5" rx="0.5"/>' +
+          '<rect x="6.5" y="7" width="5.5" height="2.5" rx="0.5"/>' +
+        '</svg>' +
+        'Table' +
+      '</button>' +
+      '<button class="i3-btn" data-mode="viz" aria-pressed="false">' +
+        '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity:.8">' +
+          '<circle cx="3" cy="9" r="2.2" fill="currentColor" fill-opacity=".6"/>' +
+          '<circle cx="6" cy="4" r="2.2" fill="currentColor" fill-opacity=".8"/>' +
+          '<circle cx="10" cy="7" r="2.2" fill="currentColor"/>' +
+          '<line x1="3" y1="9" x2="6" y2="4" stroke="currentColor" stroke-width="1"/>' +
+          '<line x1="6" y1="4" x2="10" y2="7" stroke="currentColor" stroke-width="1"/>' +
+        '</svg>' +
+        'Diagram' +
+      '</button>' +
+      '<span class="i3-viz-label">' + (labels[id] || '') + '</span>';
+
+    bar.addEventListener('click', function(e) {
+      var btn = e.target.closest('.i3-btn');
+      if (!btn) return;
+      I3.toggle(id, btn.dataset.mode);
+    });
+
+    // Build viz frame
+    var frame = document.createElement('div');
+    frame.className = 'i3-viz-frame';
+    frame.id = 'viz-' + id;
+    frame.style.display = 'none';
+    frame.setAttribute('aria-hidden', 'true');
+
+    // Insert before table (or before its dt-wrap parent)
+    var insertBefore = table;
+    if (table.parentElement && table.parentElement.classList.contains('dt-wrap')) {
+      insertBefore = table.parentElement;
+    }
+    insertBefore.parentNode.insertBefore(bar, insertBefore);
+    // Insert frame after table (or after dt-wrap)
+    var insertAfter = (table.parentElement && table.parentElement.classList.contains('dt-wrap'))
+      ? table.parentElement : table;
+    if (insertAfter.nextSibling) {
+      insertAfter.parentNode.insertBefore(frame, insertAfter.nextSibling);
+    } else {
+      insertAfter.parentNode.appendChild(frame);
+    }
+  });
+}
+
+// ── Resize handler ────────────────────────────────────────────
+var _i3ResizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(_i3ResizeTimer);
+  _i3ResizeTimer = setTimeout(function() {
+    Object.keys(I3.rendered).forEach(function(id) {
+      if (I3.rendered[id]) {
+        var frame = document.getElementById('viz-' + id);
+        if (frame && frame.style.display !== 'none') {
+          I3.forceRedraw(id);
+        }
+      }
+    });
+  }, 300);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 1 — CHIP ACCOUNTABILITY GAP (T9)  [PRIORITY]
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('chip-gap-table', function(frame, W) {
+  // Hard data (from document text — February 2025 figures)
+  var countries = [
+    {
+      name: 'UAE', short: 'UAE',
+      approved: 116900, confirmed: 2000,
+      color: I3_COLORS.uae,
+      framework: 'IGAA (Interim General Assurance Agreement)',
+      frameworkLevel: 0.35,
+      frameworkColor: I3_COLORS.warn,
+      frameworkNote: 'Full text unreleased. Audit rights, enforcement triggers, and violation consequences undisclosed.',
+      confirmNote: 'G42 chairman confirmed "a couple of thousand" in December 2025. Gap: ~114,900 chips unaccounted.',
+      approvedNote: '116,900 approved: 81,900 via Microsoft compliance pathway, 35,000 directly to G42.'
+    },
+    {
+      name: 'Saudi Arabia', short: 'KSA',
+      approved: 40000, confirmed: 0,
+      color: I3_COLORS.saudi,
+      framework: 'Undisclosed',
+      frameworkLevel: 0.1,
+      frameworkColor: '#8B3050',
+      frameworkNote: 'US references "rigorous security requirements." Specific terms not published. No independent verification.',
+      confirmNote: 'No official disclosure. No outside verification available.',
+      approvedNote: '40,000 approved: 35,000 to HUMAIN, 5,000 to SDAIA. Framework for up to 600,000 more.'
+    },
+    {
+      name: 'Qatar', short: 'QAT',
+      approved: 35000, confirmed: 0,
+      color: I3_COLORS.qatar,
+      framework: 'None identified',
+      frameworkLevel: 0,
+      frameworkColor: I3_COLORS.chinese,
+      frameworkNote: 'Qatar did not join the US Clean Network. No compliance framework located in public reporting.',
+      confirmNote: 'No official disclosure. No outside verification. No operational AI compute identified.',
+      approvedNote: '35,000 GB300 chips approved. Identical allocation to UAE despite no operational AI infrastructure.'
+    },
+  ];
+
+  var CELL = 9;   // px per waffle cell
+  var GAP  = 2;   // px gap between cells
+  var SCALE = 1000; // chips per cell
+
+  // Calculate grid dimensions
+  countries.forEach(function(c) {
+    var total = Math.ceil(c.approved / SCALE);
+    var confirmedCells = Math.max(1, Math.ceil(c.confirmed / SCALE));
+    c.totalCells = total;
+    c.confirmedCells = confirmedCells;
+    c.gapRatio = Math.round(c.approved / Math.max(c.confirmed, 1));
+    // Grid cols: aim for roughly square
+    c.cols = Math.ceil(Math.sqrt(total * 1.6));
+    c.rows = Math.ceil(total / c.cols);
+    c.gridW = c.cols * (CELL + GAP);
+    c.gridH = c.rows * (CELL + GAP);
+  });
+
+  var PAD = 16;
+  var colW = Math.floor((W - PAD * 2) / 3);
+  var maxGridH = Math.max.apply(null, countries.map(function(c) { return c.gridH; }));
+  var H = PAD + 20 + 8 + maxGridH + 8 + 18 + 8 + 12 + 12 + 8 + PAD + 20; // title+grid+labels+bar+note
+
+  var svg = I3.makeSVG(frame, W, H);
+
+  // Title
+  svg.append('text')
+    .attr('x', W / 2).attr('y', PAD + 12)
+    .attr('text-anchor', 'middle')
+    .attr('font-family', 'var(--font-s)').attr('font-size', 11)
+    .attr('fill', '#9AA0B0').attr('letter-spacing', '.1em')
+    .text('CHIP ACCOUNTABILITY GAP — Each cell = 1,000 chips');
+
+  countries.forEach(function(c, ci) {
+    var x0 = PAD + ci * colW + (colW - c.gridW) / 2;
+    var y0 = PAD + 20 + 8;
+
+    // Country label
+    svg.append('text')
+      .attr('x', PAD + ci * colW + colW / 2).attr('y', PAD + 20)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'var(--font-s)').attr('font-size', 12).attr('font-weight', 700)
+      .attr('fill', c.color)
+      .text(c.name);
+
+    // Waffle cells
+    var g = svg.append('g');
+    for (var i = 0; i < c.totalCells; i++) {
+      var col = i % c.cols;
+      var row = Math.floor(i / c.cols);
+      var cx = x0 + col * (CELL + GAP);
+      var cy = y0 + row * (CELL + GAP);
+      var isConfirmed = i < c.confirmedCells;
+      var isGap = !isConfirmed;
+
+      var rect = g.append('rect')
+        .attr('x', cx).attr('y', cy)
+        .attr('width', CELL).attr('height', CELL)
+        .attr('rx', 1)
+        .attr('fill', isConfirmed ? c.color : (isGap ? 'rgba(154,90,48,0.22)' : 'rgba(255,255,255,0.04)'))
+        .attr('stroke', isConfirmed ? c.color : 'rgba(255,255,255,0.04)')
+        .attr('stroke-width', 0.5)
+        .style('cursor', 'default');
+
+      (function(confirmed, gap, cdata, cellIdx) {
+        rect.on('mouseover', function(evt) {
+          var chip_count = confirmed ? Math.min(SCALE, cdata.confirmed - cellIdx * SCALE) : SCALE;
+          var label = confirmed
+            ? ('~' + SCALE.toLocaleString() + ' chips — confirmed in possession')
+            : ('~' + SCALE.toLocaleString() + ' chips — approved but unaccounted');
+          I3.tt(I3.buildTT(cdata.name, label, confirmed ? cdata.confirmNote : cdata.approvedNote), evt);
+        }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+      })(isConfirmed, isGap, c, i);
+    }
+
+    // Gap ratio label
+    var labelY = y0 + c.gridH + 10;
+    svg.append('text')
+      .attr('x', PAD + ci * colW + colW / 2).attr('y', labelY)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'var(--font-s)').attr('font-size', 10).attr('font-weight', 700)
+      .attr('fill', c.confirmed > 0 ? '#C0392B' : '#8B3050')
+      .text(c.confirmed > 0
+        ? c.gapRatio + ':1 gap — ' + Math.round((c.approved - c.confirmed) / c.approved * 100) + '% unaccounted'
+        : 'No confirmed possession');
+
+    // Compliance bar
+    var barY = labelY + 14;
+    var barW = colW - 24;
+    var barX = PAD + ci * colW + 12;
+
+    svg.append('text')
+      .attr('x', barX).attr('y', barY)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 9)
+      .attr('fill', '#9AA0B0').attr('letter-spacing', '.08em')
+      .text('COMPLIANCE FRAMEWORK');
+
+    svg.append('rect')
+      .attr('x', barX).attr('y', barY + 4)
+      .attr('width', barW).attr('height', 6)
+      .attr('rx', 3).attr('fill', 'rgba(255,255,255,0.08)');
+
+    svg.append('rect')
+      .attr('x', barX).attr('y', barY + 4)
+      .attr('width', barW * c.frameworkLevel).attr('height', 6)
+      .attr('rx', 3).attr('fill', c.frameworkColor)
+      .style('cursor', 'default')
+      .on('mouseover', function(evt) {
+        I3.tt(I3.buildTT(c.framework, c.frameworkNote), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+    // Framework name
+    svg.append('text')
+      .attr('x', barX).attr('y', barY + 20)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 9)
+      .attr('fill', c.frameworkColor).style('font-style', 'italic')
+      .text(c.framework.length > 28 ? c.framework.slice(0, 28) + '…' : c.framework);
+  });
+
+  // Bottom annotation
+  var noteY = H - 12;
+  svg.append('text')
+    .attr('x', W / 2).attr('y', noteY)
+    .attr('text-anchor', 'middle')
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+    .attr('fill', '#9AA0B0').attr('font-style', 'italic')
+    .text('All three countries received an identical initial allocation of 35,000 chips despite vastly different operational readiness.');
+}, 'Accountability Gap');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 1 — TAHNOON ENTITY NETWORK (T2)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-tahnoon-entities', function(frame, W) {
+  var H = 520;
+  var svg = I3.makeSVG(frame, W, H);
+  var cx = W / 2, cy = H / 2 - 10;
+
+  // Data from table
+  var nodes = [
+    { id: 'tahnoon', label: 'Sheikh Tahnoon', type: 'person', scale: 36,
+      detail: 'UAE National Security Advisor and chairman of multiple AI entities simultaneously', isCenter: true },
+    { id: 'g42',   label: 'G42', type: 'company',    scale: 22,
+      detail: 'UAE national AI company. ~75% of all UAE data centre capacity. 57 facilities, ~500MW. CEO Peng Xiao.' },
+    { id: 'mgx',   label: 'MGX', type: 'fund',       scale: 20,
+      detail: 'Dedicated AI investment fund. No financial disclosures. Holds equity in OpenAI, G42, NVIDIA AI Infrastructure Partnership.' },
+    { id: 'adia',  label: 'ADIA', type: 'fund',      scale: 18,
+      detail: 'Abu Dhabi Investment Authority. ~$1 trillion AUM. Tahnoon chairs since 2023. Early Craft Ventures investor (overlap with White House AI advisory).' },
+    { id: 'ihc',   label: 'IHC', type: 'company',    scale: 16,
+      detail: 'International Holding Company. Conglomerate with $300B+ market cap. Tahnoon is chairman.' },
+    { id: 'adq',   label: 'ADQ', type: 'fund',       scale: 15,
+      detail: '$263B industrial holding company. January 2026: non-AI assets transferred to new entity L\'imad Holding.' },
+    { id: 'atrc',  label: 'ATRC', type: 'regulator', scale: 14,
+      detail: 'Advanced Technology Research Council — parent of TII. 9 research centres including autonomous robotics, directed energy, secure systems.' },
+    { id: 'aiatc', label: 'AIATC', type: 'regulator', scale: 14,
+      detail: 'Abu Dhabi Integrated Technology and Communications Council — official UAE AI regulatory authority. Created MGX as its own investment vehicle.' },
+    { id: 'core42', label: 'Core42', type: 'company', scale: 12,
+      detail: 'G42\'s cloud subsidiary. Provides sovereign cloud layer above Azure, positioning Core42 as interface between UAE government data and Microsoft infrastructure.' },
+    { id: 'tii',   label: 'TII', type: 'company',    scale: 14,
+      detail: 'Technology Innovation Institute — developed Falcon LLM. Falcon-H1 (34B params, May 2025) matches models twice its size. Open-source release.' },
+    { id: 'darkm', label: 'DarkMatter', type: 'company', scale: 10,
+      detail: 'Former UAE cyber-intelligence company. G42 CEO Peng Xiao held director role at Beijing entity while at DarkMatter subsidiary. AP and House committee found contradictions in G42\'s denials.' },
+  ];
+
+  var edges = [
+    { source: 'tahnoon', target: 'g42',    label: 'Chairman' },
+    { source: 'tahnoon', target: 'mgx',    label: 'Chairman' },
+    { source: 'tahnoon', target: 'adia',   label: 'Chairman' },
+    { source: 'tahnoon', target: 'ihc',    label: 'Chairman' },
+    { source: 'tahnoon', target: 'adq',    label: 'Chairman' },
+    { source: 'tahnoon', target: 'atrc',   label: 'Chairman' },
+    { source: 'tahnoon', target: 'aiatc',  label: 'Chairman' },
+    { source: 'g42',     target: 'core42', label: 'Subsidiary' },
+    { source: 'atrc',    target: 'tii',    label: 'Parent' },
+    { source: 'g42',     target: 'darkm',  label: 'Former link' },
+    { source: 'aiatc',   target: 'mgx',    label: 'Created' },
+  ];
+
+  var typeColors = {
+    person:    '#E0D0FF',
+    company:   I3_COLORS.uae,
+    fund:      I3_COLORS.gulf,
+    regulator: I3_COLORS.policy,
+  };
+
+  // Position nodes
+  var centerNode = nodes[0];
+  centerNode.x = cx; centerNode.y = cy;
+
+  var satellites = nodes.slice(1);
+  var R = Math.min(W, H) * 0.34;
+  satellites.forEach(function(n, i) {
+    var angle = (i / satellites.length) * 2 * Math.PI - Math.PI / 2;
+    n.x = cx + R * Math.cos(angle);
+    n.y = cy + R * Math.sin(angle);
+  });
+
+  // Draw edges
+  var nodeMap = {};
+  nodes.forEach(function(n) { nodeMap[n.id] = n; });
+
+  edges.forEach(function(e) {
+    var s = nodeMap[e.source], t = nodeMap[e.target];
+    if (!s || !t) return;
+    var isDashed = e.label === 'Former link';
+    svg.append('line')
+      .attr('x1', s.x).attr('y1', s.y).attr('x2', t.x).attr('y2', t.y)
+      .attr('stroke', isDashed ? '#8B3050' : 'rgba(255,255,255,0.15)')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-dasharray', isDashed ? '4,3' : null);
+
+    // Edge label at midpoint
+    var mx = (s.x + t.x) / 2, my = (s.y + t.y) / 2;
+    if (e.label !== 'Chairman') { // too many "Chairman" labels would clutter
+      svg.append('text')
+        .attr('x', mx).attr('y', my - 3)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+        .attr('fill', isDashed ? '#8B3050' : 'rgba(255,255,255,0.3)')
+        .attr('pointer-events', 'none')
+        .text(e.label);
+    }
+  });
+
+  // Draw nodes
+  nodes.forEach(function(n) {
+    var g = svg.append('g').style('cursor', 'pointer');
+    var r = n.scale * 0.55;
+    var col = typeColors[n.type] || '#ccc';
+
+    if (n.isCenter) {
+      // Outer glow ring
+      g.append('circle').attr('cx', n.x).attr('cy', n.y).attr('r', r + 8)
+        .attr('fill', 'none').attr('stroke', col).attr('stroke-width', 1.5).attr('stroke-opacity', 0.3);
+    }
+
+    g.append('circle')
+      .attr('cx', n.x).attr('cy', n.y).attr('r', r)
+      .attr('fill', col).attr('fill-opacity', n.isCenter ? 0.9 : 0.65)
+      .attr('stroke', col).attr('stroke-width', n.isCenter ? 2 : 1).attr('stroke-opacity', 0.8);
+
+    // Label
+    var labelY = n.y + r + 12;
+    // Adjust for edge positions to avoid overflow
+    var anchor = 'middle';
+    if (n.x < W * 0.25) anchor = 'start';
+    if (n.x > W * 0.75) anchor = 'end';
+
+    g.append('text')
+      .attr('x', n.x).attr('y', labelY)
+      .attr('text-anchor', anchor)
+      .attr('font-family', 'var(--font-s)')
+      .attr('font-size', n.isCenter ? 12 : 10)
+      .attr('font-weight', n.isCenter ? 700 : 400)
+      .attr('fill', n.isCenter ? '#fff' : '#ccc')
+      .attr('pointer-events', 'none')
+      .text(n.label);
+
+    // Interaction
+    g.on('mouseover', function(evt) {
+      I3.tt(I3.buildTT(n.label, n.detail, 'Table 1.1a — Tahnoon\'s AI Entities'), evt);
+    }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+  });
+
+  // Legend
+  var legX = 12, legY = H - 80;
+  svg.append('text').attr('x', legX).attr('y', legY)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0')
+    .attr('letter-spacing', '.1em').text('ENTITY TYPE');
+  legY += 14;
+  [['Company', I3_COLORS.uae], ['Fund', I3_COLORS.gulf], ['Regulator', I3_COLORS.policy], ['Person', '#E0D0FF']].forEach(function(pair) {
+    svg.append('circle').attr('cx', legX + 5).attr('cy', legY - 4).attr('r', 4)
+      .attr('fill', pair[1]).attr('fill-opacity', 0.7);
+    svg.append('text').attr('x', legX + 13).attr('y', legY)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 9.5).attr('fill', '#9AA0B0')
+      .text(pair[0]);
+    legY += 14;
+  });
+}, 'Authority Network');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 1 — MBS AUTHORITY WEB (T4)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-mbs-entities', function(frame, W) {
+  var H = 480;
+  var svg = I3.makeSVG(frame, W, H);
+  var cx = W / 2, cy = H / 2;
+
+  var nodes = [
+    { id: 'mbs',    label: 'MBS', sublabel: 'Crown Prince', type: 'person', scale: 32, isCenter: true,
+      detail: 'Mohammed bin Salman — simultaneously chairman of PIF, chairs SDAIA, and chairs HUMAIN. No institutional separation between regulatory and commercial authority.' },
+    { id: 'sdaia',  label: 'SDAIA', type: 'regulator', scale: 18, role: 'Chairman',
+      detail: 'National AI regulatory authority. President reports directly to MBS. Handles regulation, strategy, and data governance with no independence from commercial authority.', confidence: 'verified' },
+    { id: 'pif',    label: 'PIF', type: 'fund', scale: 20, role: 'Chairman',
+      detail: '$913B AUM. Governor stated publicly it operates "outside the outlines of governance." HRW documented forced decisions against unanimous board opposition.', confidence: 'verified' },
+    { id: 'humain', label: 'HUMAIN', type: 'company', scale: 17, role: 'Chairman',
+      detail: 'National AI company. $77B programme (independently unverified). Only verified deployment: Aramco-Groq cluster ($1.5B, 19,000 chips). HUMAIN\'s data centres not yet operational.', confidence: 'assessed' },
+    { id: 'neom',   label: 'NEOM', type: 'company', scale: 14, role: 'Chairman',
+      detail: 'Smart city mega-project. AI infrastructure component. Completion timeline repeatedly revised.', confidence: 'verified' },
+    { id: 'aramco', label: 'Saudi Aramco', type: 'company', scale: 15, role: 'Director',
+      detail: 'Aramco-Groq cluster: ~$1.5B, 19,000 chips in Dammam — the only independently verified live AI deployment in Saudi Arabia.', confidence: 'verified' },
+    { id: 'alg',    label: 'Alghamdi', type: 'person', scale: 12, role: 'Reports to MBS',
+      detail: 'President of SDAIA (regulator) — reports directly to MBS. Simultaneously, this creates a direct link to MBS who chairs the commercial entity.', confidence: 'verified' },
+    { id: 'alaiz',  label: 'Al-Onaizan', type: 'person', scale: 12, role: 'Dual role',
+      detail: 'Head of National Centre for AI (research/policy) AND Chief Scientist at HUMAIN (commercial). No independent assessment of this arrangement published.', confidence: 'verified' },
+  ];
+
+  var typeColors = {
+    person:    '#E0D0FF',
+    company:   I3_COLORS.saudi,
+    fund:      '#C8A84A',
+    regulator: I3_COLORS.policy,
+  };
+
+  var nodeMap = {};
+  nodes.forEach(function(n) { nodeMap[n.id] = n; });
+
+  // Position
+  nodes[0].x = cx; nodes[0].y = cy;
+  var sats = nodes.slice(1);
+  var R = Math.min(W, H) * 0.33;
+  sats.forEach(function(n, i) {
+    var angle = (i / sats.length) * 2 * Math.PI - Math.PI / 2;
+    n.x = cx + R * Math.cos(angle);
+    n.y = cy + R * Math.sin(angle);
+  });
+
+  // Edges
+  sats.forEach(function(n) {
+    var isDual = n.id === 'alaiz';
+    svg.append('line')
+      .attr('x1', cx).attr('y1', cy).attr('x2', n.x).attr('y2', n.y)
+      .attr('stroke', isDual ? '#8B3050' : 'rgba(255,255,255,0.12)')
+      .attr('stroke-width', isDual ? 2 : 1.5)
+      .attr('stroke-dasharray', isDual ? '4,3' : null);
+  });
+
+  // Role labels on edges
+  sats.forEach(function(n) {
+    if (!n.role) return;
+    var mx = (cx + n.x) / 2, my = (cy + n.y) / 2;
+    svg.append('text')
+      .attr('x', mx).attr('y', my)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+      .attr('fill', 'rgba(255,255,255,0.3)').attr('pointer-events', 'none')
+      .text(n.role);
+  });
+
+  // Draw nodes
+  nodes.forEach(function(n) {
+    var g = svg.append('g').style('cursor', 'pointer');
+    var r = (n.scale || 12) * 0.55;
+    var col = typeColors[n.type] || '#ccc';
+    var opacity = n.confidence === 'assessed' ? 0.55 : 0.72;
+
+    if (n.isCenter) {
+      g.append('circle').attr('cx', n.x).attr('cy', n.y).attr('r', r + 8)
+        .attr('fill', 'none').attr('stroke', col).attr('stroke-width', 1.5).attr('stroke-opacity', 0.3);
+    }
+
+    g.append('circle')
+      .attr('cx', n.x).attr('cy', n.y).attr('r', r)
+      .attr('fill', col).attr('fill-opacity', n.isCenter ? 0.9 : opacity)
+      .attr('stroke', col).attr('stroke-width', 1.5).attr('stroke-opacity', 0.7);
+
+    var labelY = n.y + r + 12;
+    var anchor = 'middle';
+    if (n.x < W * 0.25) anchor = 'start';
+    if (n.x > W * 0.75) anchor = 'end';
+
+    g.append('text')
+      .attr('x', n.x).attr('y', labelY)
+      .attr('text-anchor', anchor)
+      .attr('font-family', 'var(--font-s)')
+      .attr('font-size', n.isCenter ? 12 : 10)
+      .attr('font-weight', n.isCenter ? 700 : 400)
+      .attr('fill', n.isCenter ? '#fff' : '#ccc')
+      .attr('pointer-events', 'none')
+      .text(n.label);
+
+    if (n.sublabel) {
+      g.append('text')
+        .attr('x', n.x).attr('y', labelY + 12)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'var(--font-s)').attr('font-size', 9)
+        .attr('fill', '#9AA0B0').attr('pointer-events', 'none')
+        .text(n.sublabel);
+    }
+
+    g.on('mouseover', function(evt) {
+      I3.tt(I3.buildTT(n.label, n.detail, 'Table 1.1c — Saudi AI Entities'), evt);
+    }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+  });
+
+  // Structural conflict annotation
+  svg.append('rect')
+    .attr('x', 10).attr('y', H - 38)
+    .attr('width', Math.min(W - 20, 480)).attr('height', 30)
+    .attr('rx', 4).attr('fill', 'rgba(139,48,80,0.12)')
+    .attr('stroke', '#8B3050').attr('stroke-width', 1);
+  svg.append('text')
+    .attr('x', 18).attr('y', H - 22)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+    .attr('fill', '#C0A090').attr('font-style', 'italic')
+    .text('One individual chairs the regulator, the sovereign fund, and the national AI company. No institutional separation.');
+}, 'Authority Web');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 2 — MATURITY RADAR (T8)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-maturity-matrix', function(frame, W) {
+  var H = 440;
+  var svg = I3.makeSVG(frame, W, H);
+  var cx = Math.min(W * 0.5, 300), cy = H / 2;
+  var R = Math.min(cx, cy) - 60;
+
+  var axes = [
+    { label: 'Capital Deployed', short: 'Capital' },
+    { label: 'Data Centre Capacity', short: 'Data Centres' },
+    { label: 'Chip Possession', short: 'Chips' },
+    { label: 'AI Model Maturity', short: 'Models' },
+  ];
+
+  var countries = [
+    { name: 'UAE',          color: I3_COLORS.uae,   values: [9, 9, 2, 9], opacity: 0.22,
+      detail: '$15–25B deployed, 500MW operational, "couple thousand" chips confirmed, Falcon/K2 models.' },
+    { name: 'Saudi Arabia', color: I3_COLORS.saudi,  values: [4, 2, 1, 3], opacity: 0.18,
+      detail: '$77B programme (unverified), Aramco-Groq only live, no confirmed chip count, ALLaM fine-tuned Llama-2.' },
+    { name: 'Qatar',        color: I3_COLORS.qatar,  values: [1, 0, 1, 1], opacity: 0.15,
+      detail: 'No independently verified AI capital, no operational compute, no confirmed chips, no identified AI model.' },
+  ];
+
+  var N = axes.length;
+  var angleStep = (2 * Math.PI) / N;
+  var activeCountries = { 'UAE': true, 'Saudi Arabia': true, 'Qatar': true };
+
+  function angleFor(i) { return i * angleStep - Math.PI / 2; }
+
+  // Grid circles
+  [0.25, 0.5, 0.75, 1].forEach(function(t) {
+    var pts = axes.map(function(_, i) {
+      return [cx + R * t * Math.cos(angleFor(i)), cy + R * t * Math.sin(angleFor(i))];
+    });
+    svg.append('polygon')
+      .attr('points', pts.map(function(p) { return p[0] + ',' + p[1]; }).join(' '))
+      .attr('fill', 'none').attr('stroke', 'rgba(255,255,255,0.07)').attr('stroke-width', 1);
+  });
+
+  // Axes
+  axes.forEach(function(a, i) {
+    var ang = angleFor(i);
+    var ex = cx + R * Math.cos(ang), ey = cy + R * Math.sin(ang);
+    svg.append('line').attr('x1', cx).attr('y1', cy).attr('x2', ex).attr('y2', ey)
+      .attr('stroke', 'rgba(255,255,255,0.12)').attr('stroke-width', 1);
+
+    // Axis label
+    var lx = cx + (R + 22) * Math.cos(ang);
+    var ly = cy + (R + 22) * Math.sin(ang);
+    var anchor = Math.abs(Math.cos(ang)) < 0.1 ? 'middle' : (Math.cos(ang) < 0 ? 'end' : 'start');
+    svg.append('text')
+      .attr('x', lx).attr('y', ly + 4)
+      .attr('text-anchor', anchor)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 10)
+      .attr('fill', '#9AA0B0').text(a.short);
+  });
+
+  // Country polygons (drawn in g elements so we can toggle)
+  var polyGroups = {};
+  countries.forEach(function(c) {
+    var g = svg.append('g').attr('data-country', c.name);
+    polyGroups[c.name] = g;
+
+    var pts = c.values.map(function(v, i) {
+      var t = v / 10;
+      return [cx + R * t * Math.cos(angleFor(i)), cy + R * t * Math.sin(angleFor(i))];
+    });
+
+    g.append('polygon')
+      .attr('points', pts.map(function(p) { return p[0] + ',' + p[1]; }).join(' '))
+      .attr('fill', c.color).attr('fill-opacity', c.opacity)
+      .attr('stroke', c.color).attr('stroke-width', 2).attr('stroke-opacity', 0.8);
+
+    // Data points
+    pts.forEach(function(p, i) {
+      g.append('circle').attr('cx', p[0]).attr('cy', p[1]).attr('r', 4)
+        .attr('fill', c.color).attr('stroke', '#0B0E14').attr('stroke-width', 1.5)
+        .style('cursor', 'pointer')
+        .on('mouseover', function(evt) {
+          I3.tt(I3.buildTT(c.name + ' — ' + axes[i].label, 'Score: ' + c.values[i] + '/10<br>' + c.detail), evt);
+        }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+    });
+  });
+
+  // Legend (right side) — clickable to toggle
+  var legX = Math.min(W - 130, cx + R + 40);
+  var legY = cy - 40;
+  svg.append('text').attr('x', legX).attr('y', legY - 10)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0')
+    .attr('letter-spacing', '.1em').text('CLICK TO TOGGLE');
+
+  countries.forEach(function(c, i) {
+    var g = svg.append('g').style('cursor', 'pointer');
+    g.append('rect').attr('x', legX).attr('y', legY + i * 20 - 6)
+      .attr('width', 14).attr('height', 14).attr('rx', 2)
+      .attr('fill', c.color).attr('fill-opacity', 0.7);
+    g.append('text').attr('x', legX + 19).attr('y', legY + i * 20 + 5)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 11)
+      .attr('fill', '#ccc').text(c.name);
+
+    g.on('click', function() {
+      activeCountries[c.name] = !activeCountries[c.name];
+      var pg = polyGroups[c.name];
+      pg.attr('opacity', activeCountries[c.name] ? 1 : 0.1);
+    });
+  });
+
+  // Scale labels
+  svg.append('text').attr('x', cx + 4).attr('y', cy - R * 0.25 - 2)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 8).attr('fill', 'rgba(255,255,255,0.3)')
+    .text('2.5');
+  svg.append('text').attr('x', cx + 4).attr('y', cy - R * 0.5 - 2)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 8).attr('fill', 'rgba(255,255,255,0.3)')
+    .text('5');
+  svg.append('text').attr('x', cx + 4).attr('y', cy - R - 2)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 8).attr('fill', 'rgba(255,255,255,0.3)')
+    .text('10');
+}, 'Radar Chart');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 2 — AI MODELS CAPABILITY RADAR (T11)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('ai-models-table', function(frame, W) {
+  var H = 440;
+  var svg = I3.makeSVG(frame, W, H);
+  var cx = Math.min(W * 0.5, 280), cy = H / 2;
+  var R = Math.min(cx - 30, cy - 50);
+
+  var axes = [
+    { label: 'Architecture\nOriginality', short: 'Architecture' },
+    { label: 'Benchmark\nPerformance', short: 'Benchmarks' },
+    { label: 'Training Data\nSovereignty', short: 'Data Sovereignty' },
+    { label: 'Open Source\nAvailability', short: 'Open Source' },
+    { label: 'Verification\nStatus', short: 'Verified' },
+  ];
+
+  var models = [
+    { name: 'Falcon (TII/UAE)', color: I3_COLORS.uae, values: [10, 8, 8, 10, 9],
+      detail: 'Trained from scratch. Falcon-H1 (May 2025): hybrid Transformer-SSM, 34B params, matches models twice its size. Open-source.' },
+    { name: 'K2 Think V1 (TII)', color: '#5BC8AF', values: [10, 10, 7, 10, 6],
+      detail: '32B parameters. Tied-for-first on AIME 2024 benchmark among open-source models. ETH Zurich contested results. Open-source.' },
+    { name: 'ALLaM (SDAIA/KSA)', color: I3_COLORS.saudi, values: [2, 4, 5, 0, 7],
+      detail: 'Fine-tuned from Meta\'s Llama-2 — not trained from scratch. SDAIA\'s own benchmarks found it underperforms global models. Closed source.' },
+    { name: 'Qai (Qatar)', color: I3_COLORS.qatar, values: [0, 0, 0, 0, 1],
+      detail: 'Announced. No public architecture, benchmark, or parameter details. No training data disclosed. No operational capability confirmed.' },
+  ];
+
+  var N = axes.length;
+  var angleStep = (2 * Math.PI) / N;
+  var activeModels = {};
+  models.forEach(function(m) { activeModels[m.name] = true; });
+
+  function angleFor(i) { return i * angleStep - Math.PI / 2; }
+
+  // Grid
+  [0.25, 0.5, 0.75, 1].forEach(function(t) {
+    var pts = axes.map(function(_, i) {
+      return [cx + R * t * Math.cos(angleFor(i)), cy + R * t * Math.sin(angleFor(i))];
+    });
+    svg.append('polygon')
+      .attr('points', pts.map(function(p) { return p[0] + ',' + p[1]; }).join(' '))
+      .attr('fill', 'none').attr('stroke', 'rgba(255,255,255,0.07)').attr('stroke-width', 1);
+  });
+
+  // Axes
+  axes.forEach(function(a, i) {
+    var ang = angleFor(i);
+    svg.append('line').attr('x1', cx).attr('y1', cy)
+      .attr('x2', cx + R * Math.cos(ang)).attr('y2', cy + R * Math.sin(ang))
+      .attr('stroke', 'rgba(255,255,255,0.12)').attr('stroke-width', 1);
+    var lx = cx + (R + 18) * Math.cos(ang);
+    var ly = cy + (R + 18) * Math.sin(ang);
+    var anchor = Math.abs(Math.cos(ang)) < 0.15 ? 'middle' : (Math.cos(ang) < 0 ? 'end' : 'start');
+    svg.append('text').attr('x', lx).attr('y', ly + 4)
+      .attr('text-anchor', anchor).attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+      .attr('fill', '#9AA0B0').text(a.short);
+  });
+
+  // Model polygons
+  var polyGroups = {};
+  models.forEach(function(m) {
+    var g = svg.append('g').attr('data-model', m.name);
+    polyGroups[m.name] = g;
+    var pts = m.values.map(function(v, i) {
+      var t = v / 10;
+      return [cx + R * t * Math.cos(angleFor(i)), cy + R * t * Math.sin(angleFor(i))];
+    });
+    g.append('polygon')
+      .attr('points', pts.map(function(p) { return p[0] + ',' + p[1]; }).join(' '))
+      .attr('fill', m.color).attr('fill-opacity', 0.18)
+      .attr('stroke', m.color).attr('stroke-width', 2).attr('stroke-opacity', 0.85);
+    pts.forEach(function(p, i) {
+      g.append('circle').attr('cx', p[0]).attr('cy', p[1]).attr('r', 4)
+        .attr('fill', m.color).attr('stroke', '#0B0E14').attr('stroke-width', 1.5)
+        .style('cursor', 'pointer')
+        .on('mouseover', function(evt) {
+          I3.tt(I3.buildTT(m.name + ' — ' + axes[i].label, 'Score: ' + m.values[i] + '/10<br>' + m.detail), evt);
+        }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+    });
+  });
+
+  // Legend
+  var legX = Math.min(W - 200, cx + R + 30);
+  if (legX < cx + R + 10) legX = cx + R + 10;
+  var legY = 50;
+  svg.append('text').attr('x', legX).attr('y', legY - 12)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0')
+    .attr('letter-spacing', '.1em').text('CLICK TO TOGGLE');
+  models.forEach(function(m, i) {
+    var g = svg.append('g').style('cursor', 'pointer');
+    g.append('rect').attr('x', legX).attr('y', legY + i * 22 - 6)
+      .attr('width', 12).attr('height', 12).attr('rx', 2).attr('fill', m.color).attr('fill-opacity', 0.8);
+    g.append('text').attr('x', legX + 17).attr('y', legY + i * 22 + 4)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 10).attr('fill', '#ccc')
+      .text(m.name.length > 20 ? m.name.slice(0, 20) + '…' : m.name);
+    g.on('click', function() {
+      activeModels[m.name] = !activeModels[m.name];
+      polyGroups[m.name].attr('opacity', activeModels[m.name] ? 1 : 0.08);
+    });
+  });
+}, 'Capability Radar');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 2 — INTEGRATION TIER HEAT-MAP + FLIP SORT (T14)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('integration-tier-table', function(frame, W) {
+  var PAD = { top: 70, left: 120, right: 10, bottom: 40 };
+  var actors = [
+    { name: 'United States', tier: 1, capital: 10, presence: 10, multilateral: 3, govTransp: 6,
+      entryMode: 'Regulator + investor + supplier',
+      currentPos: 'Occupies every layer at once. Supplier, regulator, investor simultaneously.',
+      detail: 'More than $100B in verified commercial deployment. Azure, AWS, Oracle all live. Pax Silica Founder, AUKUS Founder.' },
+    { name: 'UAE', tier: 1, capital: 8, presence: 10, multilateral: 3, govTransp: 2,
+      entryMode: 'Infrastructure host + co-investor',
+      currentPos: 'Primary Gulf AI infrastructure host. 57 data centres, ~500MW live.',
+      detail: '$15–25B verified deployed. Pax Silica signatory Jan 15. Low governance transparency — circular ownership.' },
+    { name: 'France', tier: 1, capital: 9, presence: 8, multilateral: 1, govTransp: 9,
+      entryMode: 'Investment + data centre construction',
+      currentPos: 'Deepest contracted position. Comparator for Canada.',
+      detail: '$56B contracted, 1.4GW committed on French soil. Named counterparties, binding agreements. Non-Pax Silica.' },
+    { name: 'South Korea', tier: 1, capital: 7, presence: 9, multilateral: 3, govTransp: 9,
+      entryMode: 'Nuclear energy → AI consortium',
+      currentPos: 'Energy underpins UAE AI campus. Integration pre-dates frameworks.',
+      detail: 'Barakah 5.6GW powers UAE AI campus. Pax Silica Founder. Engineering contracts publicly verifiable.' },
+    { name: 'Israel', tier: 2, capital: 3, presence: 6, multilateral: 3, govTransp: 2,
+      entryMode: 'Surveillance technology',
+      currentPos: 'Security infrastructure layer. Inside Pax Silica from founding.',
+      detail: 'NSO Group lineage. Bilateral terms undisclosed. Security technology embedded in Gulf state systems.' },
+    { name: 'Saudi Arabia', tier: 2, capital: 5, presence: 3, multilateral: 0, govTransp: 2,
+      entryMode: 'Recipient + sovereign fund',
+      currentPos: 'Non-member. Low governance transparency.',
+      detail: '$77B programme (unverified). Aramco-Groq only; HUMAIN under construction. PIF governor: "outside governance."' },
+    { name: 'United Kingdom', tier: 2, capital: 4, presence: 5, multilateral: 3, govTransp: 7,
+      entryMode: 'Defence + research',
+      currentPos: 'Inside both architectures. AUKUS + QUAIRIA (Qatar).',
+      detail: 'AUKUS Pillar II, QUAIRIA, Thales cortAIx expanding to UAE. NSI Act 2021.' },
+    { name: 'Australia', tier: 2, capital: 4, presence: 5, multilateral: 3, govTransp: 8,
+      entryMode: 'Resource + investment screening',
+      currentPos: 'Inside both architectures. Tightest inbound screen.',
+      detail: 'FIRB nil threshold — most stringent allied mechanism. CPP Investments co-owns AirTrunk with Blackstone.' },
+    { name: 'China', tier: 3, capital: 6, presence: 7, multilateral: 0, govTransp: 1,
+      entryMode: 'Telecom infrastructure',
+      currentPos: 'Inside all three Gulf states via Huawei 5G and cloud.',
+      detail: 'Huawei: all 3 Saudi mobile operators. Ooredoo 5G (Qatar). Alibaba/Tencent cloud. Class C CITC certification.' },
+    { name: 'Canada', tier: 3, capital: 3, presence: 1, multilateral: 0, govTransp: 3,
+      entryMode: 'Framework + research',
+      currentPos: 'Outside both architectures. Framework-only, no contracted AI capital.',
+      detail: '$50B UAE framework (unverified). Mila-TII collaboration. No public position from CSE, RCMP, or CSIS on Gulf AI.' },
+  ];
+
+  var cols = [
+    { key: 'tier',        label: 'Tier',          w: 40 },
+    { key: 'capital',     label: 'Capital',        w: 60 },
+    { key: 'presence',    label: 'Presence',       w: 65 },
+    { key: 'multilateral',label: 'Multilateral',   w: 75 },
+    { key: 'govTransp',   label: 'Gov. Transparency', w: 85 },
+  ];
+
+  var rowH = 34;
+  var H = PAD.top + actors.length * rowH + PAD.bottom + 50;
+  var svgEl = I3.makeSVG(frame, W, H);
+
+  // Color scale per col
+  function cellColor(col, val, max) {
+    var t = val / max;
+    if (col.key === 'tier') {
+      return val === 1 ? I3_COLORS.us : val === 2 ? I3_COLORS.warn : '#8B3050';
+    }
+    return d3.interpolate('#1A1F2B', col.key === 'govTransp' ? I3_COLORS.us : I3_COLORS.gulf)(t * 0.8 + 0.1);
+  }
+
+  var colMax = { tier: 3, capital: 10, presence: 10, multilateral: 3, govTransp: 10 };
+  var sortCol = null, sortAsc = true;
+  var rowOrder = actors.map(function(_, i) { return i; });
+
+  // Sort indicator arrow
+  var sortArrows = {};
+
+  function drawHeader() {
+    // Actor label header
+    svgEl.append('text')
+      .attr('x', PAD.left - 8).attr('y', PAD.top - 10)
+      .attr('text-anchor', 'end')
+      .attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+      .attr('fill', '#9AA0B0').attr('letter-spacing', '.08em')
+      .text('ACTOR');
+
+    var x = PAD.left;
+    cols.forEach(function(col, ci) {
+      var cx2 = x + col.w / 2;
+      var g = svgEl.append('g').style('cursor', 'pointer');
+
+      g.append('rect')
+        .attr('x', x).attr('y', PAD.top - 24)
+        .attr('width', col.w).attr('height', 22)
+        .attr('rx', 3).attr('fill', 'rgba(255,255,255,0.04)');
+
+      g.append('text')
+        .attr('x', cx2).attr('y', PAD.top - 9)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'var(--font-s)').attr('font-size', 9)
+        .attr('fill', '#ccc').attr('letter-spacing', '.05em')
+        .text(col.label.toUpperCase());
+
+      // Sort arrow placeholder
+      var arrow = g.append('text')
+        .attr('x', x + col.w - 8).attr('y', PAD.top - 9)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'var(--font-s)').attr('font-size', 9)
+        .attr('fill', 'rgba(255,255,255,0.3)')
+        .text('↕');
+      sortArrows[col.key] = arrow;
+
+      g.on('click', function() {
+        if (sortCol === col.key) { sortAsc = !sortAsc; }
+        else { sortCol = col.key; sortAsc = false; }
+
+        // Update arrows
+        Object.keys(sortArrows).forEach(function(k) {
+          sortArrows[k].attr('fill', 'rgba(255,255,255,0.3)').text('↕');
+        });
+        sortArrows[col.key].attr('fill', I3_COLORS.gulf).text(sortAsc ? '↑' : '↓');
+
+        // FLIP sort
+        var newOrder = rowOrder.slice().sort(function(a, b) {
+          var va = actors[a][col.key], vb = actors[b][col.key];
+          return sortAsc ? va - vb : vb - va;
+        });
+
+        // Record first positions
+        var firstY = {};
+        rowOrder.forEach(function(actorIdx, ri) {
+          firstY[actorIdx] = PAD.top + ri * rowH;
+        });
+
+        rowOrder = newOrder;
+
+        // Apply new order and FLIP
+        rowOrder.forEach(function(actorIdx, ri) {
+          var newY = PAD.top + ri * rowH;
+          var oldY = firstY[actorIdx];
+          var dy = oldY - newY;
+          var rowG = svgEl.select('g[data-actor="' + actorIdx + '"]');
+          if (!rowG.empty()) {
+            rowG.attr('transform', 'translate(0,' + dy + ')');
+            rowG.transition().duration(350)
+              .attr('transform', 'translate(0,0)')
+              .attr('data-row', ri);
+          }
+          // Update Y coordinates
+          rowG.selectAll('*[data-y]').each(function() {
+            var el = d3.select(this);
+            el.attr('y', parseFloat(el.attr('data-y')) - PAD.top + PAD.top);
+          });
+        });
+      });
+
+      x += col.w;
+    });
+  }
+
+  function drawRows() {
+    rowOrder.forEach(function(actorIdx, ri) {
+      var actor = actors[actorIdx];
+      var y = PAD.top + ri * rowH;
+      var g = svgEl.append('g').attr('data-actor', actorIdx).attr('data-row', ri);
+
+      // Row bg
+      g.append('rect')
+        .attr('x', 0).attr('y', y).attr('width', W).attr('height', rowH - 2)
+        .attr('fill', ri % 2 === 0 ? 'rgba(255,255,255,0.015)' : 'transparent');
+
+      // Actor name
+      var isGap = actor.name === 'Canada';
+      g.append('text')
+        .attr('x', PAD.left - 8).attr('y', y + rowH / 2 + 4)
+        .attr('text-anchor', 'end')
+        .attr('font-family', 'var(--font-s)').attr('font-size', 11)
+        .attr('font-weight', isGap ? 700 : 400)
+        .attr('fill', isGap ? '#C0392B' : '#ccc')
+        .text(actor.name);
+
+      // Cells
+      var x = PAD.left;
+      cols.forEach(function(col) {
+        var val = actor[col.key];
+        var max = colMax[col.key];
+        var color = cellColor(col, val, max);
+        var cellW = col.w - 3;
+
+        var rect = g.append('rect')
+          .attr('x', x + 1).attr('y', y + 3)
+          .attr('width', cellW).attr('height', rowH - 8)
+          .attr('rx', 3).attr('fill', color).attr('fill-opacity', 0.85);
+
+        // Value text
+        var dispVal = col.key === 'tier' ? 'T' + val : val + '/10';
+        if (col.key === 'multilateral') dispVal = ['None', 'Observer', 'Member', 'Founder'][val] || val;
+        if (col.key === 'govTransp') dispVal = val <= 3 ? 'Low' : val <= 6 ? 'Med' : 'High';
+
+        g.append('text')
+          .attr('x', x + col.w / 2).attr('y', y + rowH / 2 + 4)
+          .attr('text-anchor', 'middle')
+          .attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+          .attr('fill', '#fff').attr('pointer-events', 'none')
+          .text(dispVal);
+
+        rect.on('mouseover', function(evt) {
+          I3.tt(I3.buildTT(actor.name + ' — ' + col.label, actor.detail + '<br><em>' + actor.currentPos + '</em>'), evt);
+        }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+        x += col.w;
+      });
+    });
+  }
+
+  drawHeader();
+  drawRows();
+
+  // Instruction note
+  svgEl.append('text')
+    .attr('x', PAD.left).attr('y', H - 12)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+    .attr('fill', '#9AA0B0').attr('font-style', 'italic')
+    .text('Click column headers to sort. Hover cells for detail.');
+}, 'Heat-Map');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 2 — ALLIED CONTEXT ENGAGEMENT GAUGES (T16)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('allied-context-table', function(frame, W) {
+  var partners = [
+    { name: 'United States', isGap: false,
+      dims: [
+        { label: 'Gulf Bilateral', val: 100, note: 'IGAA, NVIDIA, Stargate UAE, $600B Trump visit, Major Defense Partner designation (UAE, Sep 2024).' },
+        { label: 'Pax Silica', val: 100, note: 'Founder of the Pax Silica framework.' },
+        { label: 'AUKUS Pillar II', val: 100, note: 'Founder of AUKUS.' },
+        { label: 'Investment Screen', val: 65, note: 'CFIUS — oversight contested by current administration.' },
+      ]
+    },
+    { name: 'United Kingdom', isGap: false,
+      dims: [
+        { label: 'Gulf Bilateral', val: 80, note: 'AUKUS Pillar II, QUAIRIA (Qatar-UK AI Research and Innovation Agreement), Thales cortAIx expanding to UAE.' },
+        { label: 'Pax Silica', val: 100, note: 'Founding member of Pax Silica.' },
+        { label: 'AUKUS Pillar II', val: 100, note: 'Full AUKUS member.' },
+        { label: 'Investment Screen', val: 70, note: 'NSI Act (2021) — National Security and Investment Act.' },
+      ]
+    },
+    { name: 'Australia', isGap: false,
+      dims: [
+        { label: 'Gulf Bilateral', val: 65, note: 'FIRB screening, AUKUS Pillar II. CPP Investments co-owns AirTrunk (HUMAIN partner) with Blackstone.' },
+        { label: 'Pax Silica', val: 100, note: 'Founding member of Pax Silica.' },
+        { label: 'AUKUS Pillar II', val: 100, note: 'Full AUKUS member.' },
+        { label: 'Investment Screen', val: 95, note: 'FIRB nil threshold — most stringent allied mechanism identified. Mandatory review for ALL foreign government investment regardless of size.' },
+      ]
+    },
+    { name: 'New Zealand', isGap: false,
+      dims: [
+        { label: 'Gulf Bilateral', val: 5, note: 'Not identified in open sources.' },
+        { label: 'Pax Silica', val: 0, note: 'Non-member.' },
+        { label: 'AUKUS Pillar II', val: 25, note: 'Not a full member — limited engagement.' },
+        { label: 'Investment Screen', val: 40, note: 'OIO review (Overseas Investment Office).' },
+      ]
+    },
+    { name: 'Canada', isGap: true,
+      dims: [
+        { label: 'Gulf Bilateral', val: 20, note: '$50B UAE framework (unverified, uncontracted). Mila-TII collaboration. No public position from CSE, RCMP, or CSIS on Gulf AI engagement.' },
+        { label: 'Pax Silica', val: 0, note: 'Observer only — unsigned. Outside Pax Silica architecture.' },
+        { label: 'AUKUS Pillar II', val: 0, note: 'Excluded from AUKUS. Outside this architecture entirely.' },
+        { label: 'Investment Screen', val: 30, note: 'Investment Canada Act (amended 2024). AI-specific provisions pending. No nil threshold equivalent.' },
+      ]
+    },
+  ];
+
+  // Layout
+  var rowH = 72, PAD = 16, nameW = 110, dimW = Math.floor((W - nameW - PAD * 2) / 4);
+  var H = PAD + 32 + partners.length * rowH + 70 + PAD;
+  var svgEl = I3.makeSVG(frame, W, H);
+
+  // Column headers
+  var dimLabels = partners[0].dims.map(function(d) { return d.label; });
+  dimLabels.forEach(function(lbl, di) {
+    svgEl.append('text')
+      .attr('x', PAD + nameW + di * dimW + dimW / 2).attr('y', PAD + 16)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)')
+      .attr('font-size', 9.5).attr('fill', '#9AA0B0').attr('letter-spacing', '.06em')
+      .text(lbl.toUpperCase());
+  });
+
+  // Rows
+  partners.forEach(function(p, pi) {
+    var y0 = PAD + 32 + pi * rowH;
+
+    // Row background highlight for Canada
+    if (p.isGap) {
+      svgEl.append('rect')
+        .attr('x', 0).attr('y', y0 - 4).attr('width', W).attr('height', rowH + 2)
+        .attr('fill', 'rgba(192,57,43,0.06)').attr('stroke', 'rgba(192,57,43,0.2)')
+        .attr('stroke-width', 1);
+    }
+
+    // Country name
+    svgEl.append('text')
+      .attr('x', PAD + nameW - 8).attr('y', y0 + rowH / 2 + 4)
+      .attr('text-anchor', 'end').attr('font-family', 'var(--font-s)')
+      .attr('font-size', 11).attr('font-weight', p.isGap ? 700 : 600)
+      .attr('fill', p.isGap ? '#C0392B' : '#ccc')
+      .text(p.name);
+
+    // Gauge bars
+    p.dims.forEach(function(dim, di) {
+      var gx = PAD + nameW + di * dimW + 6;
+      var gy = y0 + 8;
+      var bw = dimW - 12;
+      var bh = 10;
+
+      // Track
+      svgEl.append('rect')
+        .attr('x', gx).attr('y', gy).attr('width', bw).attr('height', bh)
+        .attr('rx', 5).attr('fill', 'rgba(255,255,255,0.07)');
+
+      // Fill
+      var fillColor = dim.val === 0 ? '#C0392B' :
+                      dim.val < 50 ? '#9A5A30' :
+                      dim.val < 80 ? I3_COLORS.gulf : I3_COLORS.us;
+      if (p.isGap && dim.val === 0) fillColor = '#8B3050';
+
+      var fillW = (dim.val / 100) * bw;
+      if (dim.val > 0) {
+        svgEl.append('rect')
+          .attr('x', gx).attr('y', gy).attr('width', fillW).attr('height', bh)
+          .attr('rx', 5).attr('fill', fillColor).attr('fill-opacity', 0.85)
+          .style('cursor', 'default')
+          .on('mouseover', function(evt) {
+            I3.tt(I3.buildTT(p.name + ' — ' + dim.label, dim.note), evt);
+          }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+      }
+
+      // Value label
+      var dispVal = dim.val === 0 ? 'None' :
+                    dim.val === 100 ? 'Full' :
+                    dim.val + '%';
+      svgEl.append('text')
+        .attr('x', gx + bw / 2).attr('y', gy + bh + 13)
+        .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)')
+        .attr('font-size', 9).attr('fill', dim.val === 0 ? '#8B3050' : '#9AA0B0')
+        .text(dispVal);
+
+      // "ABSENT" label for 0
+      if (dim.val === 0) {
+        svgEl.append('text')
+          .attr('x', gx + bw / 2).attr('y', gy + 8)
+          .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)')
+          .attr('font-size', 8.5).attr('font-weight', 700)
+          .attr('fill', '#8B3050').attr('letter-spacing', '.1em')
+          .text('ABSENT');
+      }
+    });
+  });
+
+  // Canada gap annotation
+  var annotY = PAD + 32 + partners.length * rowH + 10;
+  svgEl.append('rect')
+    .attr('x', PAD).attr('y', annotY)
+    .attr('width', W - PAD * 2).attr('height', 50)
+    .attr('rx', 4).attr('fill', 'rgba(192,57,43,0.06)')
+    .attr('stroke', 'rgba(192,57,43,0.3)').attr('stroke-width', 1);
+  svgEl.append('text')
+    .attr('x', PAD + 10).attr('y', annotY + 16)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 10).attr('font-weight', 700)
+    .attr('fill', '#C0392B').attr('letter-spacing', '.08em')
+    .text('INTELLIGENCE GAP — CANADA');
+  svgEl.append('foreignObject')
+    .attr('x', PAD + 10).attr('y', annotY + 22)
+    .attr('width', W - PAD * 2 - 20).attr('height', 32)
+    .append('xhtml:p')
+    .style('font-family', 'var(--font-s)').style('font-size', '9.5px').style('color', '#C0A090')
+    .style('margin', '0').style('line-height', '1.5')
+    .text('No public position from CSE, RCMP, or CSIS on Gulf AI engagement has been identified. Canada is outside both Pax Silica and AUKUS architectures.');
+}, 'Engagement Gauges');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 3 — COMPETITIVE MATRIX CONSTELLATION + FILTER (T15)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('competitive-matrix-table', function(frame, W) {
+  // Build filter UI above SVG
+  var filterDiv = document.createElement('div');
+  filterDiv.className = 'i3-filter-bar';
+  filterDiv.style.padding = '10px 12px 0';
+  filterDiv.innerHTML =
+    '<input class="i3-filter-input" placeholder="Filter actors…" id="cm-filter-input" />' +
+    '<button class="i3-filter-btn active" data-filter="all">All</button>' +
+    '<button class="i3-filter-btn" data-filter="founder">Pax Silica Founder</button>' +
+    '<button class="i3-filter-btn" data-filter="signatory">Signatory</button>' +
+    '<button class="i3-filter-btn" data-filter="nonmember">Non-member</button>';
+  frame.appendChild(filterDiv);
+
+  var actors = [
+    { name: 'United States', entryMode: 'Regulator+investor+supplier', layer: 'Policy+chip+cloud',
+      scale: 100, paxStatus: 'founder', color: I3_COLORS.us,
+      detail: 'Instrument: IGAA, NVIDIA, Stargate. Scale: $100B+ (commercial). Occupies every layer simultaneously.' },
+    { name: 'UAE', entryMode: 'Recipient + co-investor', layer: 'Infrastructure host',
+      scale: 80, paxStatus: 'signatory', color: I3_COLORS.uae,
+      detail: 'Instrument: IGAA, G42/MGX/OpenAI. Scale: $15–25B verified. Pax Silica signatory Jan 15.' },
+    { name: 'Saudi Arabia', entryMode: 'Recipient + sovereign fund', layer: 'Infrastructure (building)',
+      scale: 55, paxStatus: 'nonmember', color: I3_COLORS.saudi,
+      detail: 'Instrument: HUMAIN, PIF, AWS. Scale: $77B programme (unverified). Non-member.' },
+    { name: 'Qatar', entryMode: 'Recipient + investor', layer: 'Capital + research',
+      scale: 40, paxStatus: 'signatory', color: I3_COLORS.qatar,
+      detail: 'Instrument: QIA, Qai, Brookfield JV. Scale: $557B fund (Qai unassessed). Signatory Jan 12.' },
+    { name: 'France', entryMode: 'Investment + DC construction', layer: 'Physical infrastructure',
+      scale: 75, paxStatus: 'nonmember', color: '#8888CC',
+      detail: 'Instrument: $56B contracted on French soil, 1.4GW. Non-member. Deepest contracted position.' },
+    { name: 'South Korea', entryMode: 'Nuclear energy → AI consortium', layer: 'Power + compute',
+      scale: 65, paxStatus: 'founder', color: '#5BC8AF',
+      detail: 'Instrument: Barakah 5.6GW, Stargate UAE. Founding Pax Silica member. Energy pre-dates frameworks.' },
+    { name: 'United Kingdom', entryMode: 'Defence + research', layer: 'Security cooperation',
+      scale: 45, paxStatus: 'founder', color: '#7090B0',
+      detail: 'Instrument: AUKUS Pillar II, QUAIRIA. Founding Pax Silica member. AUKUS member.' },
+    { name: 'Australia', entryMode: 'Resource + investment screening', layer: 'Regulatory + bilateral',
+      scale: 40, paxStatus: 'founder', color: '#60A870',
+      detail: 'Instrument: FIRB nil threshold, AUKUS Pillar II. Founding Pax Silica member. Tightest inbound screen.' },
+    { name: 'Canada', entryMode: 'Framework + research', layer: 'Framework only',
+      scale: 18, paxStatus: 'nonmember', color: '#C0392B',
+      detail: 'Instrument: $50B UAE framework (unverified), Mila-TII. Observer (unsigned). Outside both architectures.' },
+    { name: 'Israel', entryMode: 'Surveillance technology', layer: 'Security infrastructure',
+      scale: 30, paxStatus: 'founder', color: '#B8A060',
+      detail: 'Instrument: NSO Group lineage. Bilateral terms undisclosed. Inside Pax Silica from founding.' },
+  ];
+
+  var H = 420;
+  var svgEl = I3.makeSVG(frame, W, H);
+
+  // Force layout
+  var simulation = d3.forceSimulation(actors)
+    .force('charge', d3.forceManyBody().strength(-60))
+    .force('center', d3.forceCenter(W / 2, H / 2 - 10))
+    .force('collision', d3.forceCollide().radius(function(d) { return Math.sqrt(d.scale) * 2.2; }))
+    .stop();
+
+  for (var i = 0; i < 120; i++) simulation.tick();
+
+  // Draw Pax Silica ring
+  svgEl.append('circle')
+    .attr('cx', W / 2).attr('cy', H / 2 - 10).attr('r', Math.min(W, H) * 0.38)
+    .attr('fill', 'none').attr('stroke', 'rgba(10,126,140,0.12)').attr('stroke-width', 1)
+    .attr('stroke-dasharray', '6,4');
+  svgEl.append('text')
+    .attr('x', W / 2 + Math.min(W, H) * 0.38 - 5).attr('y', H / 2 - 10 - 4)
+    .attr('text-anchor', 'end').attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+    .attr('fill', 'rgba(10,126,140,0.4)').attr('letter-spacing', '.1em')
+    .text('PAX SILICA PERIMETER');
+
+  var nodeGroups = [];
+  actors.forEach(function(d) {
+    var r = Math.sqrt(d.scale) * 1.8;
+    var g = svgEl.append('g').attr('class', 'i3-const-node').datum(d);
+    nodeGroups.push(g);
+
+    // Pax Silica ring
+    if (d.paxStatus === 'founder') {
+      g.append('circle').attr('cx', d.x).attr('cy', d.y).attr('r', r + 4)
+        .attr('fill', 'none').attr('stroke', d.color).attr('stroke-width', 1.5).attr('stroke-opacity', 0.4);
+    } else if (d.paxStatus === 'signatory') {
+      g.append('circle').attr('cx', d.x).attr('cy', d.y).attr('r', r + 4)
+        .attr('fill', 'none').attr('stroke', d.color).attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '3,2').attr('stroke-opacity', 0.4);
+    }
+
+    g.append('circle').attr('cx', d.x).attr('cy', d.y).attr('r', r)
+      .attr('fill', d.color).attr('fill-opacity', 0.7)
+      .attr('stroke', d.color).attr('stroke-width', 1.5);
+
+    g.append('text')
+      .attr('x', d.x).attr('y', d.y + r + 13)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)')
+      .attr('font-size', 9.5).attr('fill', '#ccc').attr('pointer-events', 'none')
+      .text(d.name);
+
+    g.on('mouseover', function(evt) {
+      I3.tt(I3.buildTT(d.name, d.detail, 'Table 1.4a — Competitive Landscape Matrix'), evt);
+    }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+  });
+
+  // Filter logic
+  function applyFilter(textFilter, btnFilter) {
+    nodeGroups.forEach(function(g) {
+      var d = g.datum();
+      var matchText = !textFilter || d.name.toLowerCase().includes(textFilter.toLowerCase());
+      var matchBtn = btnFilter === 'all' ||
+                     (btnFilter === 'founder' && d.paxStatus === 'founder') ||
+                     (btnFilter === 'signatory' && d.paxStatus === 'signatory') ||
+                     (btnFilter === 'nonmember' && d.paxStatus === 'nonmember');
+      g.attr('opacity', matchText && matchBtn ? 1 : 0.1);
+    });
+  }
+
+  var currentBtn = 'all', currentText = '';
+
+  filterDiv.querySelector('#cm-filter-input').addEventListener('input', function(e) {
+    currentText = e.target.value;
+    applyFilter(currentText, currentBtn);
+  });
+
+  filterDiv.querySelectorAll('.i3-filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      filterDiv.querySelectorAll('.i3-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentBtn = btn.dataset.filter;
+      applyFilter(currentText, currentBtn);
+    });
+  });
+
+  // Legend
+  svgEl.append('text').attr('x', 12).attr('y', H - 28)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0')
+    .attr('letter-spacing', '.08em').text('RING: ──── Founder  ····· Signatory  (none) Non-member  |  SIZE ∝ scale of engagement');
+}, 'Constellation');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 3 — SAUDI DUAL-ROLE CONFLICT MAP (T5)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-saudi-dual-roles', function(frame, W) {
+  var data = [
+    { person: 'Alghamdi', roleA: 'SDAIA President\n(Regulator)', roleB: 'Reports directly\nto MBS',
+      conflict: 'Person regulating AI answers to person who chairs AI investment fund and national AI company.',
+      orgA: 'Regulator', orgB: 'Executive' },
+    { person: 'Al-Onaizan', roleA: 'Head, National Centre\nfor AI (Policy)', roleB: 'Chief Scientist\nHUMAIN (Commercial)',
+      conflict: 'Same person oversees national AI research policy and leads commercial AI development. Objectives not inherently aligned.',
+      orgA: 'Policy', orgB: 'Commercial' },
+    { person: 'Al-Rumayyan', roleA: 'Governor, PIF\n($913B sovereign fund)', roleB: 'PIF operates "outside\nthe outlines of governance"',
+      conflict: 'Governor of largest investment vehicle publicly stated it operates outside governance frameworks.',
+      orgA: 'Fund', orgB: 'Governance gap' },
+  ];
+
+  var H = 260, PAD = 20;
+  var colW = (W - PAD * 2) / 3;
+  var svg = I3.makeSVG(frame, W, H);
+
+  // Column headers
+  var headers = ['Role A (Policy/Regulatory)', 'Person', 'Role B (Commercial/Executive)'];
+  var hx = [PAD, PAD + colW, PAD + colW * 2];
+  headers.forEach(function(h, i) {
+    svg.append('text')
+      .attr('x', hx[i] + colW / 2).attr('y', 22)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+      .attr('fill', i === 1 ? '#fff' : (i === 0 ? I3_COLORS.policy : I3_COLORS.conflict))
+      .attr('letter-spacing', '.06em').text(h.toUpperCase());
+  });
+
+  var rowH = (H - 50) / data.length;
+
+  data.forEach(function(d, di) {
+    var y = 40 + di * rowH + rowH / 2;
+
+    // Role A box
+    var aX = PAD + 4, aW = colW - 8;
+    svg.append('rect').attr('x', aX).attr('y', y - 18).attr('width', aW).attr('height', 36)
+      .attr('rx', 4).attr('fill', 'rgba(70,130,180,0.15)').attr('stroke', I3_COLORS.policy).attr('stroke-width', 1);
+
+    // Role B box
+    var bX = PAD + colW * 2 + 4;
+    svg.append('rect').attr('x', bX).attr('y', y - 18).attr('width', aW).attr('height', 36)
+      .attr('rx', 4).attr('fill', 'rgba(139,48,80,0.15)').attr('stroke', I3_COLORS.conflict).attr('stroke-width', 1);
+
+    // Person circle
+    var px = PAD + colW + colW / 2;
+    svg.append('circle').attr('cx', px).attr('cy', y).attr('r', 20)
+      .attr('fill', 'rgba(224,208,255,0.12)').attr('stroke', '#E0D0FF').attr('stroke-width', 1.5);
+
+    // Conflict lines
+    svg.append('line')
+      .attr('x1', aX + aW).attr('y1', y).attr('x2', px - 20).attr('y2', y)
+      .attr('stroke', '#8B3050').attr('stroke-width', 1.5).attr('stroke-dasharray', '4,3');
+    svg.append('line')
+      .attr('x1', px + 20).attr('y1', y).attr('x2', bX).attr('y2', y)
+      .attr('stroke', '#8B3050').attr('stroke-width', 1.5).attr('stroke-dasharray', '4,3');
+
+    // Text labels
+    var aLines = d.roleA.split('\n');
+    aLines.forEach(function(l, li) {
+      svg.append('text').attr('x', aX + aW / 2).attr('y', y - 4 + li * 13)
+        .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+        .attr('fill', '#9AB0D0').attr('pointer-events', 'none').text(l);
+    });
+
+    var bLines = d.roleB.split('\n');
+    bLines.forEach(function(l, li) {
+      svg.append('text').attr('x', bX + aW / 2).attr('y', y - 4 + li * 13)
+        .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+        .attr('fill', '#D0A0B0').attr('pointer-events', 'none').text(l);
+    });
+
+    svg.append('text').attr('x', px).attr('y', y + 4)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+      .attr('font-weight', 700).attr('fill', '#E0D0FF').attr('pointer-events', 'none')
+      .text(d.person.split(' ')[0]);
+
+    // Hover on the whole row area
+    svg.append('rect').attr('x', PAD).attr('y', y - 20).attr('width', W - PAD * 2).attr('height', 40)
+      .attr('fill', 'transparent').style('cursor', 'default')
+      .on('mouseover', function(evt) {
+        I3.tt(I3.buildTT(d.person, d.conflict, 'Table 1.1d — Personnel Holding Multiple Roles'), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+  });
+}, 'Conflict Map');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 3 — DEPENDENCY STACK (T10)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-dep-stack', function(frame, W) {
+  var layers = [
+    { name: 'AI Computing', icon: '◈',
+      uae:   { us: 90, cn: 5,  unk: 5,  note: 'G42, Microsoft Azure, NVIDIA, Oracle, OpenAI. Core42 sovereign layer above Azure. ~500MW operational.' },
+      saudi: { us: 80, cn: 10, unk: 10, note: 'AWS (HUMAIN primary), NVIDIA, Oracle, Groq. Aramco-Groq cluster only live deployment.' },
+      qatar: { us: 20, cn: 5,  unk: 75, note: 'Qai-Brookfield announced. No construction started. No operational AI compute identified.' },
+    },
+    { name: 'Cloud Infrastructure', icon: '☁',
+      uae:   { us: 85, cn: 5,  unk: 10, note: 'Azure, AWS, Oracle cloud. Core42 provides sovereign wrapper over Azure.' },
+      saudi: { us: 60, cn: 30, unk: 10, note: 'AWS primary (HUMAIN). Alibaba Cloud ~$500M. Tencent Cloud ~$150M. Huawei Cloud Class C CITC cert (top secret).' },
+      qatar: { us: 40, cn: 30, unk: 30, note: 'Limited public information. No dominant cloud provider identified in open sources.' },
+    },
+    { name: '5G Telecoms', icon: '📶',
+      uae:   { us: 50, cn: 35, unk: 15, note: 'Huawei and non-Huawei mix. UAE did not join Clean Network.' },
+      saudi: { us: 15, cn: 80, unk: 5,  note: 'All three Saudi mobile operators use Huawei equipment. Did not join Clean Network.' },
+      qatar: { us: 5,  cn: 90, unk: 5,  note: 'Ooredoo 5G entirely Huawei-built. Huawei publicly identified Ooredoo as origin of 5.5G technology. Did not join Clean Network.' },
+    },
+    { name: 'AI Software / Models', icon: '⟨⟩',
+      uae:   { us: 70, cn: 5,  unk: 25, note: 'Falcon/K2 (TII, domestic). OpenAI partnership. Significant US model dependency.' },
+      saudi: { us: 60, cn: 10, unk: 30, note: 'ALLaM built on Meta Llama-2. SDAIA admits global models outperform. No independent domestic model.' },
+      qatar: { us: 30, cn: 5,  unk: 65, note: 'Qai announced but no details. Heavy reliance on US/global models.' },
+    },
+    { name: 'Governance Framework', icon: '⊞',
+      uae:   { us: 60, cn: 0,  unk: 40, note: 'IGAA (partial), AIATC regulates. Circular ownership; no independent disclosures. Pax Silica signatory.' },
+      saudi: { us: 20, cn: 0,  unk: 80, note: 'SDAIA "outside governance." PIF governor stated same. No CFIUS equivalent. Non-Pax Silica.' },
+      qatar: { us: 10, cn: 0,  unk: 90, note: 'No compliance framework for chips identified. Did not join Clean Network. Signatory Jan 12 only.' },
+    },
+  ];
+
+  var countryColors = { uae: I3_COLORS.uae, saudi: I3_COLORS.saudi, qatar: I3_COLORS.qatar };
+  var segColors = { us: I3_COLORS.us, cn: '#C0392B', unk: 'rgba(255,255,255,0.12)' };
+  var segLabels = { us: 'US/Allied', cn: 'Chinese', unk: 'Unknown/Other' };
+
+  var PAD = 16, rowH = 50, nameW = 110, barH = 28;
+  var countries = ['uae', 'saudi', 'qatar'];
+  var countryNames = { uae: 'UAE', saudi: 'Saudi Arabia', qatar: 'Qatar' };
+  var colW = Math.floor((W - PAD * 2 - nameW) / 3);
+  var H = PAD + 30 + layers.length * rowH + 50 + PAD;
+  var svg = I3.makeSVG(frame, W, H);
+
+  // Country headers
+  countries.forEach(function(c, ci) {
+    svg.append('text')
+      .attr('x', PAD + nameW + ci * colW + colW / 2).attr('y', PAD + 16)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 11)
+      .attr('font-weight', 700).attr('fill', countryColors[c])
+      .text(countryNames[c]);
+  });
+
+  layers.forEach(function(layer, li) {
+    var y0 = PAD + 30 + li * rowH;
+
+    // Layer name
+    svg.append('text')
+      .attr('x', PAD + nameW - 8).attr('y', y0 + barH / 2 + 4)
+      .attr('text-anchor', 'end').attr('font-family', 'var(--font-s)').attr('font-size', 10)
+      .attr('fill', '#9AA0B0').text(layer.name);
+
+    countries.forEach(function(c, ci) {
+      var data = layer[c];
+      var bx = PAD + nameW + ci * colW + 4;
+      var bw = colW - 8;
+
+      // Track background
+      svg.append('rect').attr('x', bx).attr('y', y0).attr('width', bw).attr('height', barH)
+        .attr('rx', 3).attr('fill', 'rgba(255,255,255,0.03)');
+
+      // Stacked segments
+      var x = bx;
+      ['us', 'cn', 'unk'].forEach(function(seg) {
+        var pct = data[seg] / 100;
+        var sw = bw * pct;
+        if (sw < 1) return;
+
+        var rect = svg.append('rect')
+          .attr('x', x).attr('y', y0).attr('width', sw).attr('height', barH)
+          .attr('fill', segColors[seg]).attr('fill-opacity', seg === 'unk' ? 1 : 0.8)
+          .style('cursor', 'default');
+
+        if (sw > 20) {
+          svg.append('text')
+            .attr('x', x + sw / 2).attr('y', y0 + barH / 2 + 4)
+            .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+            .attr('fill', seg === 'unk' ? '#9AA0B0' : '#fff').attr('pointer-events', 'none')
+            .text(data[seg] + '%');
+        }
+
+        rect.on('mouseover', function(evt) {
+          I3.tt(I3.buildTT(countryNames[c] + ' — ' + layer.name + ' (' + segLabels[seg] + ')',
+            data[seg] + '% ' + segLabels[seg] + '<br>' + data.note), evt);
+        }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+        x += sw;
+      });
+    });
+  });
+
+  // Legend
+  var legY = H - 30;
+  var legX = PAD + nameW;
+  [['us', 'US/Allied'], ['cn', 'Chinese infrastructure'], ['unk', 'Unknown/Other']].forEach(function(pair, i) {
+    svg.append('rect').attr('x', legX + i * 160).attr('y', legY)
+      .attr('width', 12).attr('height', 12).attr('rx', 2)
+      .attr('fill', segColors[pair[0]]).attr('fill-opacity', pair[0] === 'unk' ? 1 : 0.8);
+    svg.append('text').attr('x', legX + i * 160 + 16).attr('y', legY + 10)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 10).attr('fill', '#9AA0B0')
+      .text(pair[1]);
+  });
+}, 'Dependency Stack');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 3 — QATAR INVESTMENTS STATUS TIMELINE (T7)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-qatar-investments', function(frame, W) {
+  var investments = [
+    { name: 'Builder.ai', year: 2023, month: 6, scale: 250, status: 'bankrupt', color: '#C0392B',
+      note: 'Led funding round 2023, ~$250M committed. Declared bankruptcy 2025 amid fraud allegations (Bloomberg, FT). Relevant to assessing QIA due diligence.' },
+    { name: 'Anthropic', year: 2025, month: 9, scale: 150, status: 'active', color: I3_COLORS.us,
+      note: 'QIA Series F round, September 2025. Investment amount not disclosed. Both QIA (Qatar) and MGX (UAE) now hold Anthropic equity. Neither has disclosed stake size or governance rights.' },
+    { name: 'Ivanhoe Mines (IVN.TSX)', year: 2025, month: 9, scale: 500, status: 'active', color: I3_COLORS.gulf,
+      note: '$500M for ~4% equity, September 2025. Largest identified QIA investment in a Canadian-listed company. Critical mineral exposure.' },
+    { name: 'QIA General AI Fund', year: 2025, month: 12, scale: 1000, status: 'assessed', color: I3_COLORS.policy,
+      note: '$557B total fund. Qai partnership with Brookfield announced but no construction started. No independently verified AI capital deployment.' },
+  ];
+
+  var statusLabels = { active: 'Active', bankrupt: 'Bankrupt (2025)', assessed: 'Assessed/Announced' };
+  var H = 200, PAD = { top: 30, left: 100, right: 20, bottom: 50 };
+  var innerW = W - PAD.left - PAD.right;
+  var svg = I3.makeSVG(frame, W, H);
+
+  var years = [2023, 2024, 2025, 2026];
+  var xScale = function(year, month) {
+    var t = (year - 2023 + (month || 0) / 12) / 3;
+    return PAD.left + t * innerW;
+  };
+  var yScale = function(i) {
+    return PAD.top + 15 + i * ((H - PAD.top - PAD.bottom) / 4);
+  };
+
+  // Timeline axis
+  svg.append('line')
+    .attr('x1', PAD.left).attr('y1', H - PAD.bottom)
+    .attr('x2', PAD.left + innerW).attr('y2', H - PAD.bottom)
+    .attr('stroke', 'rgba(255,255,255,0.15)').attr('stroke-width', 1);
+
+  years.forEach(function(yr) {
+    var x = xScale(yr, 0);
+    svg.append('line').attr('x1', x).attr('y1', H - PAD.bottom - 4).attr('x2', x).attr('y2', H - PAD.bottom + 4)
+      .attr('stroke', 'rgba(255,255,255,0.25)').attr('stroke-width', 1);
+    svg.append('text').attr('x', x).attr('y', H - PAD.bottom + 16)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9.5)
+      .attr('fill', '#9AA0B0').text(yr);
+  });
+
+  investments.forEach(function(inv, i) {
+    var x = xScale(inv.year, inv.month);
+    var y = yScale(i);
+    var r = Math.sqrt(inv.scale / 100) * 5;
+
+    // Vertical drop line
+    svg.append('line').attr('x1', x).attr('y1', y + r).attr('x2', x).attr('y2', H - PAD.bottom)
+      .attr('stroke', 'rgba(255,255,255,0.1)').attr('stroke-dasharray', '3,3');
+
+    // Dot
+    var dotClass = 'i3-timeline-dot';
+    if (inv.status === 'bankrupt') {
+      svg.append('line').attr('x1', x - r).attr('y1', y - r).attr('x2', x + r).attr('y2', y + r)
+        .attr('stroke', '#C0392B').attr('stroke-width', 2);
+      svg.append('line').attr('x1', x + r).attr('y1', y - r).attr('x2', x - r).attr('y2', y + r)
+        .attr('stroke', '#C0392B').attr('stroke-width', 2);
+    }
+
+    svg.append('circle').attr('cx', x).attr('cy', y).attr('r', r)
+      .attr('fill', inv.color).attr('fill-opacity', inv.status === 'assessed' ? 0.45 : 0.75)
+      .attr('stroke', inv.color).attr('stroke-width', inv.status === 'bankrupt' ? 2 : 1.5)
+      .attr('stroke-opacity', 0.9).attr('class', dotClass)
+      .on('mouseover', function(evt) {
+        I3.tt(I3.buildTT(inv.name, '$' + inv.scale + 'M · ' + statusLabels[inv.status] + '<br>' + inv.note), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+    // Label
+    var anchor = x > W - 120 ? 'end' : 'start';
+    var lx = x + (anchor === 'end' ? -r - 4 : r + 4);
+    svg.append('text').attr('x', lx).attr('y', y + 4)
+      .attr('text-anchor', anchor).attr('font-family', 'var(--font-s)').attr('font-size', 10)
+      .attr('fill', inv.color).attr('pointer-events', 'none')
+      .text(inv.name + ' ($' + (inv.scale >= 1000 ? inv.scale / 1000 + 'B' : inv.scale + 'M') + ')');
+  });
+
+  svg.append('text').attr('x', W / 2).attr('y', H - 6)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+    .attr('fill', '#9AA0B0').attr('font-style', 'italic')
+    .text('Circle size ∝ investment scale. ✕ = bankrupt. Dashed = announced/assessed only.');
+}, 'Status Timeline');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 4 — UAE INTERNATIONAL PARTNERSHIPS BUBBLE MAP (T1)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-uae-partnerships', function(frame, W) {
+  var partnerships = [
+    { country: 'India', region: 'Asia', scale: 8000, status: 'operational',
+      detail: '8-exaflop national AI supercomputer with Cerebras, MBZUAI, C-DAC. India\'s first exaflop-scale infrastructure. G42 released NANDA (87B-param Hindi-English model). Operates under Indian data sovereignty rules.' },
+    { country: 'Kenya', region: 'Africa', scale: 1000, status: 'operational',
+      detail: '$1B digital ecosystem initiative with Microsoft — Kenya\'s largest single private-sector digital investment. Geothermal-powered data centre in Olkaria (Azure East Africa).' },
+    { country: 'Indonesia', region: 'Asia', scale: 1500, status: 'framework',
+      detail: 'Cloud and AI infrastructure partnership. Part of G42\'s Southeast Asia expansion.' },
+    { country: 'Egypt', region: 'Africa', scale: 800, status: 'framework',
+      detail: 'AI infrastructure and cloud services agreement. G42 data centre presence.' },
+    { country: 'Rwanda', region: 'Africa', scale: 400, status: 'framework',
+      detail: 'Digital infrastructure and AI education partnership through G42.' },
+    { country: 'Pakistan', region: 'Asia', scale: 600, status: 'framework',
+      detail: 'Cloud computing and AI capacity building. G42 partnership.' },
+    { country: 'Ethiopia', region: 'Africa', scale: 350, status: 'framework',
+      detail: 'G42 digital infrastructure agreement.' },
+    { country: 'Jordan', region: 'MENA', scale: 500, status: 'operational',
+      detail: 'AI and cloud infrastructure deployment. G42 regional expansion.' },
+    { country: 'Turkey', region: 'MENA', scale: 700, status: 'framework',
+      detail: 'AI and cloud computing agreement.' },
+    { country: 'United States', region: 'Americas', scale: 15200, status: 'operational',
+      detail: '$15.2B Microsoft infrastructure + $1.5B equity. 81,900 chip compliance pathway. OpenAI campus (Stargate UAE). NVIDIA partnership.' },
+    { country: 'France', region: 'Europe', scale: 5600, status: 'operational',
+      detail: '$5.6B portion of broader French engagement. AI research and infrastructure.' },
+    { country: 'Germany', region: 'Europe', scale: 600, status: 'framework',
+      detail: 'Technology partnership and investment framework.' },
+    { country: 'United Kingdom', region: 'Europe', scale: 800, status: 'operational',
+      detail: 'AUKUS Pillar II cooperation, Thales cortAIx. Defence technology.' },
+    { country: 'South Korea', region: 'Asia', scale: 2000, status: 'operational',
+      detail: 'Barakah nuclear → AI energy. Samsung, SK Hynix chip supply chain.' },
+    { country: 'Japan', region: 'Asia', scale: 500, status: 'framework',
+      detail: 'AI research partnership. SoftBank-G42 discussions.' },
+  ];
+
+  var statusColors = {
+    operational: I3_COLORS.us,
+    framework:   I3_COLORS.gulf,
+    unknown:     I3_COLORS.unknown,
+  };
+  var regionColors = {
+    Asia:     '#5BC8AF',
+    Africa:   '#C8A84A',
+    MENA:     '#0A7E8C',
+    Americas: '#4682B4',
+    Europe:   '#7070C0',
+  };
+
+  var H = 400;
+  var svg = I3.makeSVG(frame, W, H);
+
+  // Use D3 force pack
+  var nodes = partnerships.map(function(p) {
+    return Object.assign({}, p, { r: Math.sqrt(p.scale / 15) + 6 });
+  });
+
+  var sim = d3.forceSimulation(nodes)
+    .force('charge', d3.forceManyBody().strength(-5))
+    .force('center', d3.forceCenter(W / 2, H / 2))
+    .force('collision', d3.forceCollide().radius(function(d) { return d.r + 3; }))
+    .stop();
+  for (var i = 0; i < 200; i++) sim.tick();
+
+  nodes.forEach(function(d) {
+    var g = svg.append('g').attr('class', 'i3-bubble');
+    g.append('circle')
+      .attr('cx', d.x).attr('cy', d.y).attr('r', d.r)
+      .attr('fill', regionColors[d.region] || '#888')
+      .attr('fill-opacity', d.status === 'operational' ? 0.75 : 0.4)
+      .attr('stroke', regionColors[d.region] || '#888')
+      .attr('stroke-width', d.status === 'operational' ? 2 : 1)
+      .attr('stroke-opacity', 0.8)
+      .style('cursor', 'default')
+      .on('mouseover', function(evt) {
+        I3.tt(I3.buildTT(d.country, d.detail, 'Table 1.1b — G42 Global Expansion Footprint'), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+    if (d.r > 14) {
+      g.append('text').attr('x', d.x).attr('y', d.y + 4)
+        .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+        .attr('fill', '#fff').attr('pointer-events', 'none').attr('font-weight', 600)
+        .text(d.country.length > 8 ? d.country.slice(0, 8) : d.country);
+    }
+  });
+
+  // Legend
+  var legX = 12, legY = H - 70;
+  svg.append('text').attr('x', legX).attr('y', legY)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0')
+    .attr('letter-spacing', '.1em').text('REGION');
+  legY += 13;
+  Object.keys(regionColors).forEach(function(r, i) {
+    var lx = legX + Math.floor(i / 3) * 90;
+    var ly = legY + (i % 3) * 13;
+    svg.append('circle').attr('cx', lx + 5).attr('cy', ly - 4).attr('r', 5).attr('fill', regionColors[r]).attr('fill-opacity', 0.7);
+    svg.append('text').attr('x', lx + 13).attr('y', ly).attr('font-family', 'var(--font-s)').attr('font-size', 9.5).attr('fill', '#9AA0B0').text(r);
+  });
+  svg.append('text').attr('x', legX + 200).attr('y', legY)
+    .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0')
+    .text('SIZE ∝ partnership scale ($M)  |  OPACITY: Full = operational, Faded = framework only');
+}, 'Bubble Map');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 4 — CANADIAN INSTITUTIONS EXPOSURE (T12)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-comp-canadian', function(frame, W) {
+  var institutions = [
+    { name: 'CDPQ', aum: 473, exposure: 23000, pathway: 'Infrastructure (DP World/Jebel Ali)',
+      status: 'suspended', color: '#C0392B',
+      detail: '$2.5B stake in Jebel Ali Port. 45% stake in global DP World ports platform (~$23B EV). SUSPENDED Feb 11 2026 — DP World CEO links to Jeffrey Epstein. Canada\'s deepest UAE exposure pathway in uncertainty.' },
+    { name: 'OTPP', aum: 256, exposure: 505, pathway: 'Data centres (Mubadala co-invest)',
+      status: 'active', color: I3_COLORS.gulf,
+      detail: 'Co-invested alongside Mubadala (MGX parent) in Princeton Digital Group ($505M equity). 20+ data centres, 600MW capacity, 5 Asian countries.' },
+    { name: 'CPP Investments', aum: 777, exposure: 2000, pathway: 'Infrastructure (AirTrunk/HUMAIN)',
+      status: 'active', color: I3_COLORS.us,
+      detail: 'Co-owns AirTrunk with Blackstone. HUMAIN (Saudi AI) selected AirTrunk as partner. CPP exposure to Saudi AI infrastructure through AirTrunk.' },
+    { name: 'Brookfield', aum: 900, exposure: 20000, pathway: 'Qai JV (Qatar)',
+      status: 'active', color: I3_COLORS.policy,
+      detail: '$20B joint venture with Qai (Qatar). $15B HUMAIN partnership. One of Canada\'s largest institutional investors in Gulf AI infrastructure.' },
+    { name: 'All Maple 8', aum: 2000, exposure: 5000, pathway: 'Indirect (public markets)',
+      status: 'assessed', color: I3_COLORS.unknown,
+      detail: 'Indirect exposure through public market holdings in NVIDIA, Microsoft, and other Gulf AI-exposed companies. No direct Gulf AI infrastructure investment identified.' },
+  ];
+
+  var H = 300;
+  var svg = I3.makeSVG(frame, W, H);
+
+  var nodes = institutions.map(function(d) {
+    return Object.assign({}, d, { r: Math.pow(d.exposure / 23000, 0.45) * 55 + 12 });
+  });
+
+  var sim = d3.forceSimulation(nodes)
+    .force('charge', d3.forceManyBody().strength(-20))
+    .force('center', d3.forceCenter(W / 2, H / 2 - 10))
+    .force('collision', d3.forceCollide().radius(function(d) { return d.r + 5; }))
+    .stop();
+  for (var i = 0; i < 200; i++) sim.tick();
+
+  nodes.forEach(function(d) {
+    var g = svg.append('g').attr('class', 'i3-bubble' + (d.status === 'suspended' ? ' suspended' : ''));
+    g.append('circle').attr('cx', d.x).attr('cy', d.y).attr('r', d.r)
+      .attr('fill', d.color).attr('fill-opacity', d.status === 'assessed' ? 0.3 : 0.6)
+      .attr('stroke', d.status === 'suspended' ? '#C0392B' : d.color)
+      .attr('stroke-width', d.status === 'suspended' ? 2.5 : 1.5)
+      .attr('stroke-dasharray', d.status === 'suspended' ? '5,3' : null)
+      .style('cursor', 'default')
+      .on('mouseover', function(evt) {
+        I3.tt(I3.buildTT(d.name + ' (AUM $' + d.aum + 'B CAD)', 'Gulf exposure ~$' + (d.exposure >= 1000 ? (d.exposure/1000).toFixed(1) + 'B' : d.exposure + 'M') + '<br>' + d.detail), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+    g.append('text').attr('x', d.x).attr('y', d.y)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 10)
+      .attr('font-weight', 700).attr('fill', '#fff').attr('pointer-events', 'none')
+      .text(d.name);
+    g.append('text').attr('x', d.x).attr('y', d.y + 13)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+      .attr('fill', 'rgba(255,255,255,0.7)').attr('pointer-events', 'none')
+      .text('$' + (d.exposure >= 1000 ? (d.exposure / 1000).toFixed(0) + 'B' : d.exposure + 'M'));
+
+    if (d.status === 'suspended') {
+      g.append('text').attr('x', d.x).attr('y', d.y + 26)
+        .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 8)
+        .attr('fill', '#C0392B').attr('font-weight', 700).attr('letter-spacing', '.08em')
+        .attr('pointer-events', 'none').text('SUSPENDED');
+    }
+  });
+
+  svg.append('text').attr('x', W / 2).attr('y', H - 8)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+    .attr('fill', '#9AA0B0').attr('font-style', 'italic')
+    .text('SIZE ∝ estimated Gulf AI exposure. Dashed border = suspended/at risk.');
+}, 'Exposure Chart');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 4 — CHINESE ACTORS DOT MATRIX (T13)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-comp-chinese', function(frame, W) {
+  var actors = [
+    { name: 'Huawei', domain: 'Telecom/Cloud',
+      uae:   { scale: 3, note: 'Telecom infrastructure mix. UAE did not join Clean Network.' },
+      saudi: { scale: 5, note: 'All 3 Saudi mobile operators use Huawei equipment. Huawei Cloud Class C CITC cert (permits top-secret classification data).' },
+      qatar: { scale: 5, note: 'Ooredoo entire 5G network Huawei-built. Huawei identified Ooredoo as origin of 5.5G technology. Qatar did not join Clean Network.' },
+    },
+    { name: 'Alibaba Cloud', domain: 'Cloud',
+      uae:   { scale: 2, note: 'Cloud presence in UAE market.' },
+      saudi: { scale: 4, note: '~$500M estimated in-country investment. Cloud infrastructure.' },
+      qatar: { scale: 1, note: 'Limited identified presence.' },
+    },
+    { name: 'Tencent Cloud', domain: 'Cloud',
+      uae:   { scale: 1, note: 'Limited presence.' },
+      saudi: { scale: 3, note: '~$150M estimated in-country investment. Separate from Alibaba.' },
+      qatar: { scale: 1, note: 'Limited identified presence.' },
+    },
+    { name: 'ByteDance / TikTok', domain: 'Consumer AI/Data',
+      uae:   { scale: 2, note: 'Regional operations. Data flow considerations.' },
+      saudi: { scale: 2, note: 'Significant user base. Data flows under Saudi regulations.' },
+      qatar: { scale: 2, note: 'User base present.' },
+    },
+  ];
+
+  var countries = ['uae', 'saudi', 'qatar'];
+  var cNames = { uae: 'UAE', saudi: 'Saudi Arabia', qatar: 'Qatar' };
+  var cColors = { uae: I3_COLORS.uae, saudi: I3_COLORS.saudi, qatar: I3_COLORS.qatar };
+
+  var PAD = 16, nameW = 120, colW = Math.floor((W - PAD * 2 - nameW) / 3);
+  var rowH = 54, H = PAD + 30 + actors.length * rowH + PAD;
+  var svg = I3.makeSVG(frame, W, H);
+
+  // Column headers
+  countries.forEach(function(c, ci) {
+    svg.append('text')
+      .attr('x', PAD + nameW + ci * colW + colW / 2).attr('y', PAD + 16)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 11)
+      .attr('font-weight', 700).attr('fill', cColors[c]).text(cNames[c]);
+  });
+
+  actors.forEach(function(actor, ai) {
+    var y0 = PAD + 30 + ai * rowH;
+
+    svg.append('text')
+      .attr('x', PAD + nameW - 8).attr('y', y0 + rowH / 2 + 4)
+      .attr('text-anchor', 'end').attr('font-family', 'var(--font-s)').attr('font-size', 10)
+      .attr('fill', '#ccc').text(actor.name);
+    svg.append('text')
+      .attr('x', PAD + nameW - 8).attr('y', y0 + rowH / 2 + 16)
+      .attr('text-anchor', 'end').attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+      .attr('fill', '#9AA0B0').text(actor.domain);
+
+    countries.forEach(function(c, ci) {
+      var data = actor[c];
+      var cx2 = PAD + nameW + ci * colW + colW / 2;
+      var cy2 = y0 + rowH / 2;
+      var r = data.scale * 6;
+
+      svg.append('circle').attr('cx', cx2).attr('cy', cy2).attr('r', r)
+        .attr('fill', '#C0392B').attr('fill-opacity', 0.12 + data.scale * 0.12)
+        .attr('stroke', '#C0392B').attr('stroke-width', 1).attr('stroke-opacity', 0.5)
+        .attr('class', 'i3-dep-dot')
+        .on('mouseover', function(evt) {
+          I3.tt(I3.buildTT(actor.name + ' — ' + cNames[c], data.note), evt);
+        }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+    });
+  });
+
+  svg.append('text').attr('x', W / 2).attr('y', H - 6)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+    .attr('fill', '#9AA0B0').attr('font-style', 'italic')
+    .text('Circle size ∝ assessed penetration depth. Hover for detail.');
+}, 'Domain Matrix');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 4 — TAHNOON PARTNERS ARC DIAGRAM (T3)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-tahnoon-partners', function(frame, W) {
+  var flows = [
+    { from: 'Microsoft', to: 'G42 / UAE', type: 'capital', size: 15200,
+      note: '$1.5B equity + $15.2B infrastructure. Provides compliance pathway for 81,900 chips. CEO described it as "vault within a vault." Full terms undisclosed.' },
+    { from: 'Microsoft', to: 'G42 / UAE', type: 'chips', size: 81900,
+      note: '81,900 of UAE\'s 116,900 approved chips flow through Microsoft compliance pathway. "Vault within a vault" architecture.' },
+    { from: 'OpenAI', to: 'G42 / UAE', type: 'technology', size: 5000,
+      note: 'G42 builds Stargate UAE campus (5GW planned, 200MW targeting late 2026). MGX holds separate equity stake in OpenAI. Builder and investor are the same figure (Tahnoon).' },
+    { from: 'NVIDIA', to: 'G42 / UAE', type: 'chips', size: 35000,
+      note: '35,000 chips approved directly to G42. NVIDIA AI Infrastructure Partnership through MGX. Of 116,900 total approved, only "couple thousand" confirmed in possession.' },
+    { from: 'US Government', to: 'G42 / UAE', type: 'governance', size: 1000,
+      note: 'IGAA (Interim General Assurance Agreement) — governing how chips may be used. Full text unreleased. Audit rights and enforcement triggers not in public domain.' },
+  ];
+
+  var typeColors = {
+    capital:    I3_COLORS.gulf,
+    chips:      I3_COLORS.us,
+    technology: '#5BC8AF',
+    governance: I3_COLORS.policy,
+  };
+
+  var H = 280;
+  var svg = I3.makeSVG(frame, W, H);
+  var midY = H / 2;
+
+  var leftNodes = ['Microsoft', 'OpenAI', 'NVIDIA', 'US Government'];
+  var rightNodes = ['G42 / UAE'];
+  var nodeH = 32;
+  var leftSpacing = (H - 40) / leftNodes.length;
+  var leftPositions = {};
+  leftNodes.forEach(function(n, i) {
+    leftPositions[n] = { x: 80, y: 30 + i * leftSpacing + leftSpacing / 2 };
+  });
+  var rightPositions = { 'G42 / UAE': { x: W - 80, y: midY } };
+
+  // Draw flow arcs
+  flows.forEach(function(f) {
+    var src = leftPositions[f.from];
+    var dst = rightPositions[f.to];
+    if (!src || !dst) return;
+    var strokeW = Math.max(1.5, Math.log(f.size / 1000 + 1) * 2);
+    var color = typeColors[f.type];
+    var mx = (src.x + dst.x) / 2;
+
+    var path = 'M ' + src.x + ' ' + src.y +
+               ' C ' + mx + ' ' + src.y + ', ' + mx + ' ' + dst.y + ', ' + dst.x + ' ' + dst.y;
+    svg.append('path').attr('d', path).attr('class', 'i3-arc-path')
+      .attr('stroke', color).attr('stroke-width', strokeW).attr('fill', 'none')
+      .attr('stroke-opacity', 0.55)
+      .on('mouseover', function(evt) {
+        d3.select(this).attr('stroke-opacity', 0.9);
+        I3.tt(I3.buildTT(f.from + ' → ' + f.to + ' (' + f.type + ')',
+          'Scale: ' + (f.size >= 1000 ? f.size.toLocaleString() + (f.type === 'chips' ? ' chips' : ' $M') : f.size + ' $M') +
+          '<br>' + f.note), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', function() {
+        d3.select(this).attr('stroke-opacity', 0.55);
+        I3.ttHide();
+      });
+  });
+
+  // Left nodes
+  leftNodes.forEach(function(n) {
+    var pos = leftPositions[n];
+    var g = svg.append('g');
+    g.append('rect').attr('x', 0).attr('y', pos.y - nodeH / 2)
+      .attr('width', 140).attr('height', nodeH).attr('rx', 4)
+      .attr('fill', 'rgba(255,255,255,0.05)').attr('stroke', 'rgba(255,255,255,0.12)');
+    g.append('text').attr('x', 70).attr('y', pos.y + 5)
+      .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 10.5)
+      .attr('fill', '#ccc').text(n);
+  });
+
+  // Right node (Tahnoon/UAE)
+  var rp = rightPositions['G42 / UAE'];
+  svg.append('rect').attr('x', W - 155).attr('y', rp.y - 20)
+    .attr('width', 150).attr('height', 40).attr('rx', 4)
+    .attr('fill', 'rgba(10,126,140,0.2)').attr('stroke', I3_COLORS.uae).attr('stroke-width', 1.5);
+  svg.append('text').attr('x', W - 80).attr('y', rp.y + 5)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 11)
+    .attr('font-weight', 700).attr('fill', I3_COLORS.uae).text('G42 / UAE');
+
+  // Legend
+  var legX = 160, legY = H - 20;
+  [['capital', 'Capital ($)'], ['chips', 'Chip supply'], ['technology', 'Technology transfer'], ['governance', 'Governance']].forEach(function(pair, i) {
+    svg.append('line').attr('x1', legX + i * 120).attr('y1', legY).attr('x2', legX + i * 120 + 20).attr('y2', legY)
+      .attr('stroke', typeColors[pair[0]]).attr('stroke-width', 2.5);
+    svg.append('text').attr('x', legX + i * 120 + 24).attr('y', legY + 4)
+      .attr('font-family', 'var(--font-s)').attr('font-size', 9).attr('fill', '#9AA0B0').text(pair[1]);
+  });
+}, 'Flow Diagram');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 4 — QATAR OFFICIALS DOMAIN MATRIX (T6)
+   ═══════════════════════════════════════════════════════════════ */
+I3.register('i3-qatar-officials', function(frame, W) {
+  // The table shows one figure (Sheikh Faisal bin Thani) holding 5 simultaneous roles
+  var roles = [
+    { title: 'Minister of Commerce & Industry', domain: 'Government Policy',
+      color: I3_COLORS.policy,
+      detail: 'Sets commercial policy framework governing all foreign technology investment in Qatar, including Qai partnership structures.' },
+    { title: 'Chair, Ooredoo Group', domain: 'Telecoms (Huawei)',
+      color: '#C0392B',
+      detail: 'Controls Qatar\'s main telecommunications operator. Entire 5G network Huawei-built. Huawei executive identified Ooredoo as origin of 5.5G technology. Same person overseeing AI commercialisation policy controls Chinese-built infrastructure all Qatari data flows through.' },
+    { title: 'Chair, Qatar Financial Centre', domain: 'Financial Regulation',
+      color: I3_COLORS.gulf,
+      detail: 'Oversees financial regulation and oversight of investment frameworks, including those governing AI investment partnerships.' },
+    { title: 'Board, Qatar Investment Authority', domain: 'Sovereign Investment',
+      color: I3_COLORS.qatar,
+      detail: 'QIA manages $557B. Investments include Anthropic, Builder.ai (bankrupt), Ivanhoe Mines. Board role creates overlap between investment decisions and commercial/regulatory policy.' },
+    { title: 'AI Oversight Functions', domain: 'AI Governance',
+      color: I3_COLORS.us,
+      detail: 'Government AI oversight role intersecting with commercial AI partnerships. Dashed boxes in original diagram mark entities that should exist separately but do not have institutional separation.' },
+  ];
+
+  var H = 300;
+  var svg = I3.makeSVG(frame, W, H);
+  var cx = W / 2, cy = H / 2 - 10;
+
+  // Central figure
+  svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 38)
+    .attr('fill', 'rgba(139,48,80,0.15)').attr('stroke', '#8B3050').attr('stroke-width', 2);
+  svg.append('text').attr('x', cx).attr('y', cy)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 10.5)
+    .attr('font-weight', 700).attr('fill', '#E0C0C8').text('Sheikh Faisal');
+  svg.append('text').attr('x', cx).attr('y', cy + 14)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+    .attr('fill', '#C0A0A8').text('bin Thani');
+  svg.append('text').attr('x', cx).attr('y', cy - 14)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 8.5)
+    .attr('fill', '#C0A0A8').text('5 simultaneous roles');
+
+  // Satellite role cards
+  var R = Math.min(W * 0.38, 135);
+  roles.forEach(function(role, i) {
+    var angle = (i / roles.length) * 2 * Math.PI - Math.PI / 2;
+    var rx = cx + R * Math.cos(angle);
+    var ry = cy + R * Math.sin(angle);
+
+    // Edge
+    svg.append('line').attr('x1', cx).attr('y1', cy).attr('x2', rx).attr('y2', ry)
+      .attr('stroke', role.color).attr('stroke-width', 1.5).attr('stroke-opacity', 0.4);
+
+    // Role dot
+    svg.append('circle').attr('cx', rx).attr('cy', ry).attr('r', 22)
+      .attr('fill', role.color).attr('fill-opacity', 0.15)
+      .attr('stroke', role.color).attr('stroke-width', 1.5)
+      .style('cursor', 'default')
+      .on('mouseover', function(evt) {
+        I3.tt(I3.buildTT(role.title, role.detail), evt);
+      }).on('mousemove', I3.ttMove).on('mouseout', I3.ttHide);
+
+    // Domain label
+    var anchor = Math.cos(angle) < -0.3 ? 'end' : Math.cos(angle) > 0.3 ? 'start' : 'middle';
+    var lx = cx + (R + 30) * Math.cos(angle);
+    var ly = cy + (R + 30) * Math.sin(angle);
+    svg.append('text').attr('x', lx).attr('y', ly + 4)
+      .attr('text-anchor', anchor).attr('font-family', 'var(--font-s)').attr('font-size', 9)
+      .attr('fill', role.color).attr('pointer-events', 'none')
+      .text(role.domain);
+  });
+
+  // Structural note
+  svg.append('text').attr('x', W / 2).attr('y', H - 8)
+    .attr('text-anchor', 'middle').attr('font-family', 'var(--font-s)').attr('font-size', 9)
+    .attr('fill', '#9AA0B0').attr('font-style', 'italic')
+    .text('AI commercialisation policy, Chinese telecom infrastructure, and sovereign investment converge in one person.');
+}, 'Domain Matrix');
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Phase 5 — GLOSSARY SEARCH INDEX (T17)
+   ═══════════════════════════════════════════════════════════════ */
+(function() {
+  // We enhance the glossary table in place (no SVG needed)
+  // Categories auto-assigned to each term
+  var termCategories = {
+    'ADIA': 'Fund', 'AIATC': 'Regulator', 'ADQ': 'Fund', 'ALLaM': 'Model',
+    'ATRC': 'Org', 'Barakah': 'Infrastructure', 'CFIUS': 'Regulation',
+    'CITC': 'Regulator', 'Core42': 'Org', 'DarkMatter': 'Org',
+    'FIRB': 'Regulation', 'G42': 'Org', 'HUMAIN': 'Org', 'IGAA': 'Agreement',
+    'IHC': 'Org', 'Llama': 'Model', 'MGX': 'Fund', 'NEOM': 'Org',
+    'NSO': 'Org', 'OIO': 'Regulation', 'PIF': 'Fund', 'Pax Silica': 'Agreement',
+    'QUAIRIA': 'Agreement', 'Qai': 'Org', 'SDAIA': 'Regulator',
+    'Stargate': 'Org', 'TII': 'Org', 'Tahnoon': 'Person', 'MBS': 'Person',
+    'Falcon': 'Model', 'AUKUS': 'Agreement', 'QIA': 'Fund',
+  };
+
+  var categoryColors = {
+    'Fund':           I3_COLORS.gulf,
+    'Regulator':      I3_COLORS.policy,
+    'Model':          '#5BC8AF',
+    'Org':            I3_COLORS.uae,
+    'Agreement':      '#9A5A30',
+    'Regulation':     '#7070C0',
+    'Infrastructure': '#60A870',
+    'Person':         '#E0D0FF',
+  };
+
+  var ALL_CATS = Object.keys(categoryColors);
+
+  function setupGlossarySearch() {
+    var table = document.getElementById('i3-glossary');
+    if (!table) return;
+
+    // Don't double-inject
+    if (document.getElementById('i3-glossary-search')) return;
+
+    // Inject search UI before the toggle bar (or before the table)
+    var toggleBar = document.querySelector('.i3-toggle-bar[data-table="i3-glossary"]');
+    var insertPoint = toggleBar || table;
+
+    var searchWrap = document.createElement('div');
+    searchWrap.className = 'i3-search-wrap';
+    searchWrap.id = 'i3-glossary-search';
+    searchWrap.innerHTML =
+      '<input class="i3-search-input" id="glos-search" placeholder="Search terms and definitions…" />' +
+      ALL_CATS.map(function(cat) {
+        return '<button class="i3-tag-btn" data-cat="' + cat + '" style="border-color:' + categoryColors[cat] + '">' + cat + '</button>';
+      }).join('') +
+      '<button class="i3-tag-btn active" data-cat="ALL">All</button>';
+
+    insertPoint.parentNode.insertBefore(searchWrap, insertPoint);
+
+    // Tag each row with its category
+    table.querySelectorAll('tbody tr').forEach(function(row) {
+      var termCell = row.querySelector('td');
+      if (!termCell) return;
+      var term = termCell.textContent.trim();
+
+      // Assign category
+      var cat = 'Org';
+      Object.keys(termCategories).forEach(function(key) {
+        if (term.toLowerCase().includes(key.toLowerCase())) cat = termCategories[key];
+      });
+      row.dataset.cat = cat;
+
+      // Add category badge to term cell
+      var badge = document.createElement('span');
+      badge.style.cssText = 'display:inline-block;margin-left:6px;padding:1px 6px;border-radius:10px;font-size:8px;font-weight:700;letter-spacing:.08em;background:' + (categoryColors[cat] || '#888') + '22;color:' + (categoryColors[cat] || '#888') + ';border:1px solid' + (categoryColors[cat] || '#888') + '44;vertical-align:middle';
+      badge.textContent = cat;
+      termCell.appendChild(badge);
+    });
+
+    var currentCat = 'ALL', currentText = '';
+
+    function filterGlossary() {
+      table.querySelectorAll('tbody tr').forEach(function(row) {
+        var termCell = row.querySelector('td:first-child');
+        var defCell  = row.querySelector('td:last-child');
+        if (!termCell || !defCell) return;
+
+        var text = (termCell.textContent + ' ' + defCell.textContent).toLowerCase();
+        var matchText = !currentText || text.includes(currentText.toLowerCase());
+        var matchCat  = currentCat === 'ALL' || row.dataset.cat === currentCat;
+
+        if (matchText && matchCat) {
+          row.classList.remove('i3-glossary-hidden');
+        } else {
+          row.classList.add('i3-glossary-hidden');
+        }
+
+        // Highlight search term in definition cell
+        if (currentText && matchText && matchCat) {
+          var defText = defCell.textContent;
+          var regex = new RegExp('(' + currentText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+          defCell.innerHTML = defText.replace(regex, '<mark class="i3-search-highlight">$1</mark>');
+        } else if (!currentText) {
+          // Restore plain text if no search
+          // (safe because we're not modifying term cells with innerHTML)
+        }
+      });
+
+      // Show count
+      var visible = table.querySelectorAll('tbody tr:not(.i3-glossary-hidden)').length;
+      var total   = table.querySelectorAll('tbody tr').length;
+      var counter = searchWrap.querySelector('.glos-count');
+      if (!counter) {
+        counter = document.createElement('span');
+        counter.className = 'glos-count';
+        counter.style.cssText = 'font-family:var(--font-s);font-size:10px;color:var(--text-sec);margin-left:auto;';
+        searchWrap.appendChild(counter);
+      }
+      counter.textContent = visible + '/' + total + ' terms';
+    }
+
+    searchWrap.querySelector('#glos-search').addEventListener('input', function(e) {
+      currentText = e.target.value;
+      filterGlossary();
+    });
+
+    searchWrap.querySelectorAll('.i3-tag-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        searchWrap.querySelectorAll('.i3-tag-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentCat = btn.dataset.cat;
+        filterGlossary();
+      });
+    });
+
+    filterGlossary(); // initial pass to show counts
+  }
+
+  // Run after toggle injection
+  setTimeout(setupGlossarySearch, 200);
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   I3 Initialisation
+   ═══════════════════════════════════════════════════════════════ */
+function i3Init() {
+  injectToggles();
+  // Glossary search is table-mode only, set up after toggles
+  setTimeout(function() {
+    if (typeof setupGlossarySearch === 'function') setupGlossarySearch();
+  }, 300);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', i3Init);
+} else {
+  // DOM already ready
+  setTimeout(i3Init, 50);
+}
+
+})(); // end I3 IIFE
+
+
+/* ═══ I3 SYSTEM END ═══ */
 </script>
 </body></html>
