@@ -1484,7 +1484,7 @@ body.focus-mode #focus-toggle {
 
 /* ─── PORTAL / POPSTATE / MISC ───────────────────────────────── */
 
-/* Tables always visible — clip-path wipe conflicts with contentVisibility:hidden on inactive panels */
+/* Tables always visible — overrides both clip-path wipe AND JS inline opacity:0 on rows */
 table.dt,
 table.dt.sr,
 table.dt.sr.vis {
@@ -1492,6 +1492,11 @@ table.dt.sr.vis {
   transform: none !important;
   clip-path: none !important;
   transition: none !important;
+}
+/* Row entrance animation sets inline opacity:0 on every tr — override with !important */
+table.dt tbody tr {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* ─── PRINT STYLES (J1) ──────────────────────────────────────── */
@@ -4902,9 +4907,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
  // ═══ v13: TABLE ROW ENTRANCE ANIMATION ═══
  document.querySelectorAll('.dt tbody tr').forEach((row, i) => {
- row.style.opacity = '0';
- row.style.transform = 'translateX(-8px)';
- row.style.transition = `opacity .3s ease ${i * 0.03}s, transform .3s ease ${i * 0.03}s`;
+ // Row entrance animation disabled — was hiding rows with opacity:0 and not reliably restoring
+ row.style.opacity = '1';
+ row.style.transform = 'translateX(0)';
+ row.style.transition = '';
  });
  // Trigger table row animations when parent panel becomes active
  const tableObserver = new MutationObserver((mutations) => {
