@@ -1529,6 +1529,152 @@ table.dt.sr.vis {
   .stat-card { padding: 16px 18px !important; }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   NAV — COMPLETE REDESIGN v2  (supersedes all prior nav/tab rules)
+═══════════════════════════════════════════════════════════════ */
+
+/* Override base nav container */
+nav {
+  padding: 0 !important;
+  background: #06080F !important;
+  border-bottom: 1px solid rgba(255,255,255,0.09) !important;
+  gap: 0 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 500 !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 1px 0 rgba(0,0,0,.5), 0 4px 20px rgba(0,0,0,.3) !important;
+}
+nav::-webkit-scrollbar { display: none; }
+nav::after { display: none !important; }
+
+/* Suppress all conflicting ::after pseudo-elements on tabs */
+.nb::after { display: none !important; }
+
+/* Core tab reset + redesign */
+.nb {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
+  padding: 14px 22px 10px !important;
+  min-width: 0 !important;
+  flex-shrink: 0 !important;
+  font-family: var(--font-s) !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.2) !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  overflow: visible !important;
+  transition: color 0.14s ease, background 0.14s ease, border-color 0.14s ease !important;
+  /* Per-panel CSS custom properties — default is UAE */
+  --nb-acc: var(--uae);
+  --nb-glow: var(--uae-glow);
+}
+
+/* Per-panel accent color overrides */
+.nb.s        { --nb-acc: var(--saudi);  --nb-glow: var(--saudi-glow); }
+.nb.q        { --nb-acc: var(--qatar);  --nb-glow: var(--qatar-glow); }
+.nb.m        { --nb-acc: #6B8A9A;       --nb-glow: rgba(107,138,154,0.30); }
+.nb.d        { --nb-acc: var(--us);     --nb-glow: rgba(70,130,180,0.30); }
+.nb.g        { --nb-acc: #9A70B0;       --nb-glow: rgba(154,112,176,0.30); }
+.nb.comp     { --nb-acc: #C8A84A;       --nb-glow: rgba(200,168,74,0.30); }
+.nb.allied   { --nb-acc: #7A9A7A;       --nb-glow: rgba(122,154,122,0.30); }
+.nb.glossary { --nb-acc: #6B7A9A;       --nb-glow: rgba(107,122,154,0.30); }
+.nb.edit     { --nb-acc: #8BCBD3;       --nb-glow: rgba(139,203,211,0.30); }
+
+.nb:hover {
+  color: rgba(255,255,255,0.58) !important;
+  background: rgba(255,255,255,0.028) !important;
+  border-bottom-color: rgba(255,255,255,0.06) !important;
+}
+
+.nb.active {
+  color: #fff !important;
+  border-bottom-color: var(--nb-acc) !important;
+  background: rgba(255,255,255,0.022) !important;
+  text-shadow: 0 0 18px var(--nb-glow) !important;
+}
+
+/* Number badge — 2-row layout */
+.nb-num {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 5px !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  background: rgba(255,255,255,0.055) !important;
+  color: rgba(255,255,255,0.22) !important;
+  transition: background 0.14s, color 0.14s, box-shadow 0.14s !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.nb:hover .nb-num {
+  background: rgba(255,255,255,0.09) !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+
+.nb.active .nb-num {
+  background: var(--nb-acc) !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px var(--nb-glow), 0 0 4px var(--nb-acc) !important;
+}
+
+/* Subtle separator before the Edit tab */
+.nb.edit {
+  border-left: 1px solid rgba(255,255,255,0.05) !important;
+  margin-left: 4px !important;
+}
+
+/* ─── DIAGRAM LOADING & LAYOUT ───────────────────────────────── */
+
+/* Loading indicator inside .sc before D3 renders */
+.sc-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.1);
+  pointer-events: none;
+  z-index: 2;
+  white-space: nowrap;
+}
+.sc-loading::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top-color: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  animation: sc-spin 1.2s linear infinite;
+}
+@keyframes sc-spin { to { transform: rotate(360deg); } }
+.sc.sc-rendered .sc-loading { display: none; }
+
+/* Ensure .sc has a defined min-height so it doesn't collapse */
+.sc { min-height: 120px; }
+
 </style>
 </head>
 <body>
@@ -6971,6 +7117,99 @@ qsa('.sc').forEach(function(sc){
       card.style.transform = '';
     });
   });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   DIAGRAM LOADING INDICATORS + D3 RELIABILITY
+══════════════════════════════════════════════════════════════ */
+(function(){
+
+  /* 1. Add loading spinner to every .sc container */
+  document.querySelectorAll('.sc').forEach(function(sc){
+    if(sc.querySelector('.sc-loading')) return; // don't duplicate
+    var msg = document.createElement('div');
+    msg.className = 'sc-loading';
+    msg.setAttribute('aria-hidden', 'true');
+    msg.textContent = 'Loading visualization';
+    sc.appendChild(msg);
+  });
+
+  /* 2. Mark containers as rendered when their SVG has children */
+  function sweepRendered(){
+    ['uae-svg','saudi-svg','qatar-svg','maturity-svg','dep-svg'].forEach(function(sid){
+      var svg = document.getElementById(sid);
+      if(!svg) return;
+      if(svg.childElementCount > 0 && svg.parentElement){
+        svg.parentElement.classList.add('sc-rendered');
+      }
+    });
+  }
+
+  /* 3. Poll until all containers are rendered or give up after ~12s */
+  var _sweepCount = 0;
+  var _sweepTimer = setInterval(function(){
+    sweepRendered();
+    _sweepCount++;
+    /* After 24 checks × 500ms = 12 seconds, stop and show error if still unrendered */
+    if(_sweepCount >= 24){
+      clearInterval(_sweepTimer);
+      document.querySelectorAll('.sc:not(.sc-rendered) .sc-loading').forEach(function(msg){
+        msg.textContent = 'Visualization requires network access';
+        msg.style.color = 'rgba(255,100,100,0.2)';
+        if(msg.previousSibling) msg.previousSibling.style.animationPlayState = 'paused';
+      });
+    }
+  }, 500);
+
+  /* 4. D3 retry: if D3 was unavailable on window.load, retry on the active panel */
+  (function retryD3(){
+    if(typeof d3 !== 'undefined') return; // already available, nothing to retry
+    var attempt = 0;
+    var retryLoop = setInterval(function(){
+      attempt++;
+      if(typeof d3 !== 'undefined'){
+        clearInterval(retryLoop);
+        var activePanel = document.querySelector('.panel.active');
+        if(!activePanel) return;
+        var panelId = activePanel.id.replace('panel-','');
+        var drawMap = {uae: window.drawUAE, saudi: window.drawSaudi, qatar: window.drawQatar, maturity: window.drawMaturity, dep: window.drawDep};
+        var fn = drawMap[panelId];
+        if(typeof fn !== 'function') return;
+        /* Reset memoization so the draw actually runs */
+        if(typeof _rendered !== 'undefined') _rendered[panelId] = false;
+        try { fn(); } catch(e){ console.warn('[gulf-ai] D3 retry draw failed:', e); }
+      } else if(attempt >= 20){
+        clearInterval(retryLoop); // give up after 10s
+      }
+    }, 500);
+  })();
+
+  /* 5. Safe show() wrapper: catches JS errors in the chain so the panel
+        switch always completes even if a D3 draw crashes */
+  (function(){
+    var _origSafe = window.show;
+    window.show = function(id, btn){
+      try {
+        _origSafe(id, btn);
+      } catch(e){
+        console.warn('[gulf-ai] show() chain error for panel "' + id + '":', e);
+        /* Fallback: do minimal panel switch so user isn't stuck */
+        document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+        document.querySelectorAll('[role="tab"]').forEach(function(b){
+          b.classList.remove('active');
+          if(b.hasAttribute('aria-selected')) b.setAttribute('aria-selected','false');
+        });
+        var target = document.getElementById('panel-' + id);
+        if(target){ target.classList.add('active'); }
+        if(btn){ btn.classList.add('active'); if(btn.hasAttribute('aria-selected')) btn.setAttribute('aria-selected','true'); }
+      }
+    };
+  })();
+
+  /* 6. Initial sweep — mark UAE panel rendered if drawUAE already ran */
+  setTimeout(sweepRendered, 300);
+  setTimeout(sweepRendered, 1200);
+
 })();
 
 })(); // end IIFE
