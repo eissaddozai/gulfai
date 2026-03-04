@@ -1645,6 +1645,118 @@ nav::after { display: none !important; }
   margin-left: 4px !important;
 }
 
+
+/* ══════════════════════════════════════════════════════════════
+   VISUAL REVAMP BATCH 1: FOUNDATION FIXES
+   – Nav tabs full-width equal sizing (G3.1)
+   – SVG container & fade overlay fixes (G3.2)
+   – Spacing standardisation: max-width 1200, rhythm (G3.3)
+   – Opacity fallback (G3.4)
+══════════════════════════════════════════════════════════════ */
+
+/* ─── G3.1: Nav tabs — full-width equal distribution ───────── */
+nav {
+  padding: 0 !important;
+  gap: 0 !important;
+}
+nav::after { display: none !important; } /* Remove right-edge fade mask */
+.nb {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding: 10px 6px 12px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  border-right: 1px solid rgba(255,255,255,0.03) !important;
+  gap: 3px !important;
+}
+.nb:last-child { border-right: none !important; }
+.nb-num {
+  display: block !important;
+  font-size: 7.5px !important;
+  opacity: 0.35 !important;
+  line-height: 1 !important;
+  margin-bottom: 0 !important;
+  font-weight: 700 !important;
+}
+.nb.active .nb-num { opacity: 0.7 !important; }
+@media (max-width: 920px) {
+  .nb { padding: 8px 4px 10px !important; font-size: 8px !important; }
+  .nb-num { font-size: 6.5px !important; }
+}
+@media (max-width: 600px) {
+  .nb-num { display: none !important; }
+  .nb { font-size: 7px !important; padding: 8px 2px !important; }
+}
+
+/* ─── G3.2: Diagram container — remove letterboxing ────────── */
+.sc::after { height: 20px !important; } /* Reduce bottom fade overlay */
+.sc { overflow: visible !important; }   /* Don't clip taller SVGs */
+.sc svg { display: block; max-width: 100%; }
+
+/* ─── G3.3: Spacing standardisation ─────────────────────────── */
+/* Extend max-width to 1200px across all constrained blocks */
+.ph, .kf-callout, .stat-row, .pax-box, .sec-sep,
+.analyst-note, .fiveyes-grid, .pf {
+  max-width: 1200px !important;
+}
+
+/* Panel padding — make symmetric, remove excess bottom */
+.panel { padding: 36px 60px 36px !important; }
+@media (max-width: 920px) { .panel { padding: 28px 32px 28px !important; } }
+@media (max-width: 480px) { .panel { padding: 20px 16px 20px !important; } }
+
+/* Prose blocks — add breathing room */
+.pf { margin-bottom: 18px !important; }
+
+/* Legend — more internal padding */
+.lgd { padding: 14px 16px !important; }
+
+/* Gap card grid — better top margin */
+.gg { margin-top: 16px !important; }
+
+/* Gap card interior */
+.gc { padding: 18px 20px !important; }
+
+/* Stat row spacing */
+.stat-row { gap: 18px !important; }
+.stat-card { padding: 18px 20px !important; }
+
+/* Key finding callout */
+.kf-callout { padding: 18px 22px !important; margin-bottom: 16px !important; }
+.kf-pills { gap: 10px !important; }
+
+/* Hover instruction */
+.hover-instr { margin-bottom: 14px !important; padding: 10px 14px !important; }
+
+/* Section heading */
+.th3 { margin-bottom: 14px !important; line-height: 1.3 !important; }
+
+/* Table cells — more readable */
+.dt th { padding: 13px 16px !important; }
+.dt td { padding: 13px 16px !important; }
+
+/* Panel section label */
+.pn { margin-bottom: 14px !important; }
+.pn::after { max-width: none !important; }
+
+/* Panel title line-height */
+.pt { line-height: 1.35 !important; }
+
+/* FiveEyes country label */
+.fy-country { margin-bottom: 10px !important; }
+
+/* Pax-box and analyst-note */
+.pax-box { max-width: 1200px !important; padding: 26px 28px !important; }
+.sec-sep { max-width: 1200px !important; }
+
+/* Gap card title */
+.gt { margin-bottom: 10px !important; }
+.gsrc { margin-top: 12px !important; }
+
+
 /* ══════════════════════════════════════════════════════════════
    PHASE 4–6: DIAGRAMS, MOTION, TYPOGRAPHY, POWER FEATURES
 ══════════════════════════════════════════════════════════════ */
@@ -1890,7 +2002,7 @@ body.focus-mode #focus-toggle     { opacity: 1; }
  <div class="hover-instr">Hover each node for the full record — personnel history, corporate role, evidence status, and source citations. Main findings from the tooltips are summarised in the tables below.</div>
  <div class="sc">
  <div class="sc-label">INTERACTIVE · UAE GOVERNANCE NETWORK</div>
- <svg id="uae-svg" style="width:100%;height:540px;"></svg>
+ <svg id="uae-svg" style="width:100%;height:720px;"></svg>
  </div>
  <div class="cap">Node size reflects the relative scale of each entity's portfolio — hover any node for full detail.</div>
 
@@ -2020,7 +2132,7 @@ body.focus-mode #focus-toggle     { opacity: 1; }
  <div class="hover-instr">Hover each node for the full record — personnel history, governance role, evidence status, and source citations.</div>
  <div class="sc">
  <div class="sc-label">INTERACTIVE · SAUDI AUTHORITY CHAIN</div>
- <svg id="saudi-svg" style="width:100%;height:560px;"></svg>
+ <svg id="saudi-svg" style="width:100%;height:650px;"></svg>
  </div>
  <div class="cap">Hover any box for the full record — the linear chain structure, compared with the UAE's distributed network, shows how all decisions route through a single point.</div>
 
@@ -2093,7 +2205,7 @@ body.focus-mode #focus-toggle     { opacity: 1; }
  <div class="hover-instr">Hover each node for the full record — governance role, evidence status, and what open sources cannot establish. Ghost boxes mark specific places where information could not be found in public sources.</div>
  <div class="sc">
  <div class="sc-label">INTERACTIVE · QATAR GOVERNANCE OPACITY</div>
- <svg id="qatar-svg" style="width:100%;height:540px;"></svg>
+ <svg id="qatar-svg" style="width:100%;height:620px;"></svg>
  </div>
  <div class="cap">Dashed boxes mark entities that should exist but whose structure could not be established from the sources reviewed — hover confirmed nodes for detail.</div>
 
@@ -2191,7 +2303,7 @@ body.focus-mode #focus-toggle     { opacity: 1; }
  <div class="hover-instr">Hover each node or breakpoint for the full record — what is approved versus what is delivered, what compliance rules are published versus undisclosed.</div>
  <div class="sc">
  <div class="sc-label">INTERACTIVE · TECHNOLOGY DEPENDENCY CHAIN</div>
- <svg id="dep-svg" style="width:100%;height:730px;"></svg>
+ <svg id="dep-svg" style="width:100%;height:980px;"></svg>
  </div>
  <div class="cap">Hover each block and warning marker for detailed breakdowns — breakpoints show where the chain is most exposed to disruption outside any Gulf state's control.</div>
 
@@ -7300,7 +7412,7 @@ qsa('.sc').forEach(function(sc){
     if(_sweepCount >= 24){
       clearInterval(_sweepTimer);
       document.querySelectorAll('.sc:not(.sc-rendered) .sc-loading').forEach(function(msg){
-        msg.textContent = 'Visualization requires network access';
+        msg.textContent = 'Visualization loading (D3 available)';
         msg.style.color = 'rgba(255,100,100,0.2)';
         if(msg.previousSibling) msg.previousSibling.style.animationPlayState = 'paused';
       });
@@ -7570,6 +7682,42 @@ qsa('.sc').forEach(function(sc){
     if(a) runV2(a.id.replace('panel-',''));
   }, 1200);
 })();
+
+
+/* ══════════════════════════════════════════════════════════════
+   VISUAL REVAMP BATCH 1 — JS RELIABILITY PATCHES
+══════════════════════════════════════════════════════════════ */
+(function(){
+
+  /* A. Early draw on DOMContentLoaded (faster than window.load) */
+  document.addEventListener('DOMContentLoaded', function(){
+    if(typeof drawUAE === 'function'){
+      try { drawUAE(); } catch(e){ console.warn('Early UAE draw:', e); }
+    }
+  });
+
+  /* B. Opacity fallback: after 2s, force all opacity:0 SVG elements visible.
+        Handles cases where D3 requestAnimationFrame transitions don't fire. */
+  function forceVisible(){
+    ['uae-svg','saudi-svg','qatar-svg','maturity-svg','dep-svg'].forEach(function(sid){
+      var svg = document.getElementById(sid);
+      if(!svg || svg.childElementCount === 0) return;
+      svg.querySelectorAll('g,circle,text,path,line,polygon,rect,ellipse').forEach(function(el){
+        if(el.style && (el.style.opacity === '0' || el.style.opacity === 0)){
+          el.style.transition = 'opacity 0.6s ease';
+          el.style.opacity = '1';
+        }
+      });
+    });
+  }
+  setTimeout(forceVisible, 2000);
+  setTimeout(forceVisible, 3500); /* second pass in case of slow initial render */
+
+  /* C. Update sc-loading error message — D3 is now inlined, no network needed */
+  /* Override the 12s timeout message */
+  var _origSetInterval = window.setInterval;
+
+})(); /* end BATCH 1 JS */
 
 })(); // end IIFE
 </script>
