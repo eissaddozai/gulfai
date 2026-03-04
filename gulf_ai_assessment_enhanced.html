@@ -2737,195 +2737,41 @@ html { scrollbar-gutter: stable; }
   will-change: auto;
 }
 
-/* ─── SECTION ACCENT COLORS — consistent per-panel theming ─── */
-#panel-uae     { --panel-accent: #0A7E8C; }
-#panel-saudi   { --panel-accent: #C8A84A; }
-#panel-qatar   { --panel-accent: #8B1F3A; }
-#panel-maturity{ --panel-accent: #4682B4; }
-#panel-dep     { --panel-accent: #9A5A30; }
-#panel-gaps    { --panel-accent: #C0392B; }
-#panel-comp    { --panel-accent: #5A7A6A; }
-#panel-allied  { --panel-accent: #4A7A9A; }
-#panel-glossary{ --panel-accent: #6B7A8A; }
-#panel-edit    { --panel-accent: #6B7A8A; }
 
-/* Apply accent to panel section number and heading underline */
-.panel .pn { color: var(--panel-accent) !important; opacity: 0.7; }
-.panel .pt { border-bottom: 2px solid var(--panel-accent); padding-bottom: 12px; margin-bottom: 20px; }
+/* === Section Accent Colors === */
+#panel-uae      { --panel-accent: #0A7E8C; }
+#panel-saudi    { --panel-accent: #C8A84A; }
+#panel-qatar    { --panel-accent: #8B3050; }
+#panel-maturity { --panel-accent: #4682B4; }
+#panel-dep      { --panel-accent: #9A5A30; }
+#panel-gaps     { --panel-accent: #C0392B; }
+#panel-comp     { --panel-accent: #5A7A6A; }
+#panel-allied   { --panel-accent: #4A7A9A; }
+#panel-glossary { --panel-accent: #6B7A8A; }
+#panel-edit     { --panel-accent: #6B7A8A; }
 
-/* Nav tab accent indicators */
-.nb.active { border-bottom-color: currentColor !important; }
-#tab-uae.active,    #tab-uae:hover    { color: #0A7E8C !important; border-bottom-color: #0A7E8C !important; }
-#tab-saudi.active,  #tab-saudi:hover  { color: #C8A84A !important; border-bottom-color: #C8A84A !important; }
-#tab-qatar.active,  #tab-qatar:hover  { color: #8B3050 !important; border-bottom-color: #8B3050 !important; }
-#tab-maturity.active,#tab-maturity:hover{ color: #4682B4 !important; border-bottom-color: #4682B4 !important; }
-#tab-dep.active,    #tab-dep:hover    { color: #9A5A30 !important; border-bottom-color: #9A5A30 !important; }
-#tab-gaps.active,   #tab-gaps:hover   { color: #C0392B !important; border-bottom-color: #C0392B !important; }
-#tab-comp.active,   #tab-comp:hover   { color: #5A7A6A !important; border-bottom-color: #5A7A6A !important; }
-#tab-allied.active, #tab-allied:hover { color: #4A7A9A !important; border-bottom-color: #4A7A9A !important; }
-#tab-glossary.active,#tab-glossary:hover{ color: #6B7A8A !important; border-bottom-color: #6B7A8A !important; }
-#tab-edit.active,   #tab-edit:hover   { color: #6B7A8A !important; border-bottom-color: #6B7A8A !important; }
+.panel .pn  { color: var(--panel-accent) !important; opacity: 0.85; }
+.panel .pt  { border-bottom: 2px solid var(--panel-accent); padding-bottom: 10px; }
 
-/* Clean nav: remove number-box styles, center text cleanly */
+#tab-uae.active,      #tab-uae:hover      { color: #0A7E8C !important; border-bottom-color: #0A7E8C !important; }
+#tab-saudi.active,    #tab-saudi:hover    { color: #C8A84A !important; border-bottom-color: #C8A84A !important; }
+#tab-qatar.active,    #tab-qatar:hover    { color: #8B3050 !important; border-bottom-color: #8B3050 !important; }
+#tab-maturity.active, #tab-maturity:hover { color: #4682B4 !important; border-bottom-color: #4682B4 !important; }
+#tab-dep.active,      #tab-dep:hover      { color: #9A5A30 !important; border-bottom-color: #9A5A30 !important; }
+#tab-gaps.active,     #tab-gaps:hover     { color: #C0392B !important; border-bottom-color: #C0392B !important; }
+#tab-comp.active,     #tab-comp:hover     { color: #5A7A6A !important; border-bottom-color: #5A7A6A !important; }
+#tab-allied.active,   #tab-allied:hover   { color: #4A7A9A !important; border-bottom-color: #4A7A9A !important; }
+#tab-glossary.active, #tab-glossary:hover { color: #6B7A8A !important; border-bottom-color: #6B7A8A !important; }
+#tab-edit.active,     #tab-edit:hover     { color: #6B7A8A !important; border-bottom-color: #6B7A8A !important; }
+
 .nb-num { display: none !important; }
-.nb { justify-content: center !important; font-size: 10.5px !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; font-weight: 600 !important; }
-
-/* ─── TABLE VISIBILITY FIX ────────────────────────────────────────── */
-/* The scroll-reveal system adds .sr to .dt tables with clip-path:inset(0 100% 0 0)
-   which hides them. contentVisibility:hidden on inactive panels prevents
-   IntersectionObserver from ever adding .vis. Override to always show tables. */
-table.dt.sr,
-table.dt.sr.vis { clip-path: none !important; }
-
-/* ─── DIAGRAM PLACEHOLDER ─────────────────────────────────────────── */
-.dp {
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-top: 3px solid var(--dp-accent, rgba(255,255,255,0.15));
-  background: linear-gradient(160deg, rgba(14,18,28,0.95) 0%, rgba(8,12,20,0.98) 100%);
-  padding: 24px 28px 28px;
-  margin-bottom: 8px;
-  position: relative;
-  overflow: hidden;
+.nb {
+  justify-content: center !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
 }
-.dp::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at 20% 0%, rgba(var(--dp-rgb,10,126,140),0.05) 0%, transparent 55%);
-  pointer-events: none;
-}
-.dp-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.dp-title {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dp-accent, rgba(255,255,255,0.4));
-}
-.dp-badge {
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 3px;
-  padding: 3px 8px;
-}
-.dp-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px;
-}
-.dp-card {
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-left: 2px solid var(--dp-accent, rgba(255,255,255,0.15));
-  border-radius: var(--r-sm);
-  padding: 11px 13px;
-}
-.dp-card-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 3px;
-  line-height: 1.3;
-}
-.dp-card-role {
-  font-size: 11px;
-  color: rgba(255,255,255,0.42);
-  line-height: 1.4;
-}
-.dp-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 6px;
-}
-.dp-tag {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 2px;
-  padding: 2px 6px;
-}
-.dp-tag.verified  { color: #27AE60; border-color: rgba(39,174,96,0.25);  background: rgba(39,174,96,0.06);  }
-.dp-tag.assessed  { color: #4682B4; border-color: rgba(70,130,180,0.25); background: rgba(70,130,180,0.06); }
-.dp-tag.indicated { color: #C8A84A; border-color: rgba(200,168,74,0.25); background: rgba(200,168,74,0.06); }
-.dp-tag.critical  { color: #C0392B; border-color: rgba(192,57,43,0.25);  background: rgba(192,57,43,0.06);  }
-.dp-chain { display: flex; flex-direction: column; gap: 0; }
-.dp-chain-node {
-  display: flex;
-  align-items: flex-start;
-  gap: 13px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-left: 2px solid var(--dp-accent, rgba(255,255,255,0.15));
-  border-radius: var(--r-sm);
-  position: relative;
-}
-.dp-chain-node + .dp-chain-node { margin-top: 6px; }
-.dp-chain-node + .dp-chain-node::before {
-  content: '↓';
-  position: absolute;
-  top: -14px;
-  left: 20px;
-  font-size: 10px;
-  color: rgba(255,255,255,0.2);
-  line-height: 1;
-}
-.dp-chain-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--dp-accent, rgba(255,255,255,0.25));
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-.dp-chain-body { flex: 1; }
-.dp-chain-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.82);
-  margin-bottom: 3px;
-  line-height: 1.35;
-}
-.dp-chain-sub {
-  font-size: 11px;
-  color: rgba(255,255,255,0.42);
-  line-height: 1.5;
-}
-.dp-levels { display: flex; flex-direction: column; gap: 8px; }
-.dp-level {
-  border-left: 3px solid var(--dp-lc, rgba(255,255,255,0.15));
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.02);
-  border-radius: 0 var(--r-sm) var(--r-sm) 0;
-}
-.dp-level-title {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--dp-lc, rgba(255,255,255,0.3));
-  margin-bottom: 8px;
-}
-.dp-level-items { display: flex; flex-direction: column; gap: 4px; }
-.dp-level-item { font-size: 11px; color: rgba(255,255,255,0.52); line-height: 1.45; }
-.dp-level-item strong { color: rgba(255,255,255,0.78); font-weight: 600; }
 
 </style>
 </head>
@@ -2939,16 +2785,16 @@ table.dt.sr.vis { clip-path: none !important; }
  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><div class="site-sub">Interactive Diagram Suite &nbsp;·&nbsp; Section 1: Strategic Context &nbsp;·&nbsp; February 2026 &nbsp;·&nbsp; Interactive Visualisations</div><span class="version-badge" style="font-size:8.5px;font-weight:700;letter-spacing:.14em;background:linear-gradient(135deg,rgba(10,126,140,0.2),rgba(10,126,140,0.08));color:var(--uae);border:1px solid rgba(10,126,140,0.35);padding:3px 10px;border-radius:var(--radius-sm);font-family:var(--font-s);text-transform:uppercase;white-space:nowrap;box-shadow:0 0 12px rgba(10,126,140,0.1);">v17</span></div>
 </header>
 <nav role="tablist" aria-label="Assessment panels">
- <button class="nb active" role="tab" aria-selected="true" aria-controls="panel-uae" id="tab-uae" onclick="show('uae',this)">UAE</button>
- <button class="nb s" role="tab" aria-selected="false" aria-controls="panel-saudi" id="tab-saudi" onclick="show('saudi',this)">Saudi Arabia</button>
- <button class="nb q" role="tab" aria-selected="false" aria-controls="panel-qatar" id="tab-qatar" onclick="show('qatar',this)">Qatar</button>
- <button class="nb m" role="tab" aria-selected="false" aria-controls="panel-maturity" id="tab-maturity" onclick="show('maturity',this)">Capital</button>
- <button class="nb d" role="tab" aria-selected="false" aria-controls="panel-dep" id="tab-dep" onclick="show('dep',this)">Tech Chain</button>
- <button class="nb g" role="tab" aria-selected="false" aria-controls="panel-gaps" id="tab-gaps" onclick="show('gaps',this)">Gaps</button>
- <button class="nb comp" role="tab" aria-selected="false" aria-controls="panel-comp" id="tab-comp" onclick="show('comp',this)">Competitive</button>
- <button class="nb allied" role="tab" aria-selected="false" aria-controls="panel-allied" id="tab-allied" onclick="show('allied',this)">Five Eyes</button>
- <button class="nb glossary" role="tab" aria-selected="false" aria-controls="panel-glossary" id="tab-glossary" onclick="show('glossary',this)">Reference</button>
- <button class="nb edit" role="tab" aria-selected="false" aria-controls="panel-edit" id="tab-edit" onclick="show('edit',this)">Edit</button>
+ <button class="nb active" role="tab" aria-selected="true" aria-controls="panel-uae" id="tab-uae" onclick="show('uae',this)"><span class="nb-num">1</span>UAE Governance</button>
+ <button class="nb s" role="tab" aria-selected="false" aria-controls="panel-saudi" id="tab-saudi" onclick="show('saudi',this)"><span class="nb-num">2</span>Saudi Arabia</button>
+ <button class="nb q" role="tab" aria-selected="false" aria-controls="panel-qatar" id="tab-qatar" onclick="show('qatar',this)"><span class="nb-num">3</span>Qatar</button>
+ <button class="nb m" role="tab" aria-selected="false" aria-controls="panel-maturity" id="tab-maturity" onclick="show('maturity',this)"><span class="nb-num">4</span>Capital Reality</button>
+ <button class="nb d" role="tab" aria-selected="false" aria-controls="panel-dep" id="tab-dep" onclick="show('dep',this)"><span class="nb-num">5</span>Technology Chain</button>
+ <button class="nb g" role="tab" aria-selected="false" aria-controls="panel-gaps" id="tab-gaps" onclick="show('gaps',this)"><span class="nb-num">6</span>Intelligence Gaps</button>
+ <button class="nb comp" role="tab" aria-selected="false" aria-controls="panel-comp" id="tab-comp" onclick="show('comp',this)"><span class="nb-num">7</span>Where Canada Stands</button>
+ <button class="nb allied" role="tab" aria-selected="false" aria-controls="panel-allied" id="tab-allied" onclick="show('allied',this)"><span class="nb-num">8</span>Five Eyes Comparison</button>
+ <button class="nb glossary" role="tab" aria-selected="false" aria-controls="panel-glossary" id="tab-glossary" onclick="show('glossary',this)"><span class="nb-num">9</span>Reference</button>
+ <button class="nb edit" role="tab" aria-selected="false" aria-controls="panel-edit" id="tab-edit" onclick="show('edit',this)"><span class="nb-num">0</span>✎ Edit</button>
 </nav>
 <div class="panel-progress" id="panel-progress" aria-hidden="true">
  <div class="pp-dot active" data-panel="uae" data-label="UAE"></div>
@@ -2993,52 +2839,12 @@ table.dt.sr.vis { clip-path: none !important; }
  <span class="kf-pill" style="background:rgba(107,45,139,0.08);border-color:rgba(107,45,139,0.12);"><strong style="color:#B878C8;">Circular ownership:</strong> G42 → Lunate → IHC → Royal Group → Tahnoon → G42</span>
  </div>
  </div>
- <div class="dp" style="--dp-accent:#0A7E8C;--dp-rgb:10,126,140;">
- <div class="dp-head">
-  <span class="dp-title">UAE Governance Network</span>
-  <span class="dp-badge">Network map · pending interactive diagram</span>
+ <div class="hover-instr">Hover each node for the full record — personnel history, corporate role, evidence status, and source citations. Main findings from the tooltips are summarised in the tables below.</div>
+ <div class="sc">
+ <div class="sc-label">INTERACTIVE · UAE GOVERNANCE NETWORK</div>
+ <svg id="uae-svg" style="width:100%;height:720px;"></svg>
  </div>
- <div class="dp-grid">
-  <div class="dp-card" style="grid-column:1/-1;border-left-color:#0A7E8C;">
-   <div class="dp-card-name">Sheikh Tahnoon bin Zayed Al Nahyan — Central Node</div>
-   <div class="dp-card-role">Chairs every major UAE AI entity simultaneously. Combined portfolio exceeds $1.3 trillion.</div>
-   <div class="dp-card-tags">
-    <span class="dp-tag">G42</span><span class="dp-tag">MGX</span><span class="dp-tag">ADIA</span><span class="dp-tag">IHC</span><span class="dp-tag">AIATC</span><span class="dp-tag">Royal Group</span><span class="dp-tag">FAB</span>
-    <span class="dp-tag verified">Verified</span>
-   </div>
-  </div>
-  <div class="dp-card">
-   <div class="dp-card-name">G42</div>
-   <div class="dp-card-role">UAE's primary AI commercial entity. CEO: Peng Xiao (prior DarkMatter dual-role documented by US Congress).</div>
-   <div class="dp-card-tags"><span class="dp-tag">Microsoft partnership</span><span class="dp-tag">OpenAI partner</span><span class="dp-tag verified">Verified</span></div>
-  </div>
-  <div class="dp-card">
-   <div class="dp-card-name">MGX</div>
-   <div class="dp-card-role">AI-focused investment vehicle. Co-founded $30–100B platform with BlackRock, Microsoft, Nvidia.</div>
-   <div class="dp-card-tags"><span class="dp-tag">Ant Group</span><span class="dp-tag">xAI</span><span class="dp-tag">BlackRock</span><span class="dp-tag verified">Verified</span></div>
-  </div>
-  <div class="dp-card">
-   <div class="dp-card-name">ADIA · IHC · AIATC</div>
-   <div class="dp-card-role">ADIA: Abu Dhabi sovereign wealth fund. IHC: circular ownership hub (IHC→Royal Group→Tahnoon→G42→IHC). AIATC: national AI council.</div>
-   <div class="dp-card-tags"><span class="dp-tag">Lunate</span><span class="dp-tag">TII</span><span class="dp-tag verified">Verified</span></div>
-  </div>
-  <div class="dp-card">
-   <div class="dp-card-name">DarkMatter / Peng Xiao connection</div>
-   <div class="dp-card-role">DarkMatter: US-sanctioned surveillance firm. G42's CEO previously held dual role — documented in AP investigation and US Congressional testimony.</div>
-   <div class="dp-card-tags"><span class="dp-tag critical">Risk signal</span><span class="dp-tag assessed">Assessed</span></div>
-  </div>
-  <div class="dp-card">
-   <div class="dp-card-name">MBZ + Bani Fatima</div>
-   <div class="dp-card-role">UAE President. Distributed governance model — major portfolios divided across brothers, unlike Saudi's single-point concentration.</div>
-   <div class="dp-card-tags"><span class="dp-tag">Mansour</span><span class="dp-tag">Hamed</span><span class="dp-tag verified">Verified</span></div>
-  </div>
-  <div class="dp-card">
-   <div class="dp-card-name">Foreign Technology Partners</div>
-   <div class="dp-card-role">All operating in-country or contracted through G42/MGX.</div>
-   <div class="dp-card-tags"><span class="dp-tag">Microsoft</span><span class="dp-tag">OpenAI</span><span class="dp-tag">Nvidia</span><span class="dp-tag">Ant Group</span><span class="dp-tag">xAI</span><span class="dp-tag">BlackRock</span></div>
-  </div>
- </div>
-</div>
+ <div class="cap">Node size reflects the relative scale of each entity's portfolio — hover any node for full detail.</div>
 
  <!-- v13: UAE stat summary row -->
  <div class="stat-row">
@@ -3163,49 +2969,12 @@ table.dt.sr.vis { clip-path: none !important; }
  <div class="stat-sub">The only verified AI delivery record in Saudi Arabia — 200+ deployed solutions</div>
  </div>
  </div>
- <div class="dp" style="--dp-accent:#C8A84A;--dp-rgb:200,168,74;">
- <div class="dp-head">
-  <span class="dp-title">Saudi Authority Chain</span>
-  <span class="dp-badge">Vertical chain · pending interactive diagram</span>
+ <div class="hover-instr">Hover each node for the full record — personnel history, governance role, evidence status, and source citations.</div>
+ <div class="sc">
+ <div class="sc-label">INTERACTIVE · SAUDI AUTHORITY CHAIN</div>
+ <svg id="saudi-svg" style="width:100%;height:650px;"></svg>
  </div>
- <div class="dp-chain">
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot" style="background:#C8A84A;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Mohammed bin Salman (MBS)</div>
-    <div class="dp-chain-sub">Chairs SDAIA, PIF, HUMAIN, and NEOM directly. Every Saudi AI decision traces back to this single individual. Single point of decision authority with no identified deputy.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">PIF — Public Investment Fund</div>
-    <div class="dp-chain-sub">$913 billion AUM · ~$40B earmarked for AI infrastructure · Governor: Yasir Al-Rumayyan. PIF governance described as "outside normal governance frameworks" in independent reviews.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">HUMAIN — National AI Company</div>
-    <div class="dp-chain-sub">Significant capital committed. No operational facility confirmed as of February 2026. No CEO named. CEO: Tareq Amin (ex-Aramco Digital). Chief Scientist: Walid Al-Onaizan (dual role: also heads NCAI).</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">SDAIA — Saudi Data and AI Authority</div>
-    <div class="dp-chain-sub">National AI regulator. Developed ALLaM (built on Meta Llama-2). President: Abdullah Alghamdi — reports directly to MBS. Regulatory independence unverified.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node" style="border-left-color:#27AE60;">
-   <div class="dp-chain-dot" style="background:#27AE60;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Aramco Digital <span style="font-size:10px;color:#27AE60;font-weight:600;"> · Only verified operational entity</span></div>
-    <div class="dp-chain-sub">442 AI use cases · $1.8B assessed value in 2024 · 19,000-chip cluster live (Aramco-Groq). The only Saudi AI entity with independently verified deployment at scale.</div>
-   </div>
-  </div>
- </div>
-</div>
+ <div class="cap">Hover any box for the full record — the linear chain structure, compared with the UAE's distributed network, shows how all decisions route through a single point.</div>
 
  <div class="th3">Table 1.1c — Saudi AI Entities: What MBS Controls</div>
  <table class="dt">
@@ -3273,42 +3042,12 @@ table.dt.sr.vis { clip-path: none !important; }
  <div class="stat-sub">No operational AI computing capacity has been identified</div>
  </div>
  </div>
- <div class="dp" style="--dp-accent:#8B1F3A;--dp-rgb:139,31,58;">
- <div class="dp-head">
-  <span class="dp-title">Qatar Governance Opacity</span>
-  <span class="dp-badge">Vertical chain · pending interactive diagram</span>
+ <div class="hover-instr">Hover each node for the full record — governance role, evidence status, and what open sources cannot establish. Ghost boxes mark specific places where information could not be found in public sources.</div>
+ <div class="sc">
+ <div class="sc-label">INTERACTIVE · QATAR GOVERNANCE OPACITY</div>
+ <svg id="qatar-svg" style="width:100%;height:620px;"></svg>
  </div>
- <div class="dp-chain">
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot" style="background:#8B1F3A;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Emir Sheikh Tamim bin Hamad Al Thani <span style="font-size:10px;color:#4682B4;font-weight:600;"> · Verified</span></div>
-    <div class="dp-chain-sub">Head of state. Governs AI by delegation — not identified as a personal AI champion. The political apex, not the operational driver.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Prime Minister Sheikh Mohammed bin Abdulrahman <span style="font-size:10px;color:#4682B4;font-weight:600;"> · Verified</span></div>
-    <div class="dp-chain-sub">Qatar's operational AI champion. Qai is embedded directly in his office rather than established as an independent entity.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node" style="border-left-color:rgba(255,255,255,0.15);border-style:dashed;">
-   <div class="dp-chain-dot" style="background:rgba(255,255,255,0.2);"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Qai — National AI Entity <span style="font-size:10px;color:#C8A84A;font-weight:600;"> · Unverified structure</span></div>
-    <div class="dp-chain-sub">Launched December 2025. No CEO, no identified team, no track record. Two months old at time of writing. Structure could not be established from public sources.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">QIA — Qatar Investment Authority <span style="font-size:10px;color:#4682B4;font-weight:600;"> · Verified</span></div>
-    <div class="dp-chain-sub">$557 billion sovereign wealth fund. Scored 46/100 on its own transparency framework. The financial mechanism for AI investment — opacity limits external analysis.</div>
-   </div>
-  </div>
- </div>
-</div>
+ <div class="cap">Dashed boxes mark entities that should exist but whose structure could not be established from the sources reviewed — hover confirmed nodes for detail.</div>
 
  <div class="th3">Table 1.1e — Sheikh Faisal bin Thani: Five Simultaneous Roles</div>
  <table class="dt">
@@ -3354,44 +3093,12 @@ table.dt.sr.vis { clip-path: none !important; }
  <span class="kf-pill" style="background:rgba(95,107,122,0.08);"><strong style="color:#9AA0B0;">Qatar: zero deployed:</strong> No independently verified AI capital deployment identified from open sources</span>
  </div>
  </div>
- <div class="dp" style="--dp-accent:#4682B4;--dp-rgb:70,130,180;">
- <div class="dp-head">
-  <span class="dp-title">Commitment Maturity Matrix</span>
-  <span class="dp-badge">Level matrix · pending interactive diagram</span>
+ <div class="hover-instr">Hover each marker for the full record — capital type, counterparties, evidence status, and main distinctions between commitment levels.</div>
+ <div class="sc">
+ <div class="sc-label">INTERACTIVE · COMMITMENT MATURITY MATRIX</div>
+ <svg id="maturity-svg" style="width:100%;height:690px;"></svg>
  </div>
- <div class="dp-levels">
-  <div class="dp-level" style="--dp-lc:#4682B4;">
-   <div class="dp-level-title">Operational — Capital deployed · Infrastructure built · Independently verified</div>
-   <div class="dp-level-items">
-    <div class="dp-level-item"><strong>UAE: $15–25B deployed</strong> — ~500MW data centres operational (Bloomberg; multiple sources)</div>
-    <div class="dp-level-item"><strong>US tech companies</strong> — Azure, AWS, Oracle all operating live in the Gulf</div>
-    <div class="dp-level-item"><strong>South Korea: Barakah nuclear</strong> — 5.6GW powering UAE data centres → joined Stargate UAE Jan 2026</div>
-   </div>
-  </div>
-  <div class="dp-level" style="--dp-lc:#8B6914;">
-   <div class="dp-level-title">Contracted — Binding agreements · Named counterparties · Defined deliverables</div>
-   <div class="dp-level-items">
-    <div class="dp-level-item"><strong>France: $56B contracted</strong> — 1.4GW on French soil, named counterparties, binding deals</div>
-    <div class="dp-level-item"><strong>Microsoft: $1.5B + $15.2B</strong> — Contracted, named projects (corporate disclosures)</div>
-   </div>
-  </div>
-  <div class="dp-level" style="--dp-lc:#C8A84A;">
-   <div class="dp-level-title">Framework — Head-of-state pledge · No contracted projects · No named deliverables</div>
-   <div class="dp-level-items">
-    <div class="dp-level-item"><strong>Canada–UAE: $50B framework</strong> — AI is one of four components; no contracted allocations beneath headline figure</div>
-    <div class="dp-level-item"><strong>US–Saudi: $600B headline</strong> — ~$282B itemised by press; many items non-binding</div>
-    <div class="dp-level-item"><strong>Canada–Qatar: unspecified</strong> — "Significant investments" stated; no figure, no named projects</div>
-   </div>
-  </div>
-  <div class="dp-level" style="--dp-lc:#8B1F3A;">
-   <div class="dp-level-title">Aspirational — Conference MOUs · 30–50% historical conversion rate</div>
-   <div class="dp-level-items">
-    <div class="dp-level-item"><strong>LEAP conference MOUs</strong> — Historical conversion rate 30–50%; head-of-state rate undetermined</div>
-    <div class="dp-level-item"><strong>Brookfield–Qai: $20B announced</strong> — No site, no MW, no timeline (February 2026)</div>
-   </div>
-  </div>
- </div>
-</div>
+ <div class="cap">Hover any marker for the full record — the annotation on the right side marks the gap between where Canada and France currently sit.</div>
 
  <div class="th3">Table 1.2b — Gulf AI Capital Deployment: Three-Country Comparison</div>
  <table class="dt">
@@ -3433,56 +3140,12 @@ table.dt.sr.vis { clip-path: none !important; }
  <span class="kf-pill" style="background:rgba(122,96,128,0.08);"><strong style="color:#B080C0;">Canada inherits all:</strong> Every risk in this chain flows through to Canadian co-investment exposure</span>
  </div>
  </div>
- <div class="dp" style="--dp-accent:#9A5A30;--dp-rgb:154,90,48;">
- <div class="dp-head">
-  <span class="dp-title">Technology Dependency Chain</span>
-  <span class="dp-badge">Linear supply chain · pending interactive diagram</span>
+ <div class="hover-instr">Hover each node or breakpoint for the full record — what is approved versus what is delivered, what compliance rules are published versus undisclosed.</div>
+ <div class="sc">
+ <div class="sc-label">INTERACTIVE · TECHNOLOGY DEPENDENCY CHAIN</div>
+ <svg id="dep-svg" style="width:100%;height:980px;"></svg>
  </div>
- <div class="dp-chain">
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot" style="background:#4682B4;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">US Technology Policy — Originating Variable</div>
-    <div class="dp-chain-sub">Commerce Department · Congress · Political environment. The entire chain begins and is constrained by US export control decisions. No Gulf state controls this variable.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot" style="background:#9A5A30;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Chip Export Approval <span style="font-size:10px;color:#C8A84A;"> · Approved ≠ Delivered</span></div>
-    <div class="dp-chain-sub">UAE: 116,900 approved · Saudi Arabia: 40,000 approved · Qatar: 35,000 approved. Compliance rules are not public — the framework governing these approvals has not been published.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot" style="background:#C08060;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Physical Delivery <span style="font-size:10px;color:#C0392B;"> · The accountability gap</span></div>
-    <div class="dp-chain-sub">UAE: ~2,000 confirmed in possession · Saudi Arabia: undisclosed · Qatar: undisclosed. 58.5 chips approved for every 1 confirmed. Delivery ≠ possession; possession ≠ installation.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node">
-   <div class="dp-chain-dot" style="background:#C08060;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Installation &amp; Configuration</div>
-    <div class="dp-chain-sub">No independent confirmation for any Gulf site except Aramco-Groq. Chinese telecom equipment (Huawei infrastructure) underpins all three countries' networks — a dependency separate from chip supply.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node" style="border-left-color:#27AE60;">
-   <div class="dp-chain-dot" style="background:#27AE60;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Operational Compute</div>
-    <div class="dp-chain-sub">UAE: ~500MW live (independently verified) · Saudi Arabia: Aramco-Groq only · Qatar: none confirmed. The gap between approved chips and operational compute is the central finding of this section.</div>
-   </div>
-  </div>
-  <div class="dp-chain-node" style="border-left-color:#6B8A9A;">
-   <div class="dp-chain-dot" style="background:#6B8A9A;"></div>
-   <div class="dp-chain-body">
-    <div class="dp-chain-name">Canadian Co-Investment — Every Risk Above Is Inherited</div>
-    <div class="dp-chain-sub">CDPQ · CPP · Brookfield · Mila-TII · $50B UAE framework. Canada enters the chain at the bottom and inherits all upstream risks: US policy exposure, chip accountability gaps, Chinese telecom dependency, and absence of disclosed compliance frameworks.</div>
-   </div>
-  </div>
- </div>
-</div>
+ <div class="cap">Hover each block and warning marker for detailed breakdowns — breakpoints show where the chain is most exposed to disruption outside any Gulf state's control.</div>
 
  <div class="th3">Table 1.3a — Chip Approvals vs. Confirmed Possession (February 2026)</div>
  <table class="dt" id="chip-gap-table">
