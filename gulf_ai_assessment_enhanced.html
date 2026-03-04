@@ -1484,14 +1484,14 @@ body.focus-mode #focus-toggle {
 
 /* ─── PORTAL / POPSTATE / MISC ───────────────────────────────── */
 
-/* Scroll-reveal table wipe (M8) */
-table.dt.sr {
-  clip-path: inset(0 100% 0 0);
-  transition: none;
-}
+/* Tables always visible — clip-path wipe conflicts with contentVisibility:hidden on inactive panels */
+table.dt,
+table.dt.sr,
 table.dt.sr.vis {
-  clip-path: inset(0 0% 0 0);
-  transition: clip-path .7s cubic-bezier(.22,1,.36,1) !important;
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+  transition: none !important;
 }
 
 /* ─── PRINT STYLES (J1) ──────────────────────────────────────── */
