@@ -929,16 +929,16 @@ table.dt td[data-num] {
 .kf-callout.kf-saudi { border-left: 4px solid var(--saudi) !important; }
 .kf-callout.kf-qatar { border-left: 4px solid var(--qatar) !important; }
 
-/* Decorative opening quote (P10) */
+/* Decorative opening quote (P10) — kept within overflow:hidden bounds */
 .kf-callout::before {
   content: '\201C';
   position: absolute;
-  top: -12px;
-  left: 16px;
-  font-size: 5rem;
+  top: -8px;
+  left: 12px;
+  font-size: 4rem;
   line-height: 1;
   font-family: var(--font-d);
-  opacity: .06;
+  opacity: .07;
   pointer-events: none;
   color: currentColor;
 }
@@ -993,7 +993,11 @@ table.dt td[data-num] {
 
 /* ─── PANEL ATMOSPHERE (O2, O5, O8) ─────────────────────────── */
 
-/* Aurora sweep on panel activation */
+/* Aurora sweep on panel activation — .ph needs position:relative for ::after to anchor correctly */
+.ph {
+  position: relative;
+  overflow: hidden;
+}
 @keyframes aurora-sweep {
   0%   { opacity: 0; transform: translateX(-100%); }
   30%  { opacity: 1; }
@@ -1016,8 +1020,8 @@ table.dt td[data-num] {
 #panel-gaps  { --panel-accent: #9A70B0; }
 #panel-dep, #panel-maturity { --panel-accent: #6B8A9A; }
 
-/* Subtle scanline on site header (O8) */
-.site-header::after {
+/* Subtle scanline on site header (O8) — use ::before to avoid overwriting original ::after shimmer */
+.site-header::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1029,6 +1033,7 @@ table.dt td[data-num] {
     transparent 3px
   );
   pointer-events: none;
+  z-index: 0;
 }
 
 /* ─── CLASSIFICATION BADGE (O4) ─────────────────────────────── */
@@ -5880,7 +5885,7 @@ qsa('.sc').forEach(function(sc){
     tr.addEventListener('mouseleave', function(){ if(typeof hideTT === 'function') hideTT(); });
   });
 
-  // Add gap header
+  // Add gap header and update colspan on note row
   var hRow = tbl.querySelector('thead tr');
   if(hRow){
     var hWaffle = document.createElement('th');
@@ -5892,6 +5897,9 @@ qsa('.sc').forEach(function(sc){
     hGap.textContent = 'Accountability %';
     hRow.appendChild(hGap);
   }
+  // Update note row colspan to span all columns (original 4 + 2 new)
+  var noteRow = tbl.querySelector('tbody td[colspan]');
+  if(noteRow) noteRow.setAttribute('colspan', '6');
 
   // Animate gap bars on panel activation
   function animateGapBars(){
@@ -6215,7 +6223,8 @@ qsa('.sc').forEach(function(sc){
 
   var modelData = [];
   var rows = qsa('tbody tr', tbl);
-  var axes = ['Architecture','Benchmark','Training Data','Deployment','Governance'];
+  // 3 axes matching the 3 data columns (Architecture Status, Training Base, Core Consideration)
+  var axes = ['Architecture', 'Training', 'Assessment'];
   var modelColors = ['#0A7E8C','#8B7355','#5F6B7A','#6B8A6B'];
 
   rows.forEach(function(row, ri){
@@ -6223,11 +6232,9 @@ qsa('.sc').forEach(function(sc){
     if(cells.length < 5) return;
     var name = cells[0].textContent.trim().substring(0,20);
     var scores = [
-      scoreText(cells[2].textContent),
-      scoreText(cells[4].textContent),
-      scoreText(cells[3].textContent),
-      scoreText(cells[4].textContent),
-      scoreText(cells[4].textContent)
+      scoreText(cells[2].textContent),  // Architecture Status
+      scoreText(cells[3].textContent),  // Training Base
+      scoreText(cells[4].textContent)   // Core Consideration
     ];
     modelData.push({ name: name, scores: scores, color: modelColors[ri] || '#6B7A9A' });
     // Add checkbox
@@ -6486,6 +6493,30 @@ qsa('.sc').forEach(function(sc){
   // We hook into the show() function to apply post-render enhancements
   var _origShowD3 = window.show;
   window.show = function(id, btn){
+    // Cancel pending entrance animation timers and forcibly restore opacity
+    // on ALL SVG diagrams to prevent nodes getting stuck at opacity 0 or 0.12
+    var svgIds = ['uae-svg','saudi-svg','qatar-svg','maturity-svg','dep-svg'];
+    svgIds.forEach(function(sid){
+      var s = document.getElementById(sid);
+      if(!s) return;
+      // Cancel pending entrance timers
+      if(s._pendingTimers){
+        s._pendingTimers.forEach(function(t){ clearTimeout(t); });
+        s._pendingTimers = [];
+      }
+      // Restore any dimmed/hidden groups
+      if(s._pendingGroups){
+        s._pendingGroups.forEach(function(g){
+          g.style.opacity = '';
+          g.style.transform = '';
+          g.style.transition = '';
+        });
+      }
+      // Also reset any dimmed nodes (from hover dimming)
+      s.querySelectorAll('g[style]').forEach(function(g){
+        if(g.style.opacity && g.style.opacity !== '1') g.style.opacity = '';
+      });
+    });
     _origShowD3(id, btn);
     setTimeout(function(){ applyD3Enhancements(id); }, 350);
   };
@@ -6517,16 +6548,25 @@ qsa('.sc').forEach(function(sc){
     });
 
     // Entrance animation: fade + translate on first reveal (G1)
+    // Track all pending timeouts so we can cancel+restore if panel changes
+    var pendingTimers = [];
     groups.forEach(function(g, i){
       g.style.opacity = '0';
       g.style.transform = 'translateY(12px)';
-      setTimeout(function(){
+      var t1 = setTimeout(function(){
         g.style.transition = 'opacity .3s ease, transform .3s ease';
         g.style.opacity = '';
         g.style.transform = '';
-        setTimeout(function(){ g.style.transition = ''; }, 350);
+        var t2 = setTimeout(function(){
+          g.style.transition = '';
+        }, 350);
+        pendingTimers.push(t2);
       }, i * 35);
+      pendingTimers.push(t1);
     });
+    // Store timers on svg so the show() wrapper can cancel them and restore opacity
+    svg._pendingTimers = pendingTimers;
+    svg._pendingGroups = groups;
   }
 
   // Apply to initial panel on load
@@ -6694,22 +6734,38 @@ qsa('.sc').forEach(function(sc){
 (function(){
   function parseNum(txt){
     var s = txt.trim();
+    // Skip non-financial unit strings (MW, GB, TB, GHz, etc.)
+    if(/\d(MW|GB|TB|GHz|GW|km|kg)/i.test(s)) return null;
     var mult = 1;
-    if(s.indexOf('T') >= 0 || s.indexOf('trillion') >= 0) mult = 1e12;
-    else if(s.indexOf('B') >= 0 || s.indexOf('billion') >= 0) mult = 1e9;
-    else if(s.indexOf('M') >= 0 || s.indexOf('million') >= 0) mult = 1e6;
-    else if(s.indexOf('K') >= 0 || s.indexOf('thousand') >= 0) mult = 1e3;
+    // Only match B/T/K/M as financial suffixes (at end of number, before punctuation)
+    if(/[\dB]T[\+\s]|trillion/i.test(s)) mult = 1e12;
+    else if(/[\d\$]B[\+\s%]?$|billion/i.test(s) || /\$[\d.]+B/.test(s)) mult = 1e9;
+    else if(/\dM[\+\s%]?$|million/i.test(s)) mult = 1e6;
+    else if(/\dK[\+\s%]?$|thousand/i.test(s)) mult = 1e3;
     var n = parseFloat(s.replace(/[^0-9.]/g,''));
     return isNaN(n) ? null : n * mult;
   }
   function formatLike(orig, n){
     var s = orig.trim();
-    if(s.indexOf('B') >= 0) return '$' + (n/1e9).toFixed(0) + 'B';
-    if(s.indexOf('T') >= 0) return '$' + (n/1e12).toFixed(0) + 'T';
-    if(s.indexOf('K') >= 0) return (n/1e3).toFixed(0) + 'K';
-    if(s.indexOf('M') >= 0) return (n/1e6).toFixed(0) + 'M';
-    var prefix = s.match(/^\D+/);
-    return (prefix ? prefix[0] : '') + n.toFixed(0);
+    // Count decimal places in original to preserve precision
+    var decMatch = s.match(/[\d]+\.([\d]+)/);
+    var decimals = decMatch ? decMatch[1].length : 0;
+    var prefix = s.match(/^[^\d]*/)[0] || '';
+    var suffix = s.match(/[^\d.]+$/);
+    suffix = suffix ? suffix[0].replace(/^\s+/,'') : '';
+    if(/T/.test(s) && !/trillion/i.test(s)){
+      return prefix + (n/1e12).toFixed(decimals) + suffix;
+    }
+    if(/\$[\d.]+B|B[\+\s%]?$/.test(s)){
+      return prefix + (n/1e9).toFixed(decimals) + suffix;
+    }
+    if(/K[\+\s%]?$/.test(s)){
+      return (n/1e3).toFixed(decimals) + suffix;
+    }
+    if(/M[\+\s%]?$/.test(s)){
+      return (n/1e6).toFixed(decimals) + suffix;
+    }
+    return prefix + n.toFixed(0) + suffix;
   }
 
   function animateCounter(el){
