@@ -1530,7 +1530,6 @@ table.dt.sr.vis {
 }
 
 </style>
-
 </head>
 <body>
 <div class="reading-progress" id="reading-progress"></div>
@@ -5732,8 +5731,89 @@ ED.exportHTML=function(){
   });
 
   /* Strip editor block */
-  html=html.replace(/<!-- ═══ EDITOR v16 — DIRECT MANIPULATION ═══ -->[\s\S]*$/,'\n
-<!-- ═══ ENHANCEMENTS JS v1 — Interactive Tables, D3 Upgrades, Power Features ═══ -->
+  html=html.replace(/<!-- ═══ EDITOR v16 — DIRECT MANIPULATION ═══ -->[\s\S]*$/,'\n</body></html>');
+  html=html.replace(/\s*data-ed="1"/g,'');
+  html=html.replace(/\s*spellcheck="false"/g,'');
+  html=html.replace(/\s*class="ed-m"/g,'');
+  html=html.replace(/\s*class="ed-m\s/g,' class="');
+  html=html.replace(/\s*class="ed-drag"/g,'');
+
+  var blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='gulf_ai_assessment_v17.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  /* Restore editor state */
+  document.body.classList.add('ed-on');
+  edEls.forEach(function(el){
+    el.setAttribute('contenteditable','true');
+    el.setAttribute('data-ed','1');
+    el.setAttribute('spellcheck','false');
+    if(el.classList.contains('site-title')){
+      el.style.webkitTextFillColor='var(--text)';
+      el.style.backgroundClip='unset';
+      el.style.webkitBackgroundClip='unset';
+      el.style.background='none';
+    }
+  });
+  document.querySelectorAll('.fiveyes-card,.gc,.kf-pill,.sc,div[style*="max-width"],table.dt,.panel,.gap-item,.stat-card,.canada-pos-card,.kf-callout,.gov-opacity-box,.pax-box,.stat-row,.lgd,.pf,.hover-instr,.kf-pills,.gaps-summary,.ph,.doc-footer,.doc-footer-grid>div,header.site-header').forEach(function(el){
+    if(!el.closest(SKIP))el.classList.add('ed-m');
+  });
+};
+
+/* ══════ UTILITIES ══════ */
+function escHTML(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function cnt(){$('eCnt').textContent=changes.length||'';}
+function rgbHex(c){
+  if(!c||c==='transparent'||c==='rgba(0, 0, 0, 0)')return 'transparent';
+  if(c.charAt(0)==='#')return c.length===4?'#'+c[1]+c[1]+c[2]+c[2]+c[3]+c[3]:c;
+  if(c.indexOf('url')===0||c==='none')return '#000000';
+  var m=c.match(/\d+/g);
+  if(!m||m.length<3)return '#000000';
+  return '#'+((1<<24)+(+m[0]<<16)+(+m[1]<<8)+(+m[2])).toString(16).slice(1);
+}
+
+/* ══════ KEYBOARD SHORTCUTS ══════ */
+/* Prevent context bar buttons from stealing text focus (preserves cursor) */
+$('eCtx').addEventListener('mousedown',function(e){
+  if(e.target.tagName==='BUTTON')e.preventDefault();
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey&&e.key==='e'){e.preventDefault();ED.toggle();}
+  if(e.ctrlKey&&e.key==='z'&&active){e.preventDefault();ED.undo();}
+  if(e.ctrlKey&&e.key==='f'&&active){e.preventDefault();ED.showF();}
+  /* Font size: Ctrl+] increase, Ctrl+[ decrease — works on any selected element */
+  if(e.ctrlKey&&e.key===']'&&active&&sel){e.preventDefault();if(selK==='html')ED.fz(1);else if(selK==='svg')ED.svgTxtSizeStep(1);}
+  if(e.ctrlKey&&e.key==='['&&active&&sel){e.preventDefault();if(selK==='html')ED.fz(-1);else if(selK==='svg')ED.svgTxtSizeStep(-1);}
+  /* Bold: Ctrl+B */
+  if(e.ctrlKey&&e.key==='b'&&active&&sel&&selK==='html'){e.preventDefault();ED.fBold();}
+  /* Italic: Ctrl+I */
+  if(e.ctrlKey&&e.key==='i'&&active&&sel&&selK==='html'){e.preventDefault();ED.fItalic();}
+  if(e.key==='Escape'&&active){
+    /* Close one layer at a time: popup > menu > find > selection */
+    if($('ePop').classList.contains('vis')){closePop();return;}
+    if($('eMenu').classList.contains('vis')){$('eMenu').classList.remove('vis');return;}
+  $('eCat').classList.remove('vis');
+    if($('eFind').classList.contains('vis')){ED.hideF();return;}
+    if(sel){desel();return;}
+  }
+  if(e.key==='Delete'&&active&&sel&&selK==='html'&&
+     !document.activeElement.getAttribute('contenteditable')){
+    sel.style.display='none';
+    changes.push({t:'hide',el:sel});
+    desel();cnt();
+  }
+});
+
+})();
+</script>
+
 <script id="enhancements-js">
 (function(){
 'use strict';
@@ -6894,88 +6974,5 @@ qsa('.sc').forEach(function(sc){
 })();
 
 })(); // end IIFE
-</script>
-
-</body></html>');
-  html=html.replace(/\s*data-ed="1"/g,'');
-  html=html.replace(/\s*spellcheck="false"/g,'');
-  html=html.replace(/\s*class="ed-m"/g,'');
-  html=html.replace(/\s*class="ed-m\s/g,' class="');
-  html=html.replace(/\s*class="ed-drag"/g,'');
-
-  var blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='gulf_ai_assessment_v17.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-
-  /* Restore editor state */
-  document.body.classList.add('ed-on');
-  edEls.forEach(function(el){
-    el.setAttribute('contenteditable','true');
-    el.setAttribute('data-ed','1');
-    el.setAttribute('spellcheck','false');
-    if(el.classList.contains('site-title')){
-      el.style.webkitTextFillColor='var(--text)';
-      el.style.backgroundClip='unset';
-      el.style.webkitBackgroundClip='unset';
-      el.style.background='none';
-    }
-  });
-  document.querySelectorAll('.fiveyes-card,.gc,.kf-pill,.sc,div[style*="max-width"],table.dt,.panel,.gap-item,.stat-card,.canada-pos-card,.kf-callout,.gov-opacity-box,.pax-box,.stat-row,.lgd,.pf,.hover-instr,.kf-pills,.gaps-summary,.ph,.doc-footer,.doc-footer-grid>div,header.site-header').forEach(function(el){
-    if(!el.closest(SKIP))el.classList.add('ed-m');
-  });
-};
-
-/* ══════ UTILITIES ══════ */
-function escHTML(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-function cnt(){$('eCnt').textContent=changes.length||'';}
-function rgbHex(c){
-  if(!c||c==='transparent'||c==='rgba(0, 0, 0, 0)')return 'transparent';
-  if(c.charAt(0)==='#')return c.length===4?'#'+c[1]+c[1]+c[2]+c[2]+c[3]+c[3]:c;
-  if(c.indexOf('url')===0||c==='none')return '#000000';
-  var m=c.match(/\d+/g);
-  if(!m||m.length<3)return '#000000';
-  return '#'+((1<<24)+(+m[0]<<16)+(+m[1]<<8)+(+m[2])).toString(16).slice(1);
-}
-
-/* ══════ KEYBOARD SHORTCUTS ══════ */
-/* Prevent context bar buttons from stealing text focus (preserves cursor) */
-$('eCtx').addEventListener('mousedown',function(e){
-  if(e.target.tagName==='BUTTON')e.preventDefault();
-});
-
-document.addEventListener('keydown',function(e){
-  if(e.ctrlKey&&e.key==='e'){e.preventDefault();ED.toggle();}
-  if(e.ctrlKey&&e.key==='z'&&active){e.preventDefault();ED.undo();}
-  if(e.ctrlKey&&e.key==='f'&&active){e.preventDefault();ED.showF();}
-  /* Font size: Ctrl+] increase, Ctrl+[ decrease — works on any selected element */
-  if(e.ctrlKey&&e.key===']'&&active&&sel){e.preventDefault();if(selK==='html')ED.fz(1);else if(selK==='svg')ED.svgTxtSizeStep(1);}
-  if(e.ctrlKey&&e.key==='['&&active&&sel){e.preventDefault();if(selK==='html')ED.fz(-1);else if(selK==='svg')ED.svgTxtSizeStep(-1);}
-  /* Bold: Ctrl+B */
-  if(e.ctrlKey&&e.key==='b'&&active&&sel&&selK==='html'){e.preventDefault();ED.fBold();}
-  /* Italic: Ctrl+I */
-  if(e.ctrlKey&&e.key==='i'&&active&&sel&&selK==='html'){e.preventDefault();ED.fItalic();}
-  if(e.key==='Escape'&&active){
-    /* Close one layer at a time: popup > menu > find > selection */
-    if($('ePop').classList.contains('vis')){closePop();return;}
-    if($('eMenu').classList.contains('vis')){$('eMenu').classList.remove('vis');return;}
-  $('eCat').classList.remove('vis');
-    if($('eFind').classList.contains('vis')){ED.hideF();return;}
-    if(sel){desel();return;}
-  }
-  if(e.key==='Delete'&&active&&sel&&selK==='html'&&
-     !document.activeElement.getAttribute('contenteditable')){
-    sel.style.display='none';
-    changes.push({t:'hide',el:sel});
-    desel();cnt();
-  }
-});
-
-})();
 </script>
 </body></html>
