@@ -1645,6 +1645,147 @@ nav::after { display: none !important; }
   margin-left: 4px !important;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   PHASE 4–6: DIAGRAMS, MOTION, TYPOGRAPHY, POWER FEATURES
+══════════════════════════════════════════════════════════════ */
+
+/* ─── P2: Gradient text on panel titles ──────────────────── */
+.pt {
+  background: linear-gradient(120deg, #fff 25%, rgba(200,215,235,0.72) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+#panel-uae    .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(10,126,140,0.52) 100%); }
+#panel-saudi  .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(139,115,85,0.52) 100%); }
+#panel-qatar  .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(95,107,122,0.52) 100%); }
+#panel-dep    .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(70,130,180,0.52) 100%); }
+#panel-maturity .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(107,138,154,0.52) 100%); }
+#panel-gaps   .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(154,112,176,0.52) 100%); }
+#panel-comp   .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(200,168,74,0.52) 100%); }
+#panel-allied .pt { background-image: linear-gradient(120deg, #fff 20%, rgba(122,154,122,0.52) 100%); }
+
+/* ─── A7: Prose paragraph comfort width ──────────────────── */
+.pf { max-width: 72ch; }
+
+/* ─── D4: Urgency pulse ring on critical stat cards ─────── */
+@keyframes urgency-pulse {
+  0%, 100% { box-shadow: var(--shadow-card); }
+  50%       { box-shadow: 0 0 0 3px rgba(192,57,43,0.09), 0 0 20px rgba(192,57,43,0.06), var(--shadow-card); }
+}
+.stat-card.critical { animation: urgency-pulse 3.2s ease-in-out infinite; }
+
+/* ─── M5: Panel slide direction animation ────────────────── */
+@keyframes fi-right { from { opacity:0; transform:translateX(22px); } to { opacity:1; transform:translateX(0); } }
+@keyframes fi-left  { from { opacity:0; transform:translateX(-22px); } to { opacity:1; transform:translateX(0); } }
+.panel.active.dir-right { animation: fi-right 0.3s cubic-bezier(.22,1,.36,1) both !important; }
+.panel.active.dir-left  { animation: fi-left  0.3s cubic-bezier(.22,1,.36,1) both !important; }
+
+/* ─── Q3: Focus mode button ──────────────────────────────── */
+#focus-toggle {
+  position: fixed;
+  bottom: 70px;
+  right: 18px;
+  z-index: 9000;
+  background: rgba(6,8,15,0.93);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: color 0.15s, border-color 0.15s, opacity 0.15s, background 0.15s;
+  font-family: var(--font-s);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.45;
+  user-select: none;
+}
+#focus-toggle:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.14); opacity: 1; }
+#focus-toggle.on { color: #8BCBD3; border-color: rgba(10,126,140,0.3); opacity: 1; background: rgba(10,126,140,0.07); }
+body.focus-mode .site-header      { opacity: 0.22; transition: opacity 0.4s ease; }
+body.focus-mode .site-header:hover{ opacity: 1;    transition: opacity 0.2s ease; }
+body.focus-mode nav               { opacity: 0.1;  transition: opacity 0.4s ease; }
+body.focus-mode nav:hover         { opacity: 1;    transition: opacity 0.2s ease; }
+body.focus-mode .panel-progress   { opacity: 0.1;  transition: opacity 0.4s ease; }
+body.focus-mode .ed-bar           { opacity: 0.05 !important; }
+body.focus-mode #focus-toggle     { opacity: 1; }
+
+/* ─── Q5: Keyboard shortcut overlay ─────────────────────── */
+#shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+#shortcuts-overlay.vis { opacity: 1; pointer-events: auto; }
+.sco-box {
+  background: rgba(11,14,22,0.99);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 28px 32px 24px;
+  max-width: 560px;
+  width: 92%;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.75), 0 0 1px rgba(255,255,255,0.06);
+}
+.sco-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+.sco-title { font-family:var(--font-d); font-size:17px; font-weight:600; color:#fff; letter-spacing:-0.01em; }
+.sco-close {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 6px; padding: 4px 10px; font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.06em; color: rgba(255,255,255,0.38); cursor: pointer;
+  font-family: var(--font-s); text-transform: uppercase; transition: all 0.12s;
+}
+.sco-close:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.2); }
+.sco-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px 24px; }
+.sco-row {
+  display:flex; align-items:center; gap:8px; padding:7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  font-size: 11px; color: var(--text-sec);
+}
+.sco-k {
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:26px; height:20px; padding:0 5px;
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+  border-radius:4px; font-size:9.5px; font-weight:700; color:#fff;
+  font-family:'SFMono-Regular','Consolas',monospace; flex-shrink:0; letter-spacing:0;
+}
+.sco-sep { grid-column:1/-1; height:1px; background:rgba(255,255,255,0.05); margin:6px 0; }
+.sco-section-label {
+  grid-column:1/-1; font-size:8.5px; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:rgba(255,255,255,0.18); padding:10px 0 4px;
+}
+
+/* ─── G7/G8: Diagram pan/zoom controls ──────────────────── */
+.zoom-reset-btn {
+  position: absolute; top: 44px; right: 12px; z-index: 10;
+  background: rgba(8,10,16,0.9); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 7px; padding: 5px 9px; font-size: 15px; line-height: 1;
+  color: rgba(255,255,255,0.35); cursor: pointer;
+  backdrop-filter: blur(8px); transition: color 0.12s, border-color 0.12s;
+  user-select: none;
+}
+.zoom-reset-btn:hover { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); }
+.zoom-hint {
+  position:absolute; bottom:14px; right:16px;
+  font-size:8px; letter-spacing:0.1em; text-transform:uppercase;
+  color:rgba(255,255,255,0.1); pointer-events:none; font-family:var(--font-s);
+}
+
 /* ─── DIAGRAM LOADING & LAYOUT ───────────────────────────────── */
 
 /* Loading indicator inside .sc before D3 renders */
@@ -7215,6 +7356,219 @@ qsa('.sc').forEach(function(sc){
   setTimeout(sweepRendered, 300);
   setTimeout(sweepRendered, 1200);
 
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 4–6 JS: MOTION, POWER FEATURES, D3 POST-PROCESSING
+══════════════════════════════════════════════════════════════ */
+
+/* ─── M5: Panel slide direction ─────────────────────────── */
+(function(){
+  var panelOrder = ['uae','saudi','qatar','maturity','dep','gaps','comp','allied','glossary','edit'];
+  var curIdx = 0;
+  var _origSlide = window.show;
+  window.show = function(id, btn){
+    var newIdx = panelOrder.indexOf(id);
+    var panel = document.getElementById('panel-' + id);
+    if(panel && newIdx !== curIdx){
+      panel.classList.remove('dir-right','dir-left');
+      void panel.offsetWidth;
+      panel.classList.add(newIdx > curIdx ? 'dir-right' : 'dir-left');
+      setTimeout(function(){ panel.classList.remove('dir-right','dir-left'); }, 380);
+    }
+    if(newIdx >= 0) curIdx = newIdx;
+    _origSlide(id, btn);
+  };
+})();
+
+/* ─── D4: Tag the most critical stat card ───────────────── */
+(function(){
+  var first = document.querySelector('#panel-dep .stat-card');
+  if(first) first.classList.add('critical');
+})();
+
+/* ─── Q3: Focus mode button ──────────────────────────────── */
+(function(){
+  if(document.getElementById('focus-toggle')) return;
+  var btn = document.createElement('button');
+  btn.id = 'focus-toggle';
+  btn.setAttribute('aria-label', 'Toggle focus mode (F)');
+  btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>Focus';
+  btn.addEventListener('click', function(){
+    document.body.classList.toggle('focus-mode');
+    btn.classList.toggle('on', document.body.classList.contains('focus-mode'));
+  });
+  document.body.appendChild(btn);
+})();
+
+/* ─── Q5: Keyboard shortcut overlay + global keyboard nav ── */
+(function(){
+  if(document.getElementById('shortcuts-overlay')) return;
+
+  var overlay = document.createElement('div');
+  overlay.id = 'shortcuts-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-label', 'Keyboard shortcuts');
+  overlay.innerHTML =
+    '<div class="sco-box">'
+  + '<div class="sco-head">'
+  +   '<div class="sco-title">Keyboard Shortcuts</div>'
+  +   '<button class="sco-close" aria-label="Close">Close <span class="sco-k">Esc</span></button>'
+  + '</div>'
+  + '<div class="sco-grid">'
+  +   '<div class="sco-section-label">Navigation</div>'
+  +   '<div class="sco-row"><span class="sco-k">1</span>–<span class="sco-k">9</span>&nbsp;Panel navigation</div>'
+  +   '<div class="sco-row"><span class="sco-k">←</span><span class="sco-k">→</span>&nbsp;Prev / next panel</div>'
+  +   '<div class="sco-row"><span class="sco-k">0</span>&nbsp;Edit mode panel</div>'
+  +   '<div class="sco-row"><span class="sco-k">?</span>&nbsp;This overlay</div>'
+  +   '<div class="sco-sep"></div>'
+  +   '<div class="sco-section-label">Interface</div>'
+  +   '<div class="sco-row"><span class="sco-k">⌘K</span>&nbsp;Command palette</div>'
+  +   '<div class="sco-row"><span class="sco-k">F</span>&nbsp;Focus mode</div>'
+  +   '<div class="sco-row"><span class="sco-k">Esc</span>&nbsp;Close overlays</div>'
+  +   '<div class="sco-row"><span class="sco-k">E</span>&nbsp;Toggle editor</div>'
+  + '</div>'
+  + '</div>';
+  document.body.appendChild(overlay);
+
+  function openSCO(){ overlay.classList.add('vis'); }
+  function closeSCO(){ overlay.classList.remove('vis'); }
+
+  overlay.querySelector('.sco-close').addEventListener('click', closeSCO);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeSCO(); });
+
+  var panelKeys = {'1':'uae','2':'saudi','3':'qatar','4':'maturity','5':'dep','6':'gaps','7':'comp','8':'allied','9':'glossary','0':'edit'};
+  var panelSeq = ['uae','saudi','qatar','maturity','dep','gaps','comp','allied','glossary','edit'];
+
+  document.addEventListener('keydown', function(e){
+    if(document.body.classList.contains('ed-on')) return;
+    var tag = (e.target.tagName||'').toLowerCase();
+    if(tag==='input'||tag==='textarea'||e.target.isContentEditable) return;
+
+    if(e.key==='?'||(e.key==='/'&&e.shiftKey)){ e.preventDefault(); overlay.classList.contains('vis') ? closeSCO() : openSCO(); return; }
+    if(e.key==='Escape'){ closeSCO(); return; }
+
+    if(panelKeys[e.key]&&!e.metaKey&&!e.ctrlKey&&!e.altKey){
+      e.preventDefault();
+      var pid = panelKeys[e.key];
+      var pb = document.querySelector('.nb[onclick*="''+pid+''"]');
+      if(pb&&typeof window.show==='function') window.show(pid, pb);
+      return;
+    }
+
+    if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&!e.metaKey&&!e.ctrlKey){
+      var active = document.querySelector('.panel.active');
+      if(!active) return;
+      var cur = panelSeq.indexOf(active.id.replace('panel-',''));
+      var nxt = e.key==='ArrowRight' ? Math.min(cur+1,panelSeq.length-1) : Math.max(cur-1,0);
+      if(nxt!==cur){
+        var nb = document.querySelector('.nb[onclick*="''+panelSeq[nxt]+''"]');
+        if(nb&&typeof window.show==='function') window.show(panelSeq[nxt], nb);
+      }
+      return;
+    }
+
+    if((e.key==='f'||e.key==='F')&&!e.metaKey&&!e.ctrlKey){ var ft=document.getElementById('focus-toggle'); if(ft) ft.click(); }
+    if((e.key==='e'||e.key==='E')&&!e.metaKey&&!e.ctrlKey){
+      if(typeof ED!=='undefined'&&typeof ED.toggle==='function') ED.toggle();
+    }
+  });
+})();
+
+/* ─── D3 V2: Bezier edges + Node glow + Pan/zoom (G3,G4,G7,G8) ── */
+(function(){
+  var svgPanelMap = {uae:'uae-svg', saudi:'saudi-svg', qatar:'qatar-svg', maturity:'maturity-svg', dep:'dep-svg'};
+
+  /* Convert line elements to quadratic bezier paths */
+  function bezierEdges(svgEl){
+    svgEl.querySelectorAll('line').forEach(function(line){
+      var x1=parseFloat(line.getAttribute('x1')||0), y1=parseFloat(line.getAttribute('y1')||0);
+      var x2=parseFloat(line.getAttribute('x2')||0), y2=parseFloat(line.getAttribute('y2')||0);
+      var mx=(x1+x2)/2, my=(y1+y2)/2;
+      var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+      var off=Math.min(len*0.12,22);
+      var px=(-dy/len)*off, py=(dx/len)*off;
+      var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d','M'+x1+','+y1+' Q'+(mx+px)+','+(my+py)+' '+x2+','+y2);
+      p.setAttribute('fill','none');
+      ['stroke','stroke-width','stroke-opacity','stroke-dasharray','opacity'].forEach(function(a){
+        var v=line.getAttribute(a); if(v) p.setAttribute(a,v);
+      });
+      if(line.style.cssText) p.style.cssText=line.style.cssText;
+      line.parentNode&&line.parentNode.insertBefore(p,line);
+      line.remove();
+    });
+  }
+
+  /* Add glow filter + apply to priority nodes */
+  function glowPriorityNodes(svgEl, labels){
+    var defs=svgEl.querySelector('defs');
+    if(!defs||defs.querySelector('#enh-glow-f')) return;
+    var f=document.createElementNS('http://www.w3.org/2000/svg','filter');
+    f.id='enh-glow-f'; f.setAttribute('x','-50%'); f.setAttribute('y','-50%');
+    f.setAttribute('width','200%'); f.setAttribute('height','200%');
+    var blur=document.createElementNS('http://www.w3.org/2000/svg','feGaussianBlur');
+    blur.setAttribute('stdDeviation','5'); blur.setAttribute('result','coloredBlur');
+    var merge=document.createElementNS('http://www.w3.org/2000/svg','feMerge');
+    ['coloredBlur','SourceGraphic'].forEach(function(s){
+      var n=document.createElementNS('http://www.w3.org/2000/svg','feMergeNode');
+      n.setAttribute('in',s); merge.appendChild(n);
+    });
+    f.appendChild(blur); f.appendChild(merge); defs.appendChild(f);
+
+    svgEl.querySelectorAll('text').forEach(function(t){
+      var txt=t.textContent||'';
+      if(labels.some(function(l){ return txt.indexOf(l)!==-1; })){
+        var g=t.parentElement;
+        if(g&&g.tagName==='g'&&!g.getAttribute('filter'))
+          g.setAttribute('filter','url(#enh-glow-f)');
+      }
+    });
+  }
+
+  /* Add D3 pan+zoom to a diagram container */
+  function addPanZoom(svgEl){
+    if(!svgEl||svgEl._pzAdded||typeof d3==='undefined') return;
+    svgEl._pzAdded=true;
+    var sc=svgEl.parentElement; if(!sc) return;
+    var g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.id=svgEl.id+'-zg';
+    while(svgEl.firstChild) g.appendChild(svgEl.firstChild);
+    svgEl.appendChild(g);
+    var zoom=d3.zoom().scaleExtent([0.2,5]).on('zoom',function(ev){ g.setAttribute('transform',ev.transform); });
+    d3.select(svgEl).call(zoom);
+    var rb=document.createElement('button'); rb.className='zoom-reset-btn'; rb.title='Reset view'; rb.textContent='⌖';
+    rb.addEventListener('click',function(){ d3.select(svgEl).transition().duration(380).call(zoom.transform,d3.zoomIdentity); });
+    sc.style.position='relative'; sc.appendChild(rb);
+    var zh=document.createElement('div'); zh.className='zoom-hint'; zh.textContent='Scroll to zoom · Drag to pan';
+    sc.appendChild(zh);
+  }
+
+  var glowLabels = {
+    uae:     ['Tahnoon','G42','MGX','MBZ'],
+    saudi:   ['MBS','PIF','SDAIA'],
+    qatar:   ['Emir','QIA'],
+    maturity:['UAE','Saudi'],
+    dep:     ['G42','Nvidia','TSMC']
+  };
+
+  function runV2(panelId){
+    var svgId=svgPanelMap[panelId]; if(!svgId) return;
+    var sv=document.getElementById(svgId); if(!sv||sv._d3v2||sv.childElementCount===0) return;
+    sv._d3v2=true;
+    try { bezierEdges(sv); } catch(e){ console.warn('bezier:',e); }
+    try { glowPriorityNodes(sv, glowLabels[panelId]||[]); } catch(e){ console.warn('glow:',e); }
+    if(panelId==='uae') try { addPanZoom(sv); } catch(e){ console.warn('zoom:',e); }
+  }
+
+  var _prevV2=window.show;
+  window.show=function(id,btn){ _prevV2(id,btn); setTimeout(function(){ runV2(id); },600); };
+
+  /* Also run on the panel that's already active on load */
+  setTimeout(function(){
+    var a=document.querySelector('.panel.active');
+    if(a) runV2(a.id.replace('panel-',''));
+  }, 1200);
 })();
 
 })(); // end IIFE
