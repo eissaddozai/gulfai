@@ -3372,6 +3372,7 @@ function drawUAE(){
  if (typeof _rendered !== 'undefined' && _rendered.uae) return; if (typeof _rendered !== 'undefined') _rendered.uae = true;
  const svg=d3.select('#uae-svg');svg.selectAll('*').remove();
  const W=document.getElementById('uae-svg').parentElement.offsetWidth,H=720;
+ if(W<10){if(typeof _rendered!=='undefined')_rendered.uae=false;setTimeout(drawUAE,150);return;}
  svg.attr('viewBox',`0 0 ${W} ${H}`);
  const cx=W/2,cy=H/2-10;
  const defs=svg.append('defs');
@@ -3563,6 +3564,7 @@ function drawSaudi(){
  if (typeof _rendered !== 'undefined' && _rendered.saudi) return; if (typeof _rendered !== 'undefined') _rendered.saudi = true;
  const svg=d3.select('#saudi-svg');svg.selectAll('*').remove();
  const W=document.getElementById('saudi-svg').parentElement.offsetWidth,H=650;
+ if(W<10){if(typeof _rendered!=='undefined')_rendered.saudi=false;setTimeout(drawSaudi,150);return;}
  svg.attr('viewBox',`0 0 ${W} ${H}`);
  const cx=W/2,BW=235,BH=58;
  // v13: Background grid and ambient glow
@@ -3653,6 +3655,7 @@ function drawQatar(){
  if (typeof _rendered !== 'undefined' && _rendered.qatar) return; if (typeof _rendered !== 'undefined') _rendered.qatar = true;
  const svg=d3.select('#qatar-svg');svg.selectAll('*').remove();
  const W=document.getElementById('qatar-svg').parentElement.offsetWidth,H=620;
+ if(W<10){if(typeof _rendered!=='undefined')_rendered.qatar=false;setTimeout(drawQatar,150);return;}
  svg.attr('viewBox',`0 0 ${W} ${H}`);
  const cx=W/2,BW=210,BH=54;
  // v13: Background grid and defs
@@ -3733,6 +3736,7 @@ function drawMaturity(){
  if (typeof _rendered !== 'undefined' && _rendered.maturity) return; if (typeof _rendered !== 'undefined') _rendered.maturity = true;
  const svg=d3.select('#maturity-svg');svg.selectAll('*').remove();
  const W=document.getElementById('maturity-svg').parentElement.offsetWidth,H=690;
+ if(W<10){if(typeof _rendered!=='undefined')_rendered.maturity=false;setTimeout(drawMaturity,150);return;}
  svg.attr('viewBox',`0 0 ${W} ${H}`);
  const AX=192,TY=55,BY=625;
  // v13: Background and defs
@@ -3798,6 +3802,7 @@ function drawDep(){
  if (typeof _rendered !== 'undefined' && _rendered.dep) return; if (typeof _rendered !== 'undefined') _rendered.dep = true;
  const svg=d3.select('#dep-svg');svg.selectAll('*').remove();
  const W=document.getElementById('dep-svg').parentElement.offsetWidth,H=980;
+ if(W<10){if(typeof _rendered!=='undefined')_rendered.dep=false;setTimeout(drawDep,150);return;}
  svg.attr('viewBox',`0 0 ${W} ${H}`);
  const NW=Math.min(600,W-80),SX=(W-NW)/2,NH=84,BP=38,SP=24;
  // v13: Background grid and defs
@@ -7782,26 +7787,12 @@ qsa('.sc').forEach(function(sc){
   // We hook into the show() function to apply post-render enhancements
   var _origShowD3 = window.show;
   window.show = function(id, btn){
-    // Cancel pending entrance animation timers and forcibly restore opacity
-    // on ALL SVG diagrams to prevent nodes getting stuck at opacity 0 or 0.12
+    // Reset any hover-dimmed nodes on all diagrams before panel switch
     var svgIds = ['uae-svg','saudi-svg','qatar-svg','maturity-svg','dep-svg'];
     svgIds.forEach(function(sid){
       var s = document.getElementById(sid);
       if(!s) return;
-      // Cancel pending entrance timers
-      if(s._pendingTimers){
-        s._pendingTimers.forEach(function(t){ clearTimeout(t); });
-        s._pendingTimers = [];
-      }
-      // Restore any dimmed/hidden groups
-      if(s._pendingGroups){
-        s._pendingGroups.forEach(function(g){
-          g.style.opacity = '';
-          g.style.transform = '';
-          g.style.transition = '';
-        });
-      }
-      // Also reset any dimmed nodes (from hover dimming)
+      // Reset any dimmed nodes (from hover dimming)
       s.querySelectorAll('g[style]').forEach(function(g){
         if(g.style.opacity && g.style.opacity !== '1') g.style.opacity = '';
       });
@@ -7836,26 +7827,8 @@ qsa('.sc').forEach(function(sc){
       });
     });
 
-    // Entrance animation: fade + translate on first reveal (G1)
-    // Track all pending timeouts so we can cancel+restore if panel changes
-    var pendingTimers = [];
-    groups.forEach(function(g, i){
-      g.style.opacity = '0';
-      g.style.transform = 'translateY(12px)';
-      var t1 = setTimeout(function(){
-        g.style.transition = 'opacity .3s ease, transform .3s ease';
-        g.style.opacity = '';
-        g.style.transform = '';
-        var t2 = setTimeout(function(){
-          g.style.transition = '';
-        }, 350);
-        pendingTimers.push(t2);
-      }, i * 35);
-      pendingTimers.push(t1);
-    });
-    // Store timers on svg so the show() wrapper can cancel them and restore opacity
-    svg._pendingTimers = pendingTimers;
-    svg._pendingGroups = groups;
+    // Note: entrance animation removed — D3 draw functions handle their own
+    // opacity:0→1 transitions internally. Double-animating caused opacity:0 lock.
   }
 
   // Apply to initial panel on load
