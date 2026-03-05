@@ -5733,7 +5733,9 @@ var sIdx=-1;
 window.ED={};
 
 /* ══════ CSS VARIABLE HELPER ══════ */
-ED.cssV=function(p,v){var b=R.style.getPropertyValue(p);R.style.setProperty(p,v);changes.push({t:'css',p:p,v:v,b:b});cnt();};
+/* BUG-04 FIX: use computed style for backup so undo restores the actual previous visual value
+   (inline style.getPropertyValue returns '' for stylesheet-only vars, so undo would remove entirely) */
+ED.cssV=function(p,v){var b=R.style.getPropertyValue(p)||getComputedStyle(R).getPropertyValue(p).trim();R.style.setProperty(p,v);changes.push({t:'css',p:p,v:v,b:b});cnt();};
 ED.tc=function(inp){var p=inp.dataset.v;if(p){ED.cssV(p,inp.value);if(p==='--bg')document.body.style.background=inp.value;}};
 
 /* ══════ TOGGLE ON/OFF ══════ */
@@ -7365,7 +7367,7 @@ ED.undo=function(){
     case 'hide': c.el.style.display=''; break;
     case 'dup': if(c.el.parentNode)c.el.parentNode.removeChild(c.el); break;
     case 'svgOrder': if(c.prev)c.parent.insertBefore(c.el,c.prev);else c.parent.appendChild(c.el); break;
-    case 'css': if(c.b)R.style.setProperty(c.p,c.b);else R.style.removeProperty(c.p); break;
+    case 'css': if(c.b && c.b.trim())R.style.setProperty(c.p,c.b);else R.style.removeProperty(c.p); break;
   }
   cnt();
 };
@@ -7375,21 +7377,43 @@ ED.exportHTML=function(){
   /* [FIX 7] Clear search highlights before export */
   clearSearch();
 
-  /* Strip editor attributes */
-  edEls.forEach(function(el){
-    el.removeAttribute('contenteditable');
-    el.removeAttribute('data-ed');
-    el.removeAttribute('spellcheck');
-    /* [FIX 6] Remove ed-drag if somehow left */
-    el.classList.remove('ed-drag');
-    if(el.classList.contains('site-title')&&el._savedCSS!==undefined)
-      el.style.cssText=el._savedCSS;
-  });
-  document.querySelectorAll('svg text, svg tspan').forEach(function(t){t.style.removeProperty('cursor');});
-  document.querySelectorAll('.ed-m').forEach(function(el){el.classList.remove('ed-m');el.classList.remove('ed-drag');});
-  document.body.classList.remove('ed-on');
+  /* BUG-03 FIX: wrap ALL DOM mutations in try-finally so editor state is ALWAYS restored */
+  var html;
+  try {
+    /* Strip editor attributes */
+    edEls.forEach(function(el){
+      el.removeAttribute('contenteditable');
+      el.removeAttribute('data-ed');
+      el.removeAttribute('spellcheck');
+      /* [FIX 6] Remove ed-drag if somehow left */
+      el.classList.remove('ed-drag');
+      if(el.classList.contains('site-title')&&el._savedCSS!==undefined)
+        el.style.cssText=el._savedCSS;
+    });
+    document.querySelectorAll('svg text, svg tspan').forEach(function(t){t.style.removeProperty('cursor');});
+    document.querySelectorAll('.ed-m').forEach(function(el){el.classList.remove('ed-m');el.classList.remove('ed-drag');});
+    document.body.classList.remove('ed-on');
 
-  var html=document.documentElement.outerHTML;
+    html=document.documentElement.outerHTML;
+  } finally {
+    /* Always restore editor state — even if an error occurred above */
+    document.body.classList.add('ed-on');
+    edEls.forEach(function(el){
+      el.setAttribute('contenteditable','true');
+      el.setAttribute('data-ed','1');
+      el.setAttribute('spellcheck','false');
+      if(el.classList.contains('site-title')){
+        el.style.webkitTextFillColor='var(--text)';
+        el.style.backgroundClip='unset';
+        el.style.webkitBackgroundClip='unset';
+        el.style.background='none';
+      }
+    });
+    document.querySelectorAll('.fiveyes-card,.gc,.kf-pill,.sc,div[style*="max-width"],table.dt,.panel,.gap-item,.stat-card,.canada-pos-card,.kf-callout,.gov-opacity-box,.pax-box,.stat-row,.lgd,.pf,.hover-instr,.kf-pills,.gaps-summary,.ph,.doc-footer,.doc-footer-grid>div,header.site-header').forEach(function(el){
+      if(!el.closest(SKIP))el.classList.add('ed-m');
+    });
+  }
+  if(!html) return; /* export aborted if html capture failed */
 
   /* Patch tooltip changes into script source */
   ttData.forEach(function(d){
@@ -7439,23 +7463,7 @@ ED.exportHTML=function(){
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-
-  /* Restore editor state */
-  document.body.classList.add('ed-on');
-  edEls.forEach(function(el){
-    el.setAttribute('contenteditable','true');
-    el.setAttribute('data-ed','1');
-    el.setAttribute('spellcheck','false');
-    if(el.classList.contains('site-title')){
-      el.style.webkitTextFillColor='var(--text)';
-      el.style.backgroundClip='unset';
-      el.style.webkitBackgroundClip='unset';
-      el.style.background='none';
-    }
-  });
-  document.querySelectorAll('.fiveyes-card,.gc,.kf-pill,.sc,div[style*="max-width"],table.dt,.panel,.gap-item,.stat-card,.canada-pos-card,.kf-callout,.gov-opacity-box,.pax-box,.stat-row,.lgd,.pf,.hover-instr,.kf-pills,.gaps-summary,.ph,.doc-footer,.doc-footer-grid>div,header.site-header').forEach(function(el){
-    if(!el.closest(SKIP))el.classList.add('ed-m');
-  });
+  /* BUG-03: editor state is restored in the finally block above */
 };
 
 /* ══════ UTILITIES ══════ */
@@ -9543,20 +9551,27 @@ var I3 = window.I3 = {
     var frame = document.getElementById('viz-' + tableId);
     if (!frame) return;
     var W = frame.offsetWidth;
-    if (W < 40) {
-      // Panel not settled — retry
-      setTimeout(function() { I3.render(tableId); }, 150);
+    if (W < 10) {
+      // Panel not laid out yet — retry on next animation frame (avoids setTimeout race with contentVisibility)
+      var _self = this;
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { _self.render(tableId); });
+      });
       return;
     }
     var fn = I3.renderers[tableId];
     if (fn) {
-      frame.innerHTML = '<div class="i3-loading">Loading diagram…</div>';
+      frame.innerHTML = '';
       try {
         fn(frame, W);
         I3.rendered[tableId] = true;
+        // Entrance animation AFTER successful render (not before — avoids opacity:0 flash)
+        frame.classList.remove('i3-entering');
+        void frame.offsetWidth;
+        frame.classList.add('i3-entering');
       } catch(e) {
-        frame.innerHTML = '<div class="i3-loading" style="color:#C0392B">Diagram error: ' + e.message + '</div>';
-        console.error('I3 render error for ' + tableId + ':', e);
+        frame.innerHTML = '<div class="i3-loading" style="color:#C0392B;padding:16px">⚠ Diagram error: ' + e.message + '</div>';
+        console.error('I3 render error [' + tableId + ']:', e);
       }
     }
   },
@@ -11781,9 +11796,8 @@ I3.register('i3-qatar-officials', function(frame, W) {
 function i3Init() {
   injectToggles();
 
-  // ── Step 1: Auto-activate diagram mode for all tables with a renderer ──
-  // i3-glossary is intentionally excluded — it has no SVG renderer,
-  // it's an in-table search index that must stay visible as a table.
+  // ── Step 1: Hide all source tables and activate diagram mode ──────────────
+  // i3-glossary has no SVG renderer — stays as a searchable table.
   var DIAGRAM_IDS = [
     'i3-uae-partnerships', 'i3-tahnoon-entities', 'i3-tahnoon-partners',
     'i3-mbs-entities', 'i3-saudi-dual-roles', 'i3-qatar-officials',
@@ -11800,14 +11814,15 @@ function i3Init() {
     var bar   = document.querySelector('.i3-toggle-bar[data-table="' + id + '"]');
     if (!table || !frame) return;
 
+    // Hide source table
     table.style.display = 'none';
     if (table.parentElement && table.parentElement.classList.contains('dt-wrap')) {
       table.parentElement.style.display = 'none';
     }
-
+    // Show viz frame
     frame.style.display = 'block';
     frame.removeAttribute('aria-hidden');
-
+    // Mark toggle bar as diagram-active
     if (bar) {
       bar.querySelectorAll('.i3-btn').forEach(function(b) {
         var isDiag = b.dataset.mode === 'viz';
@@ -11817,33 +11832,51 @@ function i3Init() {
     }
   });
 
-  // ── Step 2: Render diagrams in the currently active panel immediately ──
-  var activePanel = document.querySelector('.panel.active');
-  if (activePanel) {
-    activePanel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
-      var id = f.id.replace(/^viz-/, '');
-      if (!I3.rendered[id] && I3.renderers[id]) {
-        I3.render(id);
+  // ── Step 2: PRERENDER ALL PANELS ─────────────────────────────────────────
+  // The contentVisibility:hidden performance wrapper hides inactive panels,
+  // making offsetWidth = 0 inside them. We temporarily reveal each panel,
+  // force a synchronous layout, render its diagrams, then re-hide it.
+  // This eliminates ALL race conditions with panel switching.
+  document.querySelectorAll('.panel').forEach(function(panel) {
+    var wasHidden = panel.style.contentVisibility === 'hidden';
+    if (wasHidden) {
+      panel.style.contentVisibility = '';
+      void panel.offsetHeight; // synchronous layout — makes offsetWidth measurable
+    }
+
+    panel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
+      var tableId = f.id.replace(/^viz-/, '');
+      if (!I3.rendered[tableId] && I3.renderers[tableId] && f.style.display !== 'none') {
+        I3.render(tableId);
       }
     });
-  }
 
-  // ── Step 3: Hook show() to render diagrams when any panel is activated ──
-  // Fires AFTER contentVisibility clears on target (synchronous) but before
-  // the 400ms inactive-panel-hiding timer.
+    if (wasHidden) {
+      panel.style.contentVisibility = 'hidden';
+    }
+  });
+
+  // ── Step 3: show() hook — only needed for diagrams toggled to viz mode ────
+  // After Step 2, I3.rendered[id] is true for all 16 diagrams.
+  // This hook handles two remaining cases:
+  //   a) User resets zoom (forceRedraw) → I3.rendered is set false → re-renders here
+  //   b) A renderer errored on load → I3.rendered stays false → retried here
   var _i3ShowOrig = window.show;
   window.show = function(panelId, btn) {
     _i3ShowOrig(panelId, btn);
-    setTimeout(function() {
-      var panel = document.getElementById('panel-' + panelId);
-      if (!panel) return;
-      panel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
-        var tableId = f.id.replace(/^viz-/, '');
-        if (f.style.display !== 'none' && !I3.rendered[tableId] && I3.renderers[tableId]) {
-          I3.render(tableId);
-        }
+    // Double-RAF: fires after browser settles layout following contentVisibility clear
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var panel = document.getElementById('panel-' + panelId);
+        if (!panel) return;
+        panel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
+          var tableId = f.id.replace(/^viz-/, '');
+          if (f.style.display !== 'none' && !I3.rendered[tableId] && I3.renderers[tableId]) {
+            I3.render(tableId);
+          }
+        });
       });
-    }, 120);
+    });
   };
 }
 
@@ -11868,18 +11901,9 @@ if (document.readyState === 'loading') {
    ═══════════════════════════════════════════════════════════════ */
 (function() {
 
-  /* ── G1: Entrance animation ── */
-  // Patch I3.render to play .i3-entering on the frame each time it renders
-  var _origRender = I3.render.bind(I3);
-  I3.render = function(tableId) {
-    var frame = document.getElementById('viz-' + tableId);
-    if (frame) {
-      frame.classList.remove('i3-entering');
-      void frame.offsetWidth; // reflow to restart animation
-      frame.classList.add('i3-entering');
-    }
-    _origRender(tableId);
-  };
+  /* ── G1: Entrance animation is now handled inside I3.render itself ──────── */
+  // (moved into I3.render in the core object — applied after successful SVG draw,
+  // not before, to avoid the opacity:0 flash during the W<10 retry loop)
 
   /* ── G6: Confidence tier in tooltips ── */
   // Extend I3.buildTT to accept optional confidence level
