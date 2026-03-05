@@ -5609,11 +5609,22 @@ body.ed-on .ed-drag{opacity:.8;box-shadow:0 16px 48px rgba(0,0,0,.5)!important;z
 #eHint{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);background:rgba(8,10,16,.95);border:1px solid rgba(10,126,140,.2);border-radius:10px;padding:10px 18px;font-size:11px;color:rgba(255,255,255,.5);font-family:var(--font-s);line-height:1.8;backdrop-filter:blur(16px);box-shadow:0 8px 28px rgba(0,0,0,.5);display:none;pointer-events:none;z-index:100000;white-space:nowrap;}
 #eHint b{color:#8BCBD3;font-weight:600;}
 
-@media print{.ed-bar,#eSel,.ed-h,#eCtx,#ePop,#eFind,#eTheme,#eMenu,#eCat,.ed-tt,#eHint{display:none!important;}}
+/* ── Table unit selection handle ── */
+.ed-tbl-handle{display:none;}
+.ed-on .ed-tbl-handle{display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(10,126,140,.05);border:1px solid rgba(10,126,140,.15);border-bottom:none;border-radius:5px 5px 0 0;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(10,126,140,.5);transition:background .15s,color .15s,border-color .15s;user-select:none;}
+.ed-on .ed-tbl-handle:hover{background:rgba(10,126,140,.12);color:rgba(139,203,211,.9);border-color:rgba(10,126,140,.35);}
+.ed-on .ed-tbl-handle.sel{background:rgba(10,126,140,.18);color:#8BCBD3;border-color:rgba(10,126,140,.5);}
+/* ── Group multi-select overlay ── */
+#eGrpSel{position:fixed;z-index:100004;pointer-events:none;border:1.5px dashed rgba(147,83,211,.55);border-radius:2px;background:rgba(147,83,211,.02);box-shadow:0 0 14px rgba(147,83,211,.07);display:none;}
+.ed-on .ed-m.ed-grp-sel{outline:1.5px dashed rgba(147,83,211,.45)!important;outline-offset:2px;}
+
+@media print{.ed-bar,#eSel,#eGrpSel,.ed-h,#eCtx,#ePop,#eFind,#eTheme,#eMenu,#eCat,.ed-tt,#eHint,.ed-tbl-handle{display:none!important;}}
 </style>
 
 <!-- Selection box + 8 handles -->
 <div id="eSel"><div class="ed-h nw" data-d="nw"></div><div class="ed-h n" data-d="n"></div><div class="ed-h ne" data-d="ne"></div><div class="ed-h e" data-d="e"></div><div class="ed-h se" data-d="se"></div><div class="ed-h s" data-d="s"></div><div class="ed-h sw" data-d="sw"></div><div class="ed-h w" data-d="w"></div></div>
+<!-- Group multi-select overlay -->
+<div id="eGrpSel"></div>
 
 <!-- Context property bar -->
 <div id="eCtx"></div>
@@ -5681,7 +5692,7 @@ body.ed-on .ed-drag{opacity:.8;box-shadow:0 16px 48px rgba(0,0,0,.5)!important;z
 </div>
 
 <!-- Hint -->
-<div id="eHint"><b>Click</b> any text → format with toolbar · <b>Ctrl+[/]</b> font size · <b>Ctrl+B</b> bold · <b>Ctrl+I</b> italic · <b>Click</b> SVG nodes → select + drag · <b>Dbl-click</b> nodes → edit tooltip data · <b>☰ Catalogue</b> → browse all 8 element types · <b>Right-click</b> → more options · <b>Ctrl+F</b> find</div>
+<div id="eHint"><b>Click</b> text → format · <b>⊞ Edit Table as Unit</b> → font/color/pad/stripe for all cells · <b>Shift+click</b> blocks → group edit · <b>Ctrl+[/]</b> font size · <b>Ctrl+B/I</b> bold/italic · <b>Click</b> SVG nodes → drag · <b>Dbl-click</b> → edit tooltip · <b>Right-click</b> → menu · <b>Ctrl+F</b> find · <b>☰ Catalogue</b> → browse all</div>
 
 <!-- Toolbar -->
 <div class="ed-bar" id="eBar">
@@ -5718,7 +5729,7 @@ body.ed-on .ed-drag{opacity:.8;box-shadow:0 16px 48px rgba(0,0,0,.5)!important;z
 /* ══════ CORE STATE ══════ */
 var $=function(id){return document.getElementById(id);};
 var R=document.documentElement;
-var SKIP='#eBar,#eSel,#eCtx,#ePop,#eMenu,#eCat,#eFind,#eTheme,#eHint,#edCSS,style,script,link,meta,noscript';
+var SKIP='#eBar,#eSel,#eGrpSel,#eCtx,#ePop,#eMenu,#eCat,#eFind,#eTheme,#eHint,#edCSS,style,script,link,meta,noscript';
 var active=false;
 var edEls=[];
 var origMap=new Map();
@@ -5728,6 +5739,7 @@ var selK=null;
 var drag=null;
 var ttData=[];
 var activeTT=-1;
+var multiSel=[];   // shift-click group selection
 var sHits=[];
 var sIdx=-1;
 window.ED={};
@@ -5788,6 +5800,30 @@ function on(){
     if(el.closest(SKIP))return;
     el.classList.add('ed-m');
     if(getComputedStyle(el).position==='static'){el._origPos=el.style.position;el.style.position='relative';}
+  });
+
+  /* ── 2b. Tables: inject unit-selection handle above each table ── */
+  document.querySelectorAll('table.dt').forEach(function(tbl){
+    if(tbl.closest(SKIP))return;
+    if(tbl._edHandle)return; // don't inject twice
+    var handle=document.createElement('div');
+    handle.className='ed-tbl-handle';
+    handle.innerHTML='<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" style="opacity:.7"><rect x="0" y="0" width="4" height="2"/><rect x="5" y="0" width="5" height="2"/><rect x="0" y="4" width="4" height="2"/><rect x="5" y="4" width="5" height="2"/><rect x="0" y="8" width="4" height="2"/><rect x="5" y="8" width="5" height="2"/></svg> Edit Table as Unit';
+    handle.addEventListener('click',function(ev){
+      ev.stopPropagation();
+      multiSel.forEach(function(e){e.classList.remove('ed-grp-sel');});
+      multiSel=[];
+      var gs=$('eGrpSel');if(gs)gs.style.display='none';
+      document.querySelectorAll('.ed-tbl-handle.sel').forEach(function(h){h.classList.remove('sel');});
+      sel=tbl;selK='table';
+      posSel();$('eSel').style.display='block';
+      showTableCtx(tbl);
+      handle.classList.add('sel');
+    });
+    tbl._edHandle=handle;
+    // Insert before the table (or before its dt-wrap parent)
+    var anchor=(tbl.parentElement&&tbl.parentElement.classList.contains('dt-wrap'))?tbl.parentElement:tbl;
+    anchor.parentNode.insertBefore(handle,anchor);
   });
 
   /* ── 3. SVG text: click to edit ── */
@@ -5861,6 +5897,14 @@ function off(){
     if(g._eMD)g.removeEventListener('mousedown',g._eMD);
     if(g._eDC)g.removeEventListener('dblclick',g._eDC);
   });
+  // Remove table unit handles
+  document.querySelectorAll('table.dt').forEach(function(tbl){
+    if(tbl._edHandle){tbl._edHandle.remove();delete tbl._edHandle;}
+  });
+  // Clear group selection
+  multiSel.forEach(function(e){e.classList.remove('ed-grp-sel');});
+  multiSel=[];
+  var _gs=$('eGrpSel');if(_gs)_gs.style.display='none';
   document.querySelectorAll('.ed-m').forEach(function(el){if(el._origPos!==undefined){el.style.position=el._origPos;delete el._origPos;}el.classList.remove('ed-m');});
   unpatchLiveTT();
   clearSearch();
@@ -5902,7 +5946,15 @@ function onTBlur(e){
 /* ══════ SELECTION SYSTEM ══════ */
 function selectHTML(el){desel();sel=el;selK='html';posSel();$('eSel').style.display='block';showHTMLCtx(el);}
 function selectSVG(g){desel();sel=g;selK='svg';posSel();$('eSel').style.display='block';showSVGCtx(g);}
-function desel(){sel=null;selK=null;$('eSel').style.display='none';$('eCtx').classList.remove('vis');}
+function desel(){
+  sel=null;selK=null;
+  multiSel.forEach(function(e){e.classList.remove('ed-grp-sel');});
+  multiSel=[];
+  var gs=$('eGrpSel');if(gs)gs.style.display='none';
+  document.querySelectorAll('.ed-tbl-handle.sel').forEach(function(h){h.classList.remove('sel');});
+  $('eSel').style.display='none';
+  $('eCtx').classList.remove('vis');
+}
 function posSel(){
   if(!sel)return;
   var r=sel.getBoundingClientRect();
@@ -6022,6 +6074,78 @@ function showSVGCtx(g){
   c._group=g;
   c.classList.add('vis');
   posCtx();
+}
+
+/* ══════ TABLE UNIT CONTEXT BAR ══════ */
+function showTableCtx(tbl){
+  var ths=Array.from(tbl.querySelectorAll('th'));
+  var tds=Array.from(tbl.querySelectorAll('td'));
+  var trs=Array.from(tbl.querySelectorAll('tbody tr'));
+  var allCells=ths.concat(tds);
+  var fSize=allCells.length?Math.round(parseFloat(getComputedStyle(allCells[0]).fontSize)):12;
+  var thBg=ths.length?rgbHex(getComputedStyle(ths[0]).backgroundColor):'';
+  var tdBg=tds.length?rgbHex(getComputedStyle(tds[0]).backgroundColor):'';
+  var txtCol=allCells.length?rgbHex(getComputedStyle(allCells[0]).color):'';
+  var pad=allCells.length?Math.round(parseFloat(getComputedStyle(allCells[0]).paddingTop)):8;
+  var safe=function(c){return(!c||c==='transparent'||c==='#000000')?'':c;};
+  var c=$('eCtx');
+  c.innerHTML=
+    '<span style="color:rgba(10,126,140,.85);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;padding:0 2px">⊞ TABLE ('+trs.length+'×'+ths.length+')</span>'+
+    '<div class="qs"></div>'+
+    '<button onclick="ED.tblFzStep(-1)" title="Decrease all cell font">A−</button>'+
+    '<input type="number" id="eFZ" value="'+fSize+'" min="6" max="48" style="width:44px" onchange="ED.tblFzSet(this.value)" title="All cells font size (px)">'+
+    '<button onclick="ED.tblFzStep(1)" title="Increase all cell font">A+</button>'+
+    '<div class="qs"></div>'+
+    '<label title="Header row background">TH BG</label>'+
+    '<input type="color" value="'+(safe(thBg)||'#111621')+'" onchange="ED.tblThBg(this.value)" title="Header background">'+
+    '<label title="Body cells background">TD BG</label>'+
+    '<input type="color" value="'+(safe(tdBg)||'#0B0D10')+'" onchange="ED.tblTdBg(this.value)" title="Cell background">'+
+    '<label title="Text color">Aa</label>'+
+    '<input type="color" value="'+(safe(txtCol)||'#E8EAF0')+'" onchange="ED.tblTxtColor(this.value)" title="Text color">'+
+    '<div class="qs"></div>'+
+    '<label>Pad</label><input type="number" value="'+pad+'" min="0" max="40" style="width:36px" onchange="ED.tblPad(this.value)" title="Cell padding (px)">'+
+    '<div class="qs"></div>'+
+    '<button onclick="ED.tblStripe()" title="Toggle alternating row stripe">≡ Stripe</button>'+
+    '<button onclick="ED.tblBorder()" title="Toggle cell bottom borders">⊞ Borders</button>'+
+    '<div class="qs"></div>'+
+    '<button onclick="ED.popInspect()" title="Full CSS inspector">⋯</button>';
+  c.classList.add('vis');
+  posCtx();
+}
+
+/* ══════ GROUP (MULTI-SELECT) CONTEXT BAR ══════ */
+function showGroupCtx(){
+  var n=multiSel.length;
+  var c=$('eCtx');
+  c.innerHTML=
+    '<span style="color:rgba(147,83,211,.9);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;padding:0 2px">◈ GROUP ('+n+')</span>'+
+    '<div class="qs"></div>'+
+    '<label>Aa</label><input type="color" value="#E8EAF0" onchange="ED.groupProp(\'color\',this.value)" title="Text color (all)">'+
+    '<label>BG</label><input type="color" value="#111621" onchange="ED.groupProp(\'backgroundColor\',this.value)" title="Background (all)">'+
+    '<div class="qs"></div>'+
+    '<button onclick="ED.groupFzStep(-1)" title="Decrease font (all)">A−</button>'+
+    '<button onclick="ED.groupFzStep(1)" title="Increase font (all)">A+</button>'+
+    '<div class="qs"></div>'+
+    '<label>Op</label><input type="number" value="1" step="0.1" min="0" max="1" style="width:34px" onchange="ED.groupProp(\'opacity\',this.value)" title="Opacity (all)">'+
+    '<div class="qs"></div>'+
+    '<button onclick="ED.groupHide()" title="Hide all selected">✕ Hide</button>'+
+    '<button onclick="desel()" title="Clear selection">⊘ Clear</button>';
+  c.classList.add('vis');
+  posCtx();
+}
+
+function updateGroupSel(){
+  if(!multiSel.length){var gs=$('eGrpSel');if(gs)gs.style.display='none';return;}
+  var gs=$('eGrpSel');if(!gs)return;
+  var minL=Infinity,minT=Infinity,maxR=-Infinity,maxB=-Infinity;
+  multiSel.forEach(function(el){
+    var r=el.getBoundingClientRect();
+    minL=Math.min(minL,r.left);minT=Math.min(minT,r.top);
+    maxR=Math.max(maxR,r.right);maxB=Math.max(maxB,r.bottom);
+  });
+  gs.style.left=(minL-5)+'px';gs.style.top=(minT-5)+'px';
+  gs.style.width=(maxR-minL+10)+'px';gs.style.height=(maxB-minT+10)+'px';
+  gs.style.display='block';
 }
 
 /* ── Property setters ── */
@@ -6178,6 +6302,106 @@ ED.svgTxtFill=function(v){
   cnt();
 };
 
+/* ══════ TABLE UNIT EDITING METHODS ══════ */
+ED.tblFzSet=function(v){
+  if(!sel||selK!=='table')return;
+  var nv=Math.max(6,Math.min(48,parseInt(v)||12));
+  sel.querySelectorAll('th,td').forEach(function(cell){
+    var b=cell.style.fontSize;cell.style.fontSize=nv+'px';
+    changes.push({t:'hp',el:cell,p:'fontSize',b:b,v:nv+'px'});
+  });
+  cnt();
+};
+ED.tblFzStep=function(dir){
+  if(!sel||selK!=='table')return;
+  var cells=Array.from(sel.querySelectorAll('th,td'));if(!cells.length)return;
+  var cur=parseFloat(getComputedStyle(cells[0]).fontSize);
+  var step=cur<16?1:2;
+  var nv=Math.max(6,Math.round(cur+dir*step));
+  cells.forEach(function(cell){
+    var b=cell.style.fontSize;cell.style.fontSize=nv+'px';
+    changes.push({t:'hp',el:cell,p:'fontSize',b:b,v:nv+'px'});
+  });
+  cnt();posSel();posCtx();
+  var fi=$('eFZ');if(fi)fi.value=nv;
+};
+ED.tblThBg=function(v){
+  if(!sel||selK!=='table')return;
+  sel.querySelectorAll('th').forEach(function(th){
+    var b=th.style.backgroundColor;th.style.backgroundColor=v;
+    changes.push({t:'hp',el:th,p:'backgroundColor',b:b,v:v});
+  });cnt();
+};
+ED.tblTdBg=function(v){
+  if(!sel||selK!=='table')return;
+  sel.querySelectorAll('td').forEach(function(td){
+    var b=td.style.backgroundColor;td.style.backgroundColor=v;
+    changes.push({t:'hp',el:td,p:'backgroundColor',b:b,v:v});
+  });cnt();
+};
+ED.tblTxtColor=function(v){
+  if(!sel||selK!=='table')return;
+  sel.querySelectorAll('th,td').forEach(function(cell){
+    var b=cell.style.color;cell.style.color=v;
+    changes.push({t:'hp',el:cell,p:'color',b:b,v:v});
+  });cnt();
+};
+ED.tblPad=function(v){
+  if(!sel||selK!=='table')return;
+  var nv=Math.max(0,Math.min(40,parseInt(v)||8));
+  sel.querySelectorAll('th,td').forEach(function(cell){
+    var b=cell.style.padding;cell.style.padding=nv+'px';
+    changes.push({t:'hp',el:cell,p:'padding',b:b,v:nv+'px'});
+  });cnt();posSel();
+};
+ED.tblStripe=function(){
+  if(!sel||selK!=='table')return;
+  var rows=Array.from(sel.querySelectorAll('tbody tr'));
+  var hasStripe=rows.length>1&&!!rows[1].style.backgroundColor;
+  rows.forEach(function(tr,i){
+    if(i%2===1){
+      var b=tr.style.backgroundColor;
+      var v=hasStripe?'':'rgba(255,255,255,0.025)';
+      tr.style.backgroundColor=v;
+      changes.push({t:'hp',el:tr,p:'backgroundColor',b:b,v:v});
+    }
+  });cnt();
+};
+ED.tblBorder=function(){
+  if(!sel||selK!=='table')return;
+  var cells=Array.from(sel.querySelectorAll('th,td'));if(!cells.length)return;
+  var hasBorder=!!cells[0].style.borderBottom;
+  cells.forEach(function(cell){
+    var b=cell.style.borderBottom;
+    var v=hasBorder?'':'1px solid rgba(255,255,255,0.08)';
+    cell.style.borderBottom=v;
+    changes.push({t:'hp',el:cell,p:'borderBottom',b:b,v:v});
+  });cnt();
+};
+
+/* ══════ GROUP (MULTI-SELECT) METHODS ══════ */
+ED.groupProp=function(p,v){
+  multiSel.forEach(function(el){
+    var b=el.style[p];el.style[p]=v;
+    changes.push({t:'hp',el:el,p:p,b:b,v:v});
+  });cnt();
+};
+ED.groupFzStep=function(dir){
+  multiSel.forEach(function(el){
+    var b=el.style.fontSize;
+    var cur=parseFloat(getComputedStyle(el).fontSize);
+    var step=cur<16?1:2;
+    var nv=Math.max(6,Math.round(cur+dir*step));
+    el.style.fontSize=nv+'px';
+    changes.push({t:'hp',el:el,p:'fontSize',b:b,v:nv+'px'});
+  });cnt();
+};
+ED.groupHide=function(){
+  multiSel.forEach(function(el){
+    el.style.display='none';changes.push({t:'hide',el:el});
+  });cnt();desel();
+};
+
 /* ══════ SVG TRANSFORM HELPERS ══════ */
 function getTranslate(g){
   var t=g.getAttribute('transform')||'';
@@ -6236,10 +6460,28 @@ document.addEventListener('mousedown',function(e){
     return;
   }
 
-  /* ── HTML block: select + start move ── */
+  /* ── HTML block: select + start move (Shift = multi-select) ── */
   var mov=e.target.closest('.ed-m');
   if(mov&&!e.target.getAttribute('contenteditable')&&!e.target.closest('[contenteditable]')){
     e.preventDefault();
+    if(e.shiftKey){
+      // Multi-select: toggle membership
+      var midx=multiSel.indexOf(mov);
+      if(midx>=0){multiSel.splice(midx,1);mov.classList.remove('ed-grp-sel');}
+      else{multiSel.push(mov);mov.classList.add('ed-grp-sel');}
+      if(multiSel.length>0){
+        sel=multiSel[0];selK='multi';
+        $('eSel').style.display='none';
+        updateGroupSel();showGroupCtx();
+      }else{desel();}
+      return;
+    }
+    // Normal single-select: clear any existing group
+    if(multiSel.length){
+      multiSel.forEach(function(el){el.classList.remove('ed-grp-sel');});
+      multiSel=[];
+      var _gss=$('eGrpSel');if(_gss)_gss.style.display='none';
+    }
     selectHTML(mov);
     drag={k:'hm',el:mov,sx:e.clientX,sy:e.clientY,
       ol:parseInt(mov.style.left)||0,ot:parseInt(mov.style.top)||0};
@@ -6248,7 +6490,7 @@ document.addEventListener('mousedown',function(e){
   }
 
   /* ── Background click: deselect ── */
-  if(!e.target.closest('#ePop,#eBar,.ed-h,#eCtx,#eFind,#eTheme,#eMenu,[data-ed],svg'))
+  if(!e.target.closest('#ePop,#eBar,.ed-h,#eCtx,#eFind,#eTheme,#eMenu,#eGrpSel,[data-ed],svg,.ed-tbl-handle'))
     desel();
 },true);
 
@@ -6349,8 +6591,8 @@ document.addEventListener('mouseup',function(){
   drag=null;
 });
 
-window.addEventListener('scroll',function(){posSel();posCtx();},{passive:true});
-window.addEventListener('resize',function(){posSel();posCtx();},{passive:true});
+window.addEventListener('scroll',function(){posSel();posCtx();if(multiSel.length)updateGroupSel();},{passive:true});
+window.addEventListener('resize',function(){posSel();posCtx();if(multiSel.length)updateGroupSel();},{passive:true});
 
 /* ══════ SVG TEXT POPUP ══════ */
 var activeSvgEl=null;
@@ -7379,6 +7621,13 @@ ED.exportHTML=function(){
 
   /* BUG-03 FIX: wrap ALL DOM mutations in try-finally so editor state is ALWAYS restored */
   var html;
+  // Temporarily detach table unit handles so they don't appear in export
+  var _exportHandles=[];
+  document.querySelectorAll('.ed-tbl-handle').forEach(function(h){
+    if(h.parentNode){_exportHandles.push({h:h,parent:h.parentNode,next:h.nextSibling});h.parentNode.removeChild(h);}
+  });
+  // Clear group selection classes
+  document.querySelectorAll('.ed-grp-sel').forEach(function(el){el.classList.remove('ed-grp-sel');});
   try {
     /* Strip editor attributes */
     edEls.forEach(function(el){
@@ -7412,6 +7661,12 @@ ED.exportHTML=function(){
     document.querySelectorAll('.fiveyes-card,.gc,.kf-pill,.sc,div[style*="max-width"],table.dt,.panel,.gap-item,.stat-card,.canada-pos-card,.kf-callout,.gov-opacity-box,.pax-box,.stat-row,.lgd,.pf,.hover-instr,.kf-pills,.gaps-summary,.ph,.doc-footer,.doc-footer-grid>div,header.site-header').forEach(function(el){
       if(!el.closest(SKIP))el.classList.add('ed-m');
     });
+    // Re-attach table handles and restore group selection
+    _exportHandles.forEach(function(item){
+      if(item.next&&item.next.parentNode===item.parent)item.parent.insertBefore(item.h,item.next);
+      else item.parent.appendChild(item.h);
+    });
+    multiSel.forEach(function(el){el.classList.add('ed-grp-sel');});
   }
   if(!html) return; /* export aborted if html capture failed */
 
@@ -11833,27 +12088,44 @@ function i3Init() {
   });
 
   // ── Step 2: PRERENDER ALL PANELS ─────────────────────────────────────────
-  // The contentVisibility:hidden performance wrapper hides inactive panels,
-  // making offsetWidth = 0 inside them. We temporarily reveal each panel,
-  // force a synchronous layout, render its diagrams, then re-hide it.
-  // This eliminates ALL race conditions with panel switching.
+  // contentVisibility:hidden makes offsetWidth=0 inside hidden panels.
+  // Strategy: unhide ALL panels at once, force ONE synchronous layout pass,
+  // then render all frames directly (inlined — no RAF retry trap).
+  // Width fallback chain: frame.offsetWidth → panel.offsetWidth-40 → innerWidth-100.
+  var _panelStates = [];
   document.querySelectorAll('.panel').forEach(function(panel) {
     var wasHidden = panel.style.contentVisibility === 'hidden';
-    if (wasHidden) {
-      panel.style.contentVisibility = '';
-      void panel.offsetHeight; // synchronous layout — makes offsetWidth measurable
-    }
+    _panelStates.push({ panel: panel, wasHidden: wasHidden });
+    if (wasHidden) panel.style.contentVisibility = '';
+  });
+  void document.documentElement.offsetHeight; // ONE synchronous layout for all panels
 
+  _panelStates.forEach(function(ps) {
+    var panel = ps.panel;
+    var panelW = panel.offsetWidth;
     panel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
       var tableId = f.id.replace(/^viz-/, '');
-      if (!I3.rendered[tableId] && I3.renderers[tableId] && f.style.display !== 'none') {
-        I3.render(tableId);
+      if (I3.rendered[tableId] || !I3.renderers[tableId] || f.style.display === 'none') return;
+      // Width fallback chain — avoids RAF retry trap on zero-width frames
+      var W = f.offsetWidth || (panelW > 10 ? panelW - 40 : 0) || Math.max(innerWidth - 120, 300);
+      var fn = I3.renderers[tableId];
+      f.innerHTML = '';
+      try {
+        fn(f, W);
+        I3.rendered[tableId] = true;
+        f.classList.remove('i3-entering');
+        void f.offsetWidth;
+        f.classList.add('i3-entering');
+      } catch(e) {
+        f.innerHTML = '<div class="i3-loading" style="color:#C0392B;padding:16px">⚠ Diagram error: ' + e.message + '</div>';
+        console.error('I3 render error [' + tableId + ']:', e);
       }
     });
+  });
 
-    if (wasHidden) {
-      panel.style.contentVisibility = 'hidden';
-    }
+  // Re-hide panels that were hidden
+  _panelStates.forEach(function(ps) {
+    if (ps.wasHidden) ps.panel.style.contentVisibility = 'hidden';
   });
 
   // ── Step 3: show() hook — only needed for diagrams toggled to viz mode ────
