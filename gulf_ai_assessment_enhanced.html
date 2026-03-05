@@ -12504,41 +12504,8 @@ I3.register('i3-qatar-officials', function(frame, W) {
 function i3Init() {
   injectToggles();
 
-  // ── Step 1: Hide all source tables and activate diagram mode ──────────────
-  // i3-glossary has no SVG renderer — stays as a searchable table.
-  var DIAGRAM_IDS = [
-    'i3-uae-partnerships', 'i3-tahnoon-entities', 'i3-tahnoon-partners',
-    'i3-mbs-entities', 'i3-saudi-dual-roles', 'i3-qatar-officials',
-    'i3-qatar-investments', 'i3-maturity-matrix', 'chip-gap-table',
-    'i3-dep-stack', 'ai-models-table', 'i3-comp-canadian',
-    'i3-comp-chinese', 'integration-tier-table', 'competitive-matrix-table',
-    'allied-context-table'
-  ];
-
-  DIAGRAM_IDS.forEach(function(id) {
-    if (!I3.renderers[id]) return;
-    var table = document.getElementById(id);
-    var frame = document.getElementById('viz-' + id);
-    var bar   = document.querySelector('.i3-toggle-bar[data-table="' + id + '"]');
-    if (!table || !frame) return;
-
-    // Hide source table
-    table.style.display = 'none';
-    if (table.parentElement && table.parentElement.classList.contains('dt-wrap')) {
-      table.parentElement.style.display = 'none';
-    }
-    // Show viz frame
-    frame.style.display = 'block';
-    frame.removeAttribute('aria-hidden');
-    // Mark toggle bar as diagram-active
-    if (bar) {
-      bar.querySelectorAll('.i3-btn').forEach(function(b) {
-        var isDiag = b.dataset.mode === 'viz';
-        b.classList.toggle('i3-btn--active', isDiag);
-        b.setAttribute('aria-pressed', isDiag ? 'true' : 'false');
-      });
-    }
-  });
+  // ── Step 1: (Tables shown by default — diagrams available via toggle) ──────
+  // To auto-activate all diagrams on load, restore the DIAGRAM_IDS.forEach block here.
 
   // ── Step 2: PRERENDER ALL PANELS ─────────────────────────────────────────
   // contentVisibility:hidden makes offsetWidth=0 inside hidden panels.
