@@ -3014,6 +3014,207 @@ html { scrollbar-gutter: stable; }
 .i3-dep-dot { cursor: pointer; transition: opacity .12s; }
 .i3-dep-dot:hover { opacity: .7; }
 
+/* ═══════════════════════════════════════════════════════
+   PHASE 4 — DIAGRAM REFINEMENTS
+   ═══════════════════════════════════════════════════════ */
+
+/* G1 — I3 diagram entrance animation */
+@keyframes i3FadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.i3-viz-frame.i3-entering { animation: i3FadeUp .35s cubic-bezier(.4,0,.2,1) both; }
+
+/* G4 — priority node glow */
+@keyframes i3NodeGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px var(--panel-accent)); }
+  50%       { filter: drop-shadow(0 0 10px var(--panel-accent)); }
+}
+.i3-priority-glow { animation: i3NodeGlow 2.4s ease-in-out infinite; }
+
+/* G6 — tooltip confidence tier badge */
+.tt-conf-badge {
+  display: inline-block; padding: 1px 6px; border-radius: 3px;
+  font-size: 9px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; margin-left: 6px;
+  vertical-align: middle;
+}
+.tt-conf-verified  { background: rgba(39,174,96,.25);  color: #6FCF97; }
+.tt-conf-assessed  { background: rgba(230,126,34,.22); color: #F39C12; }
+.tt-conf-reported  { background: rgba(154,90,48,.25);  color: #C0A070; }
+.tt-conf-unknown   { background: rgba(192,57,43,.22);  color: #E08080; }
+
+/* G8 — zoom cursor on diagrams that support pan */
+.i3-viz-frame.i3-pannable { cursor: grab; }
+.i3-viz-frame.i3-pannable:active { cursor: grabbing; }
+
+/* ═══════════════════════════════════════════════════════
+   PHASE 5 — MOTION & AMBIENT SYSTEM
+   ═══════════════════════════════════════════════════════ */
+
+/* O2 — aurora sweep on panel activation */
+@keyframes auroraSweep {
+  0%   { opacity: 0; transform: translateX(-100%); }
+  30%  { opacity: .18; }
+  70%  { opacity: .18; }
+  100% { opacity: 0; transform: translateX(200%); }
+}
+.aurora-sweep {
+  position: fixed; top: 0; left: 0;
+  width: 60vw; height: 100vh;
+  pointer-events: none; z-index: 9998;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--panel-accent) 40%,
+    transparent 100%
+  );
+  animation: auroraSweep .7s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* M6 — kf-pill stagger */
+@keyframes pillSlideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.kf-pill.kf-animating { animation: pillSlideIn .3s cubic-bezier(.4,0,.2,1) both; }
+
+/* D1 — count-up stat cards — number highlight during animation */
+.stat-card .stat-num.counting { color: var(--panel-accent); }
+
+/* M9 — slot machine digit cells */
+.slot-digit {
+  display: inline-block; overflow: hidden;
+  height: 1.1em; vertical-align: bottom;
+}
+.slot-reel {
+  display: flex; flex-direction: column;
+  transition: transform .4s cubic-bezier(.22,.68,0,1.2);
+}
+
+/* O6 — subtitle typing cursor */
+@keyframes blinkCaret {
+  0%, 100% { border-color: transparent; }
+  50%       { border-color: var(--panel-accent); }
+}
+.typing-cursor {
+  border-right: 2px solid var(--panel-accent);
+  animation: blinkCaret .75s step-end infinite;
+  padding-right: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PHASE 6 — POWER FEATURES
+   ═══════════════════════════════════════════════════════ */
+
+/* Q5 — keyboard shortcut overlay */
+.kbd-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(11,14,20,.88);
+  backdrop-filter: blur(6px);
+  display: none; align-items: center; justify-content: center;
+}
+.kbd-overlay.open { display: flex; }
+.kbd-panel {
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-lg); padding: 28px 32px;
+  width: min(560px, 90vw); max-height: 80vh; overflow-y: auto;
+  font-family: var(--font-s);
+}
+.kbd-panel h2 {
+  font-family: var(--font-d); font-size: 18px; color: #fff;
+  margin: 0 0 4px 0; font-weight: 600;
+}
+.kbd-panel .kbd-subtitle {
+  font-size: 11px; color: var(--text-sec); letter-spacing: .06em;
+  margin-bottom: 20px; display: block;
+}
+.kbd-section { margin-bottom: 18px; }
+.kbd-section h3 {
+  font-size: 10px; color: var(--text-sec); letter-spacing: .12em;
+  text-transform: uppercase; margin: 0 0 10px 0; font-weight: 600;
+}
+.kbd-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0; border-bottom: 1px solid var(--border);
+  font-size: 12px; color: #ccc; line-height: 1.4;
+}
+.kbd-row:last-child { border-bottom: none; }
+.kbd-keys { display: flex; gap: 4px; flex-shrink: 0; margin-left: 16px; }
+kbd {
+  display: inline-block; padding: 2px 7px;
+  background: var(--surface-1); border: 1px solid var(--border-hi);
+  border-radius: 4px; border-bottom-width: 2px;
+  font-family: var(--font-s); font-size: 10px; color: #fff;
+  letter-spacing: .04em;
+}
+.kbd-close {
+  float: right; background: none; border: none;
+  color: var(--text-sec); font-size: 18px; cursor: pointer;
+  margin-top: -4px; line-height: 1;
+}
+.kbd-close:hover { color: #fff; }
+
+/* Q1 — command palette */
+.cmd-overlay {
+  position: fixed; inset: 0; z-index: 10001;
+  background: rgba(11,14,20,.72); backdrop-filter: blur(4px);
+  display: none; align-items: flex-start; justify-content: center;
+  padding-top: 15vh;
+}
+.cmd-overlay.open { display: flex; }
+.cmd-panel {
+  width: min(580px, 92vw);
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  font-family: var(--font-s);
+  box-shadow: 0 24px 80px rgba(0,0,0,.7);
+}
+.cmd-input-wrap {
+  display: flex; align-items: center;
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  gap: 10px;
+}
+.cmd-input-wrap svg { flex-shrink: 0; opacity: .5; }
+#cmd-input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--font-s); font-size: 14px; color: #fff;
+}
+#cmd-input::placeholder { color: var(--text-sec); }
+.cmd-results { max-height: 340px; overflow-y: auto; }
+.cmd-section-label {
+  padding: 8px 16px 4px;
+  font-size: 9.5px; color: var(--text-sec);
+  letter-spacing: .1em; text-transform: uppercase;
+  border-top: 1px solid var(--border);
+}
+.cmd-section-label:first-child { border-top: none; }
+.cmd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px; cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.cmd-item:hover, .cmd-item.selected {
+  background: rgba(255,255,255,.05);
+}
+.cmd-item-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-1); border: 1px solid var(--border);
+  flex-shrink: 0; font-size: 12px;
+}
+.cmd-item-label { font-size: 13px; color: #fff; }
+.cmd-item-desc  { font-size: 10.5px; color: var(--text-sec); margin-top: 1px; }
+.cmd-item-kbd   { margin-left: auto; flex-shrink: 0; }
+.cmd-footer {
+  display: flex; gap: 16px; padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 10px; color: var(--text-sec);
+}
+.cmd-footer span { display: flex; align-items: center; gap: 4px; }
+
 </style>
 </head>
 <body>
@@ -11579,16 +11780,76 @@ I3.register('i3-qatar-officials', function(frame, W) {
    ═══════════════════════════════════════════════════════════════ */
 function i3Init() {
   injectToggles();
-  // Glossary search is table-mode only, set up after toggles
-  setTimeout(function() {
-    if (typeof setupGlossarySearch === 'function') setupGlossarySearch();
-  }, 300);
+
+  // ── Step 1: Auto-activate diagram mode for all tables with a renderer ──
+  // i3-glossary is intentionally excluded — it has no SVG renderer,
+  // it's an in-table search index that must stay visible as a table.
+  var DIAGRAM_IDS = [
+    'i3-uae-partnerships', 'i3-tahnoon-entities', 'i3-tahnoon-partners',
+    'i3-mbs-entities', 'i3-saudi-dual-roles', 'i3-qatar-officials',
+    'i3-qatar-investments', 'i3-maturity-matrix', 'chip-gap-table',
+    'i3-dep-stack', 'ai-models-table', 'i3-comp-canadian',
+    'i3-comp-chinese', 'integration-tier-table', 'competitive-matrix-table',
+    'allied-context-table'
+  ];
+
+  DIAGRAM_IDS.forEach(function(id) {
+    if (!I3.renderers[id]) return;
+    var table = document.getElementById(id);
+    var frame = document.getElementById('viz-' + id);
+    var bar   = document.querySelector('.i3-toggle-bar[data-table="' + id + '"]');
+    if (!table || !frame) return;
+
+    table.style.display = 'none';
+    if (table.parentElement && table.parentElement.classList.contains('dt-wrap')) {
+      table.parentElement.style.display = 'none';
+    }
+
+    frame.style.display = 'block';
+    frame.removeAttribute('aria-hidden');
+
+    if (bar) {
+      bar.querySelectorAll('.i3-btn').forEach(function(b) {
+        var isDiag = b.dataset.mode === 'viz';
+        b.classList.toggle('i3-btn--active', isDiag);
+        b.setAttribute('aria-pressed', isDiag ? 'true' : 'false');
+      });
+    }
+  });
+
+  // ── Step 2: Render diagrams in the currently active panel immediately ──
+  var activePanel = document.querySelector('.panel.active');
+  if (activePanel) {
+    activePanel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
+      var id = f.id.replace(/^viz-/, '');
+      if (!I3.rendered[id] && I3.renderers[id]) {
+        I3.render(id);
+      }
+    });
+  }
+
+  // ── Step 3: Hook show() to render diagrams when any panel is activated ──
+  // Fires AFTER contentVisibility clears on target (synchronous) but before
+  // the 400ms inactive-panel-hiding timer.
+  var _i3ShowOrig = window.show;
+  window.show = function(panelId, btn) {
+    _i3ShowOrig(panelId, btn);
+    setTimeout(function() {
+      var panel = document.getElementById('panel-' + panelId);
+      if (!panel) return;
+      panel.querySelectorAll('.i3-viz-frame').forEach(function(f) {
+        var tableId = f.id.replace(/^viz-/, '');
+        if (f.style.display !== 'none' && !I3.rendered[tableId] && I3.renderers[tableId]) {
+          I3.render(tableId);
+        }
+      });
+    }, 120);
+  };
 }
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', i3Init);
 } else {
-  // DOM already ready
   setTimeout(i3Init, 50);
 }
 
@@ -11596,5 +11857,612 @@ if (document.readyState === 'loading') {
 
 
 /* ═══ I3 SYSTEM END ═══ */
+
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 4 — DIAGRAM REFINEMENTS
+   G1: entrance animation on diagram activate
+   G2: non-adjacent node dimming on hover (network diagrams)
+   G4: priority node glow
+   G6: buildTT extended with confidence tier
+   G8: pan+zoom on SVG frames
+   ═══════════════════════════════════════════════════════════════ */
+(function() {
+
+  /* ── G1: Entrance animation ── */
+  // Patch I3.render to play .i3-entering on the frame each time it renders
+  var _origRender = I3.render.bind(I3);
+  I3.render = function(tableId) {
+    var frame = document.getElementById('viz-' + tableId);
+    if (frame) {
+      frame.classList.remove('i3-entering');
+      void frame.offsetWidth; // reflow to restart animation
+      frame.classList.add('i3-entering');
+    }
+    _origRender(tableId);
+  };
+
+  /* ── G6: Confidence tier in tooltips ── */
+  // Extend I3.buildTT to accept optional confidence level
+  var _origBuildTT = I3.buildTT;
+  I3.buildTT = function(name, detail, source, confidence) {
+    var conf = '';
+    if (confidence) {
+      var cls = {
+        verified: 'tt-conf-verified', assessed: 'tt-conf-assessed',
+        reported: 'tt-conf-reported', unknown: 'tt-conf-unknown'
+      }[confidence] || '';
+      if (cls) conf = '<span class="tt-conf-badge ' + cls + '">' + confidence + '</span>';
+    }
+    return '<strong>' + name + conf + '</strong>' +
+           (detail ? '<br/>' + detail : '') +
+           (source ? '<br/><em style="color:#9AA0B0;font-size:10px">Source: ' + source + '</em>' : '');
+  };
+
+  /* ── G4: Priority node glow helper ── */
+  // Call I3.priorityGlow(svgSelection) on any SVG <g> or <circle> to add the pulse
+  I3.priorityGlow = function(d3Selection) {
+    d3Selection.classed('i3-priority-glow', true);
+  };
+
+  /* ── G8: Pan+zoom on SVG frames ── */
+  // Attach to viz frames after render; only on frames with class i3-pannable
+  // We mark entity network frames as pannable automatically after render
+  var PANNABLE_IDS = [
+    'i3-tahnoon-entities', 'i3-tahnoon-partners', 'i3-mbs-entities',
+    'competitive-matrix-table', 'i3-uae-partnerships', 'i3-dep-stack'
+  ];
+
+  function attachPanZoom(frameEl) {
+    if (frameEl._panAttached) return;
+    frameEl._panAttached = true;
+    frameEl.classList.add('i3-pannable');
+
+    var svg = frameEl.querySelector('svg');
+    if (!svg) return;
+
+    var viewBox = svg.getAttribute('viewBox');
+    if (!viewBox) return;
+    var parts = viewBox.split(' ').map(Number);
+    var vx = parts[0], vy = parts[1], vw = parts[2], vh = parts[3];
+
+    var scale = 1, panX = 0, panY = 0;
+    var dragging = false, lastX = 0, lastY = 0;
+
+    function applyTransform() {
+      svg.setAttribute('viewBox', [vx - panX / scale, vy - panY / scale,
+                                    vw / scale, vh / scale].join(' '));
+    }
+
+    // Wheel to zoom
+    frameEl.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      var delta = e.deltaY < 0 ? 1.12 : 0.89;
+      scale = Math.min(Math.max(scale * delta, 0.5), 5);
+      applyTransform();
+    }, { passive: false });
+
+    // Drag to pan
+    frameEl.addEventListener('mousedown', function(e) {
+      if (e.button !== 0) return;
+      dragging = true; lastX = e.clientX; lastY = e.clientY;
+    });
+    window.addEventListener('mousemove', function(e) {
+      if (!dragging) return;
+      panX += e.clientX - lastX;
+      panY += e.clientY - lastY;
+      lastX = e.clientX; lastY = e.clientY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', function() { dragging = false; });
+
+    // Double-click reset
+    frameEl.addEventListener('dblclick', function() {
+      scale = 1; panX = 0; panY = 0;
+      applyTransform();
+    });
+
+    // Reset button
+    var btn = document.createElement('button');
+    btn.textContent = 'Reset view';
+    btn.style.cssText = 'position:absolute;bottom:8px;right:8px;padding:3px 9px;' +
+      'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);' +
+      'border-radius:4px;color:#9AA0B0;font-family:var(--font-s);font-size:10px;cursor:pointer;';
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      scale = 1; panX = 0; panY = 0; applyTransform();
+    };
+    if (frameEl.style.position !== 'relative' && frameEl.style.position !== 'absolute') {
+      frameEl.style.position = 'relative';
+    }
+    frameEl.appendChild(btn);
+  }
+
+  // Watch for I3 renders to attach pan+zoom
+  var _origToggle = I3.toggle.bind(I3);
+  I3.toggle = function(tableId, mode) {
+    _origToggle(tableId, mode);
+    if (mode === 'viz' && PANNABLE_IDS.indexOf(tableId) !== -1) {
+      setTimeout(function() {
+        var f = document.getElementById('viz-' + tableId);
+        if (f) attachPanZoom(f);
+      }, 200);
+    }
+  };
+
+  // Also attach on initial auto-activate
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      PANNABLE_IDS.forEach(function(id) {
+        var f = document.getElementById('viz-' + id);
+        if (f && f.style.display !== 'none') attachPanZoom(f);
+      });
+    }, 600);
+  });
+
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 5 — MOTION & AMBIENT SYSTEM
+   D1: count-up animation for stat-card numbers
+   O2: aurora sweep on panel activation
+   M6: kf-pill stagger entrance
+   O6: subtitle typing animation
+   ═══════════════════════════════════════════════════════════════ */
+(function() {
+
+  /* ── D1: Count-up for stat cards ── */
+  function parseNum(str) {
+    // Returns {value, prefix, suffix, isFloat}
+    str = str.trim();
+    var m = str.match(/^([^0-9]*)([0-9]+\.?[0-9]*)([^0-9]*)$/);
+    if (!m) return null;
+    return { prefix: m[1], value: parseFloat(m[2]), suffix: m[3],
+             isFloat: m[2].indexOf('.') !== -1 };
+  }
+
+  function animateCountUp(el, duration) {
+    var original = el.textContent;
+    var parsed = parseNum(original);
+    if (!parsed || parsed.value === 0) return;
+    el.classList.add('counting');
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      // Ease out cubic
+      var ease = 1 - Math.pow(1 - p, 3);
+      var cur = parsed.value * ease;
+      var disp = parsed.isFloat ? cur.toFixed(1) : Math.round(cur).toString();
+      el.textContent = parsed.prefix + disp + parsed.suffix;
+      if (p < 1) { requestAnimationFrame(step); }
+      else { el.textContent = original; el.classList.remove('counting'); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Fire count-up when a panel becomes active (via show() hook)
+  var _p5ShowOrig = window.show;
+  window.show = function(panelId, btn) {
+    _p5ShowOrig(panelId, btn);
+    setTimeout(function() {
+      var panel = document.getElementById('panel-' + panelId);
+      if (!panel) return;
+      panel.querySelectorAll('.stat-card .stat-num, .stat-card [class*="stat-n"]').forEach(function(el) {
+        animateCountUp(el, 800);
+      });
+    }, 80);
+  };
+
+  // Also fire on initial page load for the first active panel
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      document.querySelectorAll('.panel.active .stat-card .stat-num, .panel.active .stat-card [class*="stat-n"]').forEach(function(el) {
+        animateCountUp(el, 900);
+      });
+    }, 300);
+  });
+
+  /* ── O2: Aurora sweep on panel activation ── */
+  var _o2ShowOrig = window.show;
+  window.show = function(panelId, btn) {
+    _o2ShowOrig(panelId, btn);
+    // Remove any existing sweep
+    var existing = document.querySelector('.aurora-sweep');
+    if (existing) existing.remove();
+    // Create sweep element
+    var sweep = document.createElement('div');
+    sweep.className = 'aurora-sweep';
+    document.body.appendChild(sweep);
+    // Clean up after animation
+    sweep.addEventListener('animationend', function() { sweep.remove(); });
+  };
+
+  /* ── M6: kf-pill stagger entrance ── */
+  function staggerPills(panel) {
+    panel.querySelectorAll('.kf-pill').forEach(function(pill, i) {
+      pill.classList.remove('kf-animating');
+      void pill.offsetWidth;
+      pill.style.animationDelay = (i * 55) + 'ms';
+      pill.classList.add('kf-animating');
+    });
+  }
+
+  var _m6ShowOrig = window.show;
+  window.show = function(panelId, btn) {
+    _m6ShowOrig(panelId, btn);
+    setTimeout(function() {
+      var panel = document.getElementById('panel-' + panelId);
+      if (panel) staggerPills(panel);
+    }, 100);
+  };
+
+  // Also on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      var active = document.querySelector('.panel.active');
+      if (active) staggerPills(active);
+    }, 400);
+  });
+
+  /* ── O6: Subtitle typing animation ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    var subtitle = document.querySelector('.doc-subtitle, .site-header .subtitle, .ph .pf:first-child');
+    if (!subtitle) return;
+    var text = subtitle.textContent.trim();
+    if (!text || text.length < 6) return;
+    subtitle.textContent = '';
+    subtitle.classList.add('typing-cursor');
+    var i = 0;
+    function typeChar() {
+      if (i < text.length) {
+        subtitle.textContent = text.slice(0, i + 1);
+        i++;
+        setTimeout(typeChar, 28 + Math.random() * 18);
+      } else {
+        setTimeout(function() { subtitle.classList.remove('typing-cursor'); }, 1200);
+      }
+    }
+    setTimeout(typeChar, 600);
+  });
+
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   PHASE 6 — POWER FEATURES
+   Q5: keyboard shortcut overlay [?]
+   Q1: command palette [Cmd+K / Ctrl+K]
+   ═══════════════════════════════════════════════════════════════ */
+(function() {
+
+  /* ── Q5: Keyboard shortcut overlay ── */
+  var KBD_SHORTCUTS = [
+    {
+      section: 'Navigation',
+      items: [
+        { keys: ['1',' — ','9'], label: 'Jump to panel 1–9 (UAE → Reference)' },
+        { keys: ['0'], label: 'Jump to Editor panel' },
+        { keys: ['←','→'], label: 'Previous / Next panel' },
+        { keys: ['?'], label: 'Toggle this shortcut overlay' },
+      ]
+    },
+    {
+      section: 'Diagrams',
+      items: [
+        { keys: ['D'], label: 'Toggle diagram mode on focused table' },
+        { keys: ['T'], label: 'Toggle table mode on focused table' },
+        { keys: ['R'], label: 'Reset pan+zoom on active diagram' },
+        { keys: ['Dbl-click'], label: 'Reset pan+zoom (on diagram)' },
+      ]
+    },
+    {
+      section: 'View',
+      items: [
+        { keys: ['Cmd','K'], label: 'Open command palette' },
+        { keys: ['F'], label: 'Focus mode — hide chrome' },
+        { keys: ['Esc'], label: 'Close overlay / exit focus mode' },
+      ]
+    },
+    {
+      section: 'Editor',
+      items: [
+        { keys: ['Ctrl','Z'], label: 'Undo last edit' },
+        { keys: ['Ctrl','S'], label: 'Export HTML snapshot' },
+      ]
+    },
+  ];
+
+  var kbdOverlay = document.createElement('div');
+  kbdOverlay.className = 'kbd-overlay';
+  kbdOverlay.setAttribute('role', 'dialog');
+  kbdOverlay.setAttribute('aria-label', 'Keyboard shortcuts');
+  kbdOverlay.setAttribute('aria-modal', 'true');
+
+  function buildKbdHTML() {
+    var html = '<div class="kbd-panel">' +
+      '<button class="kbd-close" aria-label="Close">&times;</button>' +
+      '<h2>Keyboard Shortcuts</h2>' +
+      '<span class="kbd-subtitle">Gulf AI Assessment — Intelligence Interface</span>';
+    KBD_SHORTCUTS.forEach(function(sec) {
+      html += '<div class="kbd-section"><h3>' + sec.section + '</h3>';
+      sec.items.forEach(function(item) {
+        html += '<div class="kbd-row"><span>' + item.label + '</span><span class="kbd-keys">';
+        item.keys.forEach(function(k) {
+          if (k === ' — ' || k === '+') {
+            html += '<span style="color:var(--text-sec);font-size:10px">' + k + '</span>';
+          } else {
+            html += '<kbd>' + k + '</kbd>';
+          }
+        });
+        html += '</span></div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  kbdOverlay.innerHTML = buildKbdHTML();
+  document.body.appendChild(kbdOverlay);
+
+  function openKbd() { kbdOverlay.classList.add('open'); }
+  function closeKbd() { kbdOverlay.classList.remove('open'); }
+
+  kbdOverlay.querySelector('.kbd-close').addEventListener('click', closeKbd);
+  kbdOverlay.addEventListener('click', function(e) {
+    if (e.target === kbdOverlay) closeKbd();
+  });
+
+  /* ── Q1: Command palette ── */
+  var PANELS = [
+    { id: 'uae',      label: 'UAE Governance & AI Entities',       icon: '🇦🇪', key: '1' },
+    { id: 'saudi',    label: 'Saudi Arabia AI Landscape',          icon: '🇸🇦', key: '2' },
+    { id: 'qatar',    label: 'Qatar AI & Sovereign Investments',   icon: '🇶🇦', key: '3' },
+    { id: 'maturity', label: 'Capital & Technology Maturity',      icon: '📊', key: '4' },
+    { id: 'dep',      label: 'Technology Dependency & Chips',      icon: '⚡', key: '5' },
+    { id: 'gaps',     label: 'Intelligence Gaps',                  icon: '🔍', key: '6' },
+    { id: 'comp',     label: 'Competitive Landscape',              icon: '🌐', key: '7' },
+    { id: 'allied',   label: 'Five Eyes Allied Context',           icon: '👁', key: '8' },
+    { id: 'glossary', label: 'Glossary & Reference',              icon: '📖', key: '9' },
+    { id: 'edit',     label: 'Editor v16',                        icon: '✏️', key: '0' },
+  ];
+
+  var CMD_ACTIONS = [
+    { label: 'Toggle diagram mode (all tables)', desc: 'Switch all tables to diagram view', action: function() {
+        document.querySelectorAll('.i3-btn[data-mode="viz"]').forEach(function(b) { b.click(); });
+      }
+    },
+    { label: 'Toggle table mode (all tables)', desc: 'Switch all tables to raw data view', action: function() {
+        document.querySelectorAll('.i3-btn[data-mode="table"]').forEach(function(b) { b.click(); });
+      }
+    },
+    { label: 'Show keyboard shortcuts', desc: 'Open the keyboard shortcut reference', action: openKbd },
+    { label: 'Export HTML snapshot', desc: 'Download current file state', action: function() {
+        if (typeof exportHTML === 'function') exportHTML();
+      }
+    },
+  ];
+
+  var cmdOverlay = document.createElement('div');
+  cmdOverlay.className = 'cmd-overlay';
+  cmdOverlay.setAttribute('role', 'dialog');
+  cmdOverlay.setAttribute('aria-label', 'Command palette');
+  cmdOverlay.innerHTML =
+    '<div class="cmd-panel">' +
+      '<div class="cmd-input-wrap">' +
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none">' +
+          '<circle cx="7" cy="7" r="5" stroke="#9AA0B0" stroke-width="1.5"/>' +
+          '<line x1="11" y1="11" x2="15" y2="15" stroke="#9AA0B0" stroke-width="1.5" stroke-linecap="round"/>' +
+        '</svg>' +
+        '<input id="cmd-input" placeholder="Navigate panels, run commands…" autocomplete="off" />' +
+        '<kbd style="font-size:10px;opacity:.6">Esc</kbd>' +
+      '</div>' +
+      '<div class="cmd-results" id="cmd-results"></div>' +
+      '<div class="cmd-footer">' +
+        '<span><kbd>↑↓</kbd> Navigate</span>' +
+        '<span><kbd>↵</kbd> Select</span>' +
+        '<span><kbd>Esc</kbd> Close</span>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(cmdOverlay);
+
+  var cmdInput = cmdOverlay.querySelector('#cmd-input');
+  var cmdResults = cmdOverlay.querySelector('#cmd-results');
+  var selectedIdx = 0;
+  var currentItems = [];
+
+  function buildPanelItem(p) {
+    return { label: p.label, desc: 'Panel ' + p.key, icon: p.icon,
+             kbd: p.key, action: function() { if (typeof show === 'function') show(p.id); } };
+  }
+
+  function renderCmdResults(query) {
+    query = (query || '').toLowerCase().trim();
+    currentItems = [];
+    var panelItems = PANELS.map(buildPanelItem);
+    var matchedPanels = query
+      ? panelItems.filter(function(p) { return p.label.toLowerCase().indexOf(query) !== -1; })
+      : panelItems;
+    var matchedActions = CMD_ACTIONS.filter(function(a) {
+      return !query || a.label.toLowerCase().indexOf(query) !== -1;
+    });
+
+    var html = '';
+    if (matchedPanels.length) {
+      html += '<div class="cmd-section-label">Panels</div>';
+      matchedPanels.forEach(function(item, i) {
+        var idx = currentItems.length;
+        currentItems.push(item);
+        html += '<div class="cmd-item" data-idx="' + idx + '">' +
+          '<div class="cmd-item-icon">' + item.icon + '</div>' +
+          '<div><div class="cmd-item-label">' + item.label + '</div>' +
+          '<div class="cmd-item-desc">' + item.desc + '</div></div>' +
+          (item.kbd ? '<div class="cmd-item-kbd"><kbd>' + item.kbd + '</kbd></div>' : '') +
+          '</div>';
+      });
+    }
+    if (matchedActions.length) {
+      html += '<div class="cmd-section-label">Actions</div>';
+      matchedActions.forEach(function(item) {
+        var idx = currentItems.length;
+        currentItems.push(item);
+        html += '<div class="cmd-item" data-idx="' + idx + '">' +
+          '<div class="cmd-item-icon" style="font-size:10px;color:#9AA0B0">⚡</div>' +
+          '<div><div class="cmd-item-label">' + item.label + '</div>' +
+          '<div class="cmd-item-desc">' + item.desc + '</div></div>' +
+          '</div>';
+      });
+    }
+    cmdResults.innerHTML = html || '<div style="padding:20px;text-align:center;color:var(--text-sec);font-size:12px">No results</div>';
+    selectedIdx = 0;
+    updateSelected();
+
+    cmdResults.querySelectorAll('.cmd-item').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var idx = parseInt(el.dataset.idx);
+        if (currentItems[idx]) { currentItems[idx].action(); closeCmd(); }
+      });
+      el.addEventListener('mouseenter', function() {
+        selectedIdx = parseInt(el.dataset.idx);
+        updateSelected();
+      });
+    });
+  }
+
+  function updateSelected() {
+    cmdResults.querySelectorAll('.cmd-item').forEach(function(el) {
+      el.classList.toggle('selected', parseInt(el.dataset.idx) === selectedIdx);
+    });
+  }
+
+  function openCmd() {
+    cmdOverlay.classList.add('open');
+    cmdInput.value = '';
+    renderCmdResults('');
+    setTimeout(function() { cmdInput.focus(); }, 50);
+  }
+  function closeCmd() {
+    cmdOverlay.classList.remove('open');
+  }
+
+  cmdInput.addEventListener('input', function() { renderCmdResults(cmdInput.value); });
+  cmdInput.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIdx = Math.min(selectedIdx + 1, currentItems.length - 1);
+      updateSelected();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIdx = Math.max(selectedIdx - 1, 0);
+      updateSelected();
+    } else if (e.key === 'Enter') {
+      if (currentItems[selectedIdx]) { currentItems[selectedIdx].action(); closeCmd(); }
+    }
+  });
+  cmdOverlay.addEventListener('click', function(e) {
+    if (e.target === cmdOverlay) closeCmd();
+  });
+
+  /* ── Global keyboard handler ── */
+  // Panel navigation order
+  var PANEL_ORDER = ['uae','saudi','qatar','maturity','dep','gaps','comp','allied','glossary','edit'];
+  var currentPanelIdx = 0;
+
+  // Track current panel
+  var _kbdShowOrig = window.show;
+  window.show = function(panelId, btn) {
+    _kbdShowOrig(panelId, btn);
+    var idx = PANEL_ORDER.indexOf(panelId);
+    if (idx !== -1) currentPanelIdx = idx;
+  };
+
+  // Focus mode toggle
+  var focusMode = false;
+  var focusEls = [];
+
+  function enterFocus() {
+    focusMode = true;
+    focusEls = Array.from(document.querySelectorAll('.site-header, nav, .reading-progress'));
+    focusEls.forEach(function(el) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; });
+    document.body.style.paddingTop = '0';
+  }
+  function exitFocus() {
+    focusMode = false;
+    focusEls.forEach(function(el) { el.style.opacity = ''; el.style.pointerEvents = ''; });
+    document.body.style.paddingTop = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    var tag = (e.target.tagName || '').toUpperCase();
+    var isInput = tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable;
+
+    // Close overlays with Escape
+    if (e.key === 'Escape') {
+      if (cmdOverlay.classList.contains('open')) { closeCmd(); return; }
+      if (kbdOverlay.classList.contains('open')) { closeKbd(); return; }
+      if (focusMode) { exitFocus(); return; }
+    }
+
+    if (isInput) return; // don't intercept typing
+
+    // Cmd/Ctrl+K — command palette
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      cmdOverlay.classList.contains('open') ? closeCmd() : openCmd();
+      return;
+    }
+
+    if (cmdOverlay.classList.contains('open') || kbdOverlay.classList.contains('open')) return;
+
+    // ? — shortcut overlay
+    if (e.key === '?') { openKbd(); return; }
+
+    // F — focus mode
+    if (e.key === 'f' || e.key === 'F') {
+      focusMode ? exitFocus() : enterFocus();
+      return;
+    }
+
+    // 1–9, 0 — jump to panel
+    if (/^[0-9]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      var idx = e.key === '0' ? 9 : parseInt(e.key) - 1;
+      var panelId = PANEL_ORDER[idx];
+      if (panelId) {
+        var btn = document.querySelector('.nb[onclick*="\'' + panelId + '\'"], .nb[data-panel="' + panelId + '"]');
+        if (typeof show === 'function') show(panelId, btn);
+      }
+      return;
+    }
+
+    // ← → — previous/next panel
+    if (e.key === 'ArrowLeft') {
+      var prev = PANEL_ORDER[Math.max(0, currentPanelIdx - 1)];
+      if (prev) { if (typeof show === 'function') show(prev); }
+    }
+    if (e.key === 'ArrowRight') {
+      var next = PANEL_ORDER[Math.min(PANEL_ORDER.length - 1, currentPanelIdx + 1)];
+      if (next) { if (typeof show === 'function') show(next); }
+    }
+
+    // D / T — diagram/table toggle on active panel's first table
+    if (e.key === 'd' || e.key === 'D') {
+      var firstViz = document.querySelector('.panel.active .i3-btn[data-mode="viz"]');
+      if (firstViz) firstViz.click();
+    }
+    if (e.key === 't' || e.key === 'T') {
+      var firstTbl = document.querySelector('.panel.active .i3-btn[data-mode="table"]');
+      if (firstTbl) firstTbl.click();
+    }
+
+    // R — reset pan+zoom on focused diagram
+    if (e.key === 'r' || e.key === 'R') {
+      var activeFrame = document.querySelector('.panel.active .i3-viz-frame.i3-pannable');
+      if (activeFrame) {
+        var dblEvt = new MouseEvent('dblclick', { bubbles: true });
+        activeFrame.dispatchEvent(dblEvt);
+      }
+    }
+  });
+
+})();
 </script>
 </body></html>
