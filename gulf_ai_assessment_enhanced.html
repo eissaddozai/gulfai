@@ -7355,13 +7355,30 @@ ED.catFilter=function(q){
 };
 /* ══════ RIGHT-CLICK CONTEXT MENU ══════ */
 document.addEventListener('contextmenu',function(e){
-  if(!active)return;
   var el=document.elementFromPoint(e.clientX,e.clientY);
   if(!el||el.closest(SKIP)||el.closest('#eBar'))return;
   e.preventDefault();
 
   var m=$('eMenu');
   var h='';
+
+  if(!active){
+    // Edit mode is off — offer a single entry point
+    m._pendingEl=el;
+    m._pendingX=e.clientX;
+    m._pendingY=e.clientY;
+    h+='<button onclick="ED.mEnterAndEdit()">\u270F\uFE0F Edit this element</button>';
+    h+='<div class="ms"></div>';
+    h+='<button onclick="ED.mInspectOff()">Inspect CSS</button>';
+    m.innerHTML=h;
+    m.classList.add('vis');
+    var x=e.clientX,y=e.clientY;
+    if(x+190>innerWidth)x=innerWidth-200;
+    if(y+m.offsetHeight+60>innerHeight)y=innerHeight-m.offsetHeight-10;
+    m.style.left=x+'px';
+    m.style.top=y+'px';
+    return;
+  }
 
   var textEl=el.closest('[data-ed]');
   if(textEl){
@@ -7401,6 +7418,43 @@ document.addEventListener('contextmenu',function(e){
   m.style.left=x+'px';
   m.style.top=y+'px';
 });
+
+/* Enter edit mode from right-click, then focus the right-clicked element */
+ED.mEnterAndEdit=function(){
+  var pendingEl=$('eMenu')._pendingEl;
+  ED.mClose();
+  if(!active) on();
+  if(!pendingEl) return;
+  // After on() has made elements contenteditable, find and focus the target
+  requestAnimationFrame(function(){
+    var target=pendingEl.closest('[data-ed]')||pendingEl;
+    if(target&&target.getAttribute('contenteditable')==='true'){
+      target.focus();
+      // Place cursor at end
+      var range=document.createRange();
+      var sel=window.getSelection();
+      range.selectNodeContents(target);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      // Scroll into view
+      target.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  });
+};
+
+/* Inspect CSS without needing edit mode active */
+ED.mInspectOff=function(){
+  var el=$('eMenu')._pendingEl;
+  ED.mClose();
+  if(!el) return;
+  // Temporarily store _iel then call mInspect logic inline
+  var styles=window.getComputedStyle(el);
+  var props=['color','background','font-size','font-weight','padding','margin','border','opacity','display','position'];
+  var lines=props.map(function(p){return p+': '+styles.getPropertyValue(p)+';'}).join('\n');
+  var tag=el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(el.className&&typeof el.className==='string'?'.'+el.className.trim().split(/\s+/).join('.'):'');
+  alert('CSS snapshot — '+tag+'\n\n'+lines);
+};
 
 ED.mClose=function(){$('eMenu').classList.remove('vis');$('eCat').classList.remove('vis');};
 
