@@ -5485,7 +5485,9 @@ body.ed-on svg text:hover{fill:#8BCBD3!important;filter:drop-shadow(0 0 3px rgba
 body.ed-on svg g[style*="cursor"]{cursor:grab!important;}
 body.ed-on svg g[style*="cursor"]:hover>rect,
 body.ed-on svg g[style*="cursor"]:hover>circle{stroke:rgba(10,126,140,.4)!important;stroke-width:2!important;}
-body.ed-on .ed-m:hover{outline:1px dashed rgba(10,126,140,.12);outline-offset:3px;cursor:grab;}
+body.ed-on .ed-m:hover{outline:1px dashed rgba(10,126,140,.12);outline-offset:3px;cursor:pointer;}
+body.ed-on .ed-m.ed-movable{outline:1.5px solid rgba(10,126,140,.45);outline-offset:3px;cursor:grab;}
+body.ed-on .ed-m.ed-movable:hover{outline-color:rgba(10,126,140,.7);}
 body.ed-on .ed-drag{opacity:.8;box-shadow:0 16px 48px rgba(0,0,0,.5)!important;z-index:9999;cursor:grabbing!important;}
 
 /* ── Selection + 8 handles ── */
@@ -5984,10 +5986,11 @@ function onTBlur(e){
 }
 
 /* ══════ SELECTION SYSTEM ══════ */
-function selectHTML(el){desel();sel=el;selK='html';posSel();$('eSel').style.display='block';showHTMLCtx(el);}
+function selectHTML(el){desel();sel=el;selK='html';el.classList.add('ed-movable');posSel();$('eSel').style.display='block';showHTMLCtx(el);}
 function selectSVG(g){desel();sel=g;selK='svg';posSel();$('eSel').style.display='block';showSVGCtx(g);}
 function desel(){
   sel=null;selK=null;
+  document.querySelectorAll('.ed-movable').forEach(function(e){e.classList.remove('ed-movable');});
   multiSel.forEach(function(e){e.classList.remove('ed-grp-sel');});
   multiSel=[];
   var gs=$('eGrpSel');if(gs)gs.style.display='none';
@@ -6500,7 +6503,7 @@ document.addEventListener('mousedown',function(e){
     return;
   }
 
-  /* ── HTML block: select + start move (Shift = multi-select) ── */
+  /* ── HTML block: click to select; drag only if already selected ── */
   var mov=e.target.closest('.ed-m');
   if(mov&&!e.target.getAttribute('contenteditable')&&!e.target.closest('[contenteditable]')){
     e.preventDefault();
@@ -6516,13 +6519,18 @@ document.addEventListener('mousedown',function(e){
       }else{desel();}
       return;
     }
-    // Normal single-select: clear any existing group
+    // Clear any existing group
     if(multiSel.length){
       multiSel.forEach(function(el){el.classList.remove('ed-grp-sel');});
       multiSel=[];
       var _gss=$('eGrpSel');if(_gss)_gss.style.display='none';
     }
-    selectHTML(mov);
+    // First click: select only. Second click on same element: start drag.
+    if(sel!==mov){
+      selectHTML(mov);
+      return;
+    }
+    // Already selected — start drag
     drag={k:'hm',el:mov,sx:e.clientX,sy:e.clientY,
       ol:parseInt(mov.style.left)||0,ot:parseInt(mov.style.top)||0};
     mov.classList.add('ed-drag');
