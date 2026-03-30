@@ -2815,7 +2815,9 @@ html { scrollbar-gutter: stable; }
   background: var(--surface-2);
   position: relative;
 }
-.i3-viz-frame svg { display: block; width: 100%; overflow: visible; }
+.i3-viz-frame svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* Override fixed inline heights on legacy static SVGs so they scale with viewBox */
+#uae-svg,#saudi-svg,#qatar-svg,#maturity-svg,#dep-svg { height: auto !important; }
 .i3-viz-frame .i3-loading {
   text-align: center; color: var(--text-sec);
   font-size: 12px; padding: 32px;
@@ -12632,6 +12634,54 @@ function i3Init() {
       });
     });
   };
+
+  // ── Step 4: ResizeObserver — re-render when container width changes ────────
+  // Debounced 280ms, minimum 40px delta to ignore micro-fluctuations.
+  if (typeof ResizeObserver !== 'undefined') {
+
+    // I3 viz frames — re-render the D3 diagram at the new width
+    document.querySelectorAll('.i3-viz-frame').forEach(function(frame) {
+      var tableId = frame.id.replace(/^viz-/, '');
+      if (!I3.renderers[tableId]) return;
+      var lastW = 0;
+      var _roTimer = null;
+      new ResizeObserver(function(entries) {
+        var newW = Math.round(entries[0].contentRect.width);
+        if (newW < 10 || Math.abs(newW - lastW) < 40) return;
+        lastW = newW;
+        clearTimeout(_roTimer);
+        _roTimer = setTimeout(function() {
+          if (frame.style.display !== 'none' && I3.rendered[tableId]) {
+            I3.forceRedraw(tableId);
+          }
+        }, 280);
+      }).observe(frame);
+    });
+
+    // Legacy static SVGs — invalidate memoization and redraw
+    [
+      { id: 'uae-svg',      key: 'uae',      fn: function() { drawUAE     && drawUAE();      } },
+      { id: 'saudi-svg',    key: 'saudi',    fn: function() { drawSaudi   && drawSaudi();    } },
+      { id: 'qatar-svg',    key: 'qatar',    fn: function() { drawQatar   && drawQatar();    } },
+      { id: 'maturity-svg', key: 'maturity', fn: function() { drawMaturity && drawMaturity(); } },
+      { id: 'dep-svg',      key: 'dep',      fn: function() { drawDep     && drawDep();      } }
+    ].forEach(function(item) {
+      var el = document.getElementById(item.id);
+      if (!el || !el.parentElement) return;
+      var lastW = 0;
+      var _roTimer = null;
+      new ResizeObserver(function(entries) {
+        var newW = Math.round(entries[0].contentRect.width);
+        if (newW < 10 || Math.abs(newW - lastW) < 40) return;
+        lastW = newW;
+        clearTimeout(_roTimer);
+        _roTimer = setTimeout(function() {
+          if (typeof _rendered !== 'undefined') _rendered[item.key] = false;
+          item.fn();
+        }, 280);
+      }).observe(el.parentElement);
+    });
+  }
 }
 
 if (document.readyState === 'loading') {
